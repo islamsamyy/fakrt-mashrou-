@@ -144,59 +144,60 @@ export default async function HomePage() {
 
       <main className="relative z-10">
         {/* Hero Section */}
-        <section className="min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center relative overflow-hidden pt-20">
-          <div className="mb-8 inline-flex items-center gap-3 px-4 py-1 border border-primary-container/30 bg-primary-container/5 rounded-full text-xs font-bold tracking-widest text-primary-container animate-pulse">
-            <span className="material-symbols-outlined text-sm">pentagon</span>
-            المنصة العربية الأذكى — POWERED BY AI
+        <section className="min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center relative overflow-hidden pt-24">
+          <div className="mb-8 inline-flex items-center gap-3 px-4 py-1.5 border border-[#00ffd1]/30 bg-[#00ffd1]/5 rounded-full text-[10px] font-bold tracking-widest text-[#00ffd1] shadow-[0_0_15px_rgba(0,255,209,0.1)]">
+            <span className="material-symbols-outlined text-sm">rocket_launch</span>
+            المنصة العربية الأذكى 🚀 POWERED BY AI
           </div>
-          <h1 className="font-headline text-5xl md:text-8xl font-black leading-tight mb-6 max-w-5xl uppercase tracking-tighter">
-            حوّل فكرتك
-            <span className="bg-gradient-to-l from-primary-container to-secondary-container bg-clip-text text-transparent px-4">
-              إلى واقع
-            </span>
-            أو اكتشف فرصتك
-            <span className="text-tertiary-fixed-dim font-data px-4">
-              القادمة
+          <h1 className="font-headline text-5xl md:text-8xl font-black leading-tight mb-8 max-w-6xl tracking-tighter">
+            حوّل فكرتك <span className="text-[#00ffd1]">إلى واقع</span>
+            <br />
+            <span className="flex items-center justify-center gap-4 flex-wrap">
+              أو اكتشف 
+              <span className="bg-gradient-to-r from-[#ffbf00] via-[#ff6b6b] to-[#7b2cbf] bg-clip-text text-transparent transform hover:scale-105 transition-transform duration-500">
+                فرصتك القادمة
+              </span>
             </span>
           </h1>
-          <p className="text-slate-400 text-lg md:text-xl max-w-2xl mb-12 font-body leading-relaxed">
-            IDEA BUSINESS — منصة ذكية آمنة تربط أصحاب الأفكار بالمستثمرين عبر
-            بيئة متميزة ومنظمة بمعايير عالمية.
+          <p className="text-slate-400 text-lg md:text-xl max-w-3xl mb-14 font-body leading-relaxed opacity-90">
+            IDEA BUSINESS – منصة ذكية آمنة تربط أصحاب الأفكار بالمستثمرين عبر بيئة متميزة ومنظمة بمعايير عالمية.
           </p>
-          <div className="flex flex-col md:flex-row gap-6 mb-16">
+          <div className="flex flex-col md:flex-row gap-6 mb-20">
             <Link
-              href="/add-idea"
-              className="bg-primary-container text-background font-black text-xl px-10 py-5 clip-button shadow-[0_0_30px_rgba(0,255,209,0.2)] hover:brightness-110 transition-all flex items-center gap-3 active:scale-95"
+              href="/opportunities"
+              className="bg-[#00ffd1] text-black font-black text-xl px-12 py-5 rounded-md hover:brightness-110 transition-all flex items-center gap-3 active:scale-95 shadow-[0_0_40px_rgba(0,255,209,0.3)]"
             >
-              أعلن عن فكرتك
-              <span className="material-symbols-outlined font-black">
-                lightbulb
+              استعرض الفرص
+              <span className="material-symbols-outlined font-black text-xl">
+                search
               </span>
             </Link>
             <Link
-              href="/opportunities"
-              className="border border-primary-container/50 text-primary-container font-black text-xl px-10 py-5 clip-button hover:bg-primary-container/5 transition-all flex items-center gap-3 active:scale-95"
+              href="/add-idea"
+              className="border border-white/20 text-white font-black text-xl px-12 py-5 rounded-md hover:bg-white/5 transition-all flex items-center gap-3 active:scale-95"
             >
-              استعرض الفرص
-              <span className="material-symbols-outlined font-black">
-                search
+              أعلن عن فكرتك
+              <span className="material-symbols-outlined font-black text-xl">
+                lightbulb
               </span>
             </Link>
           </div>
 
-          <div className="w-full overflow-hidden whitespace-nowrap mask-gradient opacity-30 mt-12">
-            <div className="flex gap-12 animate-scroll-rtl text-slate-500 font-black text-sm uppercase tracking-[0.2em]">
+          <div className="w-full border-y border-white/5 py-8 overflow-hidden bg-black/20 backdrop-blur-sm relative">
+            <div className="flex gap-20 animate-scroll-rtl whitespace-nowrap">
               {Array(4)
                 .fill([
-                  "✦ منصة موثوقة",
-                  "✦ ذكاء اصطناعي",
-                  "✦ حماية قانونية",
-                  "✦ دفع آمن",
-                  "✦ ثنائية اللغة",
+                  "← ذكاء اصطناعي",
+                  "← منصة موثوقة",
+                  "← حماية قانونية",
+                  "← دفع آمن",
+                  "← ثنائية اللغة",
                 ])
                 .flat()
                 .map((text, i) => (
-                  <span key={i}>{text}</span>
+                  <span key={i} className="text-slate-500/60 font-black text-sm uppercase tracking-widest flex items-center gap-2">
+                    {text}
+                  </span>
                 ))}
             </div>
           </div>
