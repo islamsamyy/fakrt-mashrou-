@@ -102,7 +102,7 @@ export default async function PortfolioPage() {
                   </thead>
                   <tbody className="divide-y divide-outline-variant/10">
                     {inv.map((investment) => {
-                      const project = investment.projects as { id: string; title: string; category: string; funding_goal: number; amount_raised: number; status: string } | null
+                      const project = investment.projects as unknown as { id: string; title: string; category: string; funding_goal: number; amount_raised: number; status: string } | null
                       const statusMap: Record<string, { label: string; cls: string }> = {
                         paid: { label: 'مكتمل', cls: 'bg-primary-container/10 text-primary-container border-primary-container/30' },
                         committed: { label: 'معلّق', cls: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/30' },
