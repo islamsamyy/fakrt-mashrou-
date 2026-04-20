@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -X POST https://gbokhgaymzqqpexvcmzm.supabase.co/auth/v1/admin/users -H 'Authorization: Bearer sbp_bf35e0763a8d7b17a3bf2816670bdf19e4a135f8' -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(curl -s -X POST 'https://gbokhgaymzqqpexvcmzm.supabase.co/auth/v1/admin/users?apikey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdib2toZ2F5bXpxcXBleHZjbXptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY2MzMyMDksImV4cCI6MjA5MjIwOTIwOX0.7RsXAFeWmt0weJD4k2Pam3hRww-z1xBq5o0wNqDTYsY' -H 'Authorization: Bearer sbp_bf35e0763a8d7b17a3bf2816670bdf19e4a135f8' -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(SUPABASE_ACCESS_TOKEN=\"sbp_bf35e0763a8d7b17a3bf2816670bdf19e4a135f8\" npx supabase db push --include-all --yes)"
+    ]
+  }
+}
