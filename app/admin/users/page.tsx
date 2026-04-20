@@ -1,120 +1,135 @@
-import { createClient } from '@/lib/supabase/server'
-import { Navbar } from '@/components/layout/Navbar'
-import { DashboardSidebar } from '@/components/layout/DashboardSidebar'
+import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server';
+import { Navbar } from '@/components/layout/Navbar';
+import { DashboardSidebar } from '@/components/layout/DashboardSidebar';
+import Link from 'next/link';
 
 export const metadata = {
-  title: 'User Management - Admin Panel',
-}
+  title: 'User Management - Admin',
+};
 
 export default async function AdminUsersPage() {
-  const supabase = await createClient()
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
-  // Fetch users
+  if (!user) redirect('/login');
+
+  // Verify admin
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (profile?.role !== 'admin') {
+    redirect('/');
+  }
+
+  // Fetch all users
   const { data: users } = await supabase
     .from('profiles')
-    .select('id, full_name, email, role, tier, kyc_status, created_at')
-    .order('created_at', { ascending: false })
+    .select('id, full_name, role, kyc_status, tier, created_at')
+    .order('created_at', { ascending: false });
 
   return (
     <div className="bg-background text-on-surface font-body min-h-screen relative overflow-x-hidden text-right" dir="rtl">
-      {/* Background Decor */}
-      <div className="fixed inset-0 hex-grid pointer-events-none z-0 opacity-10"></div>
-      <div className="fixed inset-0 scanline pointer-events-none z-0 opacity-5"></div>
-
+      <div className="fixed inset-0 hex-grid pointer-events-none z-0 opacity-10" />
       <Navbar />
       <DashboardSidebar />
 
-      <main className="xl:mr-64 pt-32 pb-32 px-6 max-w-7xl mx-auto z-10 relative">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="font-headline text-4xl md:text-5xl font-black text-white uppercase tracking-tight mb-2">
-            إدارة المستخدمين
-          </h1>
-          <p className="text-slate-400">عرض وإدارة حسابات المستخدمين</p>
-        </div>
+      <main className="xl:mr-64 pt-32 pb-20 px-8 min-h-screen z-10 relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12">
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-4 font-headline">
+              إدارة المستخدمين
+            </h1>
+            <p className="text-slate-400">إدارة جميع المستخدمين على المنصة</p>
+          </div>
 
-        {/* Users Table */}
-        <div className="bg-[#0A1628] border border-white/5 overflow-hidden">
-          {/* Table Header */}
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-6 bg-slate-900/50 border-b border-white/5">
-            <div className="text-[10px] font-data uppercase text-slate-500 font-black tracking-widest">
-              الاسم
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div className="bg-[#0A1628] border border-white/5 rounded-lg p-6">
+              <div className="text-slate-400 text-sm mb-2">إجمالي المستخدمين</div>
+              <div className="text-3xl font-black text-primary-container">{users?.length || 0}</div>
             </div>
-            <div className="text-[10px] font-data uppercase text-slate-500 font-black tracking-widest">
-              الدور
+
+            <div className="bg-[#0A1628] border border-white/5 rounded-lg p-6">
+              <div className="text-slate-400 text-sm mb-2">المؤسسون</div>
+              <div className="text-3xl font-black text-secondary-container">
+                {users?.filter((u: any) => u.role === 'founder').length || 0}
+              </div>
             </div>
-            <div className="text-[10px] font-data uppercase text-slate-500 font-black tracking-widest">
-              المستوى
+
+            <div className="bg-[#0A1628] border border-white/5 rounded-lg p-6">
+              <div className="text-slate-400 text-sm mb-2">المستثمرون</div>
+              <div className="text-3xl font-black text-tertiary-fixed">
+                {users?.filter((u: any) => u.role === 'investor').length || 0}
+              </div>
             </div>
-            <div className="text-[10px] font-data uppercase text-slate-500 font-black tracking-widest">
-              KYC
-            </div>
-            <div className="text-[10px] font-data uppercase text-slate-500 font-black tracking-widest">
-              التاريخ
+
+            <div className="bg-[#0A1628] border border-white/5 rounded-lg p-6">
+              <div className="text-slate-400 text-sm mb-2">التحقق الكامل</div>
+              <div className="text-3xl font-black text-green-400">
+                {users?.filter((u: any) => u.kyc_status === 'verified').length || 0}
+              </div>
             </div>
           </div>
 
-          {/* Table Rows */}
-          {users && users.length > 0 ? (
-            users.map((user) => (
-              <div
-                key={user.id}
-                className="grid grid-cols-1 md:grid-cols-5 gap-4 p-6 border-b border-white/5 hover:bg-white/5 transition-colors"
-              >
-                <div className="text-sm text-white font-headline font-bold">
-                  {user.full_name || 'مستخدم'}
-                </div>
-                <div>
-                  <span
-                    className={`text-[10px] font-data font-black uppercase tracking-widest px-3 py-1 rounded-full ${
-                      user.role === 'admin'
-                        ? 'bg-red-500/20 text-red-400'
-                        : user.role === 'investor'
-                          ? 'bg-primary-container/20 text-primary-container'
-                          : 'bg-slate-700/20 text-slate-400'
-                    }`}
-                  >
-                    {user.role}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-[10px] font-data font-black uppercase tracking-widest text-slate-400">
-                    {user.tier}
-                  </span>
-                </div>
-                <div>
-                  <span
-                    className={`text-[10px] font-data font-black uppercase tracking-widest px-2 py-1 rounded ${
-                      user.kyc_status === 'verified'
-                        ? 'bg-primary-container/20 text-primary-container'
-                        : user.kyc_status === 'pending'
-                          ? 'bg-yellow-500/20 text-yellow-400'
-                          : 'bg-slate-700/20 text-slate-400'
-                    }`}
-                  >
-                    {user.kyc_status}
-                  </span>
-                </div>
-                <div className="text-[10px] font-data text-slate-500">
-                  {new Date(user.created_at).toLocaleDateString('ar-SA')}
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="p-12 text-center text-slate-400">
-              لا توجد مستخدمون
+          <div className="bg-[#0A1628] border border-white/5 rounded-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="border-b border-white/5 bg-white/5">
+                  <tr>
+                    <th className="px-6 py-4 text-right text-sm font-black text-primary-container">الاسم</th>
+                    <th className="px-6 py-4 text-right text-sm font-black text-primary-container">النوع</th>
+                    <th className="px-6 py-4 text-right text-sm font-black text-primary-container">حالة التحقق</th>
+                    <th className="px-6 py-4 text-right text-sm font-black text-primary-container">المستوى</th>
+                    <th className="px-6 py-4 text-right text-sm font-black text-primary-container">تاريخ الإنشاء</th>
+                    <th className="px-6 py-4 text-right text-sm font-black text-primary-container">الإجراءات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users && users.length > 0 ? (
+                    users.map((userItem: any) => (
+                      <tr key={userItem.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                        <td className="px-6 py-4 font-medium text-white">{userItem.full_name || 'بدون اسم'}</td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold ${userItem.role === 'founder' ? 'bg-secondary-container/20 text-secondary-container' : 'bg-tertiary-fixed/20 text-tertiary-fixed'}`}>
+                            {userItem.role === 'founder' ? 'مؤسس' : 'مستثمر'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold ${userItem.kyc_status === 'verified' ? 'bg-green-400/20 text-green-400' : 'bg-red-400/20 text-red-400'}`}>
+                            {userItem.kyc_status === 'verified' ? 'موثق' : 'لم يتم التحقق'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-sm text-slate-400">{userItem.tier === 'basic' ? 'أساسي' : 'مميز'}</td>
+                        <td className="px-6 py-4 text-sm text-slate-400">{new Date(userItem.created_at).toLocaleDateString('ar')}</td>
+                        <td className="px-6 py-4">
+                          <Link href={`/admin/kyc?user=${userItem.id}`} className="text-xs font-bold text-primary-container hover:text-primary-container/80">
+                            عرض
+                          </Link>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center text-slate-400">
+                        لا توجد مستخدمون
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* Note */}
-        <div className="mt-8 p-6 bg-slate-900/50 border border-white/10 rounded-lg">
-          <p className="text-sm text-slate-400">
-            <span className="material-symbols-outlined text-base mr-2">info</span>
-            لتعديل دور المستخدمين أو مستوياتهم، استخدم قاعدة البيانات مباشرة أو طلب من فريق التطوير.
-          </p>
+          <div className="mt-8">
+            <Link href="/admin" className="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-primary-container font-bold rounded-lg hover:bg-white/20">
+              العودة
+            </Link>
+          </div>
         </div>
       </main>
     </div>
-  )
+  );
 }
