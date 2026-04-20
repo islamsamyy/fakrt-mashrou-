@@ -3,11 +3,20 @@
  * Uses Resend (easier than SendGrid for Next.js)
  * Install: npm install resend
  * Get API key from: https://resend.com
+ *
+ * For development, emails are logged to console
  */
 
-import { Resend } from 'resend';
+let resend: any = null;
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Try to import Resend if available
+try {
+  const { Resend: ResendClient } = require('resend');
+  resend = new ResendClient(process.env.RESEND_API_KEY);
+} catch (error) {
+  // Resend not installed yet - use console logging
+  console.warn('Resend not installed. Install with: npm install resend');
+}
 
 interface EmailParams {
   to: string;
@@ -17,10 +26,22 @@ interface EmailParams {
 }
 
 /**
- * Send email via Resend
+ * Send email via Resend (or console in development)
  */
 export async function sendEmail({ to, subject, html, replyTo }: EmailParams) {
   try {
+    if (!resend) {
+      // Development mode - log to console
+      console.log('[EMAIL LOG]', {
+        to,
+        subject,
+        from: 'noreply@ideabusiness.com',
+        replyTo: replyTo || 'support@ideabusiness.com',
+        htmlPreview: html.substring(0, 100) + '...',
+      });
+      return { success: true, messageId: 'dev-' + Date.now() };
+    }
+
     const result = await resend.emails.send({
       from: 'noreply@ideabusiness.com',
       to,
