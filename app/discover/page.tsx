@@ -22,32 +22,40 @@ export default function DiscoverPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const categories = ['AI', 'FinTech', 'HealthTech', 'CleanEnergy', 'SaaS']
 
   useEffect(() => {
     async function loadProjects() {
-      const supabase = createClient()
+      try {
+        const supabase = createClient()
 
-      let query = supabase
-        .from('projects')
-        .select(`
-          id, title, category, description, funding_goal, amount_raised, status, verified,
-          founder:founder_id(full_name, avatar_url)
-        `)
-        .eq('status', 'active')
+        let query = supabase
+          .from('projects')
+          .select('*')
+          .eq('status', 'active')
 
-      if (selectedCategory) {
-        query = query.ilike('category', `%${selectedCategory}%`)
+        if (selectedCategory) {
+          query = query.ilike('category', `%${selectedCategory}%`)
+        }
+
+        const { data, error: err } = await query.order('created_at', { ascending: false }).limit(12)
+
+        if (err) {
+          console.error('Supabase error:', err)
+          setError(err.message)
+          setLoading(false)
+          return
+        }
+
+        setProjects((data || []) as Project[])
+        setLoading(false)
+      } catch (err) {
+        console.error('Load projects error:', err)
+        setError(err instanceof Error ? err.message : 'Failed to load projects')
+        setLoading(false)
       }
-
-      const { data } = await query.order('created_at', { ascending: false }).limit(12)
-      const projects = (data || []).map((p: any) => ({
-        ...p,
-        founder: Array.isArray(p.founder) ? p.founder[0] : p.founder,
-      }))
-      setProjects(projects as unknown as Project[])
-      setLoading(false)
     }
 
     loadProjects()
@@ -97,6 +105,12 @@ export default function DiscoverPage() {
           <div className="flex items-center justify-center py-20">
             <span className="material-symbols-outlined text-5xl text-primary-container animate-spin">progress_activity</span>
           </div>
+        ) : error ? (
+          <div className="text-center py-20">
+            <span className="material-symbols-outlined text-6xl text-red-500 block mb-4">error</span>
+            <p className="text-slate-400 font-body mb-2">حدث خطأ</p>
+            <p className="text-slate-500 text-sm">{error}</p>
+          </div>
         ) : projects.length === 0 ? (
           <div className="text-center py-20">
             <span className="material-symbols-outlined text-6xl text-slate-600 block mb-4">search_off</span>
@@ -128,14 +142,10 @@ export default function DiscoverPage() {
 
                   {/* Founder */}
                   <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/5">
-                    <Image
-                      src={proj.founder?.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${proj.id}`}
-                      alt={proj.founder?.full_name || 'مؤسس'}
-                      width={40}
-                      height={40}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <p className="text-sm font-bold text-white">{proj.founder?.full_name || 'مؤسس'}</p>
+                    <div className="w-10 h-10 rounded-full bg-primary-container/20 border border-primary-container/30 flex items-center justify-center">
+                      <span className="material-symbols-outlined text-sm text-primary-container">person</span>
+                    </div>
+                    <p className="text-sm font-bold text-white">مؤسس</p>
                   </div>
 
                   {/* Funding */}
