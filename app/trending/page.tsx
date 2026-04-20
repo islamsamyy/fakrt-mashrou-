@@ -21,7 +21,7 @@ export default async function TrendingPage() {
     .order('created_at', { ascending: false })
     .limit(20)
 
-  const trendingProjects = (projects || []).map(p => {
+  const trendingProjects = (projects || []).map((p: any) => {
     const raised = p.amount_raised || 0
     const target = p.funding_goal || 0
     const percentage = target > 0 ? Math.round((raised / target) * 100) : 0
@@ -30,6 +30,7 @@ export default async function TrendingPage() {
 
     return {
       ...p,
+      founder: Array.isArray(p.founder) ? p.founder[0] : p.founder,
       percentage,
       momentum: Math.round(momentum),
       trend: 'up' as const,

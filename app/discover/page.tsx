@@ -42,7 +42,11 @@ export default function DiscoverPage() {
       }
 
       const { data } = await query.order('created_at', { ascending: false }).limit(12)
-      setProjects((data || []) as Project[])
+      const projects = (data || []).map((p: any) => ({
+        ...p,
+        founder: Array.isArray(p.founder) ? p.founder[0] : p.founder,
+      }))
+      setProjects(projects as unknown as Project[])
       setLoading(false)
     }
 
