@@ -76,6 +76,33 @@ export default async function ProjectDetailsPage({
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Video Section */}
+            {project.video_url && (
+              <div className="bg-[#0A1628] border border-white/5 p-8 relative">
+                <div className="l-bracket-tr opacity-20"></div>
+                <h2 className="text-2xl font-bold font-headline mb-4 text-primary-container">
+                  فيديو المشروع
+                </h2>
+                <div className="relative w-full bg-slate-900 rounded-lg overflow-hidden border border-white/10">
+                  <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                    <iframe
+                      className="absolute top-0 left-0 w-full h-full"
+                      src={
+                        project.video_url.includes('youtube.com') || project.video_url.includes('youtu.be')
+                          ? `https://www.youtube.com/embed/${project.video_url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^\&\?\/\r\n]+)/)?.[1]}`
+                          : project.video_url.includes('vimeo.com')
+                          ? `https://player.vimeo.com/video/${project.video_url.match(/vimeo\.com\/(\d+)/)?.[1]}`
+                          : undefined
+                      }
+                      title="Project video"
+                      allowFullScreen
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Project Image */}
             {project.img && (
               <div className="relative h-96 overflow-hidden border border-white/5">

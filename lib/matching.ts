@@ -1,96 +1,129 @@
-import type { Project, Profile } from './types'
+'use client'
 
-/**
- * Category to interests mapping
- * Maps project categories to common investor interests
- */
-const CATEGORY_TO_INTERESTS: Record<string, string[]> = {
-  fintech: ['التكنولوجيا المالية', 'fintech'],
-  ai: ['الذكاء الاصطناعي', 'AI', 'artificial intelligence'],
-  realestate: ['العقارات', 'real estate'],
-  health: ['الصحة الرقمية', 'digital health', 'healthcare'],
-  energy: ['الطاقة المستدامة', 'sustainable energy'],
-  cybersecurity: ['الأمن السيبراني', 'cybersecurity'],
-  ecommerce: ['التجارة الإلكترونية', 'e-commerce'],
-  logistics: ['سلاسل الإمداد', 'logistics', 'supply chain'],
+import { createClient } from '@/lib/supabase/client'
+
+export interface MatchScore {
+  projectId: string
+  projectTitle: string
+  matchScore: number
+  matchReasons: string[]
 }
 
 /**
- * Calculate match score between an investor profile and a project
- * Score ranges from 0-100 based on:
- * - Category/interests match (40 points)
- * - Project verification status (20 points)
- * - Funding progress ratio (20 points)
- * - Profile quality signals (20 points)
+ * Smart matching algorithm for investors to projects
+ * Scores based on: category preference, funding range, past investments
  */
-export function calculateMatchScore(project: Project, profile: Profile): number {
+export async function getMatchedProjects(
+  investorId: string,
+  limit: number = 5
+): Promise<MatchScore[]> {
+  const supabase = createClient()
+
+  // Get investor's investment history
+  const { data: investments } = await supabase
+    .from('investments')
+    .select('project_id, projects(category, funding_goal)')
+    .eq('investor_id', investorId)
+    .limit(10)
+
+  if (!investments || investments.length === 0) {
+    return getTopProjects(limit)
+  }
+
+  const categories = investments
+    .map(inv => (inv.projects as any)?.category)
+    .filter(Boolean)
+  const fundingRanges = investments
+    .map(inv => (inv.projects as any)?.funding_goal)
+    .filter(Boolean)
+
+  const avgFunding =
+    fundingRanges.length > 0
+      ? fundingRanges.reduce((a, b) => a + b, 0) / fundingRanges.length
+      : 5000000
+
+  const { data: projects } = await supabase
+    .from('projects')
+    .select('id, title, category, funding_goal, description')
+    .eq('status', 'active')
+    .limit(50)
+
+  if (!projects) return []
+
+  const scores = projects
+    .map(project => ({
+      projectId: project.id,
+      projectTitle: project.title,
+      matchScore: calculateMatchScore(project, categories, avgFunding),
+      matchReasons: getMatchReasons(project, categories, avgFunding),
+    }))
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, limit)
+
+  return scores
+}
+
+function calculateMatchScore(
+  project: any,
+  investorCategories: string[],
+  avgFunding: number
+): number {
   let score = 0
 
-  // Factor 1: Category match with investor interests (max 40 points)
-  const projectInterests = CATEGORY_TO_INTERESTS[project.category ?? ''] ?? []
-  const investorInterests = profile.interests ?? []
-
-  const hasMatch = projectInterests.some(pi =>
-    investorInterests.some(ii => ii.toLowerCase().includes(pi.toLowerCase()) || pi.toLowerCase().includes(ii.toLowerCase()))
-  )
-
-  if (hasMatch) {
-    score += 40
-  } else if (investorInterests.length > 0) {
-    score += 10 // partial credit for having interests even if no match
-  }
-
-  // Factor 2: Project verification status (max 20 points)
-  if (project.verified) {
-    score += 20
+  if (investorCategories.includes(project.category)) {
+    score += 50
   } else {
-    score += 5
+    score += 10
   }
 
-  // Factor 3: Funding completeness (max 20 points)
-  // Projects with progress indicate investor confidence
-  const fundingRatio = project.amount_raised / Math.max(project.funding_goal, 1)
-  if (fundingRatio >= 0.75) {
-    score += 20
-  } else if (fundingRatio >= 0.5) {
+  const fundingDiff = Math.abs(project.funding_goal - avgFunding)
+  const fundingRangePercentage = fundingDiff / avgFunding
+  if (fundingRangePercentage <= 0.3) {
+    score += 30
+  } else if (fundingRangePercentage <= 0.5) {
     score += 15
-  } else if (fundingRatio >= 0.25) {
-    score += 10
-  } else if (fundingRatio > 0) {
-    score += 5
   }
 
-  // Factor 4: Profile quality signals (max 20 points)
-  // KYC verified investors get higher scores
-  if (profile.kyc_status === 'verified') {
-    score += 10
-  }
-  // Tier reflects commitment level
-  if (profile.tier === 'premium') {
-    score += 5
-  } else if (profile.tier === 'enterprise') {
-    score += 10
-  }
-  // Project quality indicators
-  if (project.description && project.description.length > 50) {
-    score += 5
-  }
+  score += Math.random() * 10
 
   return Math.min(100, score)
 }
 
-/**
- * Sort projects by match score relative to an investor profile
- * Returns projects with computed match scores, sorted descending
- */
-export function sortProjectsByMatch(
-  projects: Project[],
-  profile: Profile
-): Array<Project & { matchScore: number }> {
-  return projects
-    .map(p => ({
-      ...p,
-      matchScore: calculateMatchScore(p, profile),
-    }))
-    .sort((a, b) => b.matchScore - a.matchScore)
+function getMatchReasons(
+  project: any,
+  investorCategories: string[],
+  avgFunding: number
+): string[] {
+  const reasons: string[] = []
+
+  if (investorCategories.includes(project.category)) {
+    reasons.push(`Matches your ${project.category} preference`)
+  }
+
+  const fundingDiff = Math.abs(project.funding_goal - avgFunding)
+  if (fundingDiff / avgFunding <= 0.3) {
+    reasons.push(`Funding goal within your range`)
+  }
+
+  return reasons.slice(0, 2)
+}
+
+async function getTopProjects(limit: number): Promise<MatchScore[]> {
+  const supabase = createClient()
+
+  const { data: projects } = await supabase
+    .from('projects')
+    .select('id, title, category, funding_goal')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false })
+    .limit(limit)
+
+  if (!projects) return []
+
+  return projects.map(project => ({
+    projectId: project.id,
+    projectTitle: project.title,
+    matchScore: 50,
+    matchReasons: ['New project', project.category],
+  }))
 }

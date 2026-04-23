@@ -23,6 +23,7 @@ export interface Project {
   status: 'draft' | 'active' | 'funded' | 'cancelled';
   verified: boolean;
   img: string | null;
+  video_url: string | null;
   created_at: string;
   founder?: Profile;
 }
@@ -57,4 +58,16 @@ export interface SavedOpportunity {
   project_id: string;
   created_at: string;
   project?: Project;
+}
+
+export interface Notification {
+  id: string;
+  user_id: string;
+  title: string;
+  message: string;
+  read: boolean;
+  event_type: 'investment' | 'message' | 'project' | 'system';
+  related_user_id?: string | null;
+  created_at: string;
+  relatedUser?: Profile;
 }

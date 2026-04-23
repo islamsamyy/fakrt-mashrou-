@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { updateProject, deleteProject } from './actions'
+import VideoSection from './video-section'
 import type { Project } from '@/lib/types'
 
 interface EditProjectClientProps {
@@ -19,6 +20,7 @@ export default function EditProjectClient({ project }: EditProjectClientProps) {
     description: project.description || '',
     funding_goal: project.funding_goal.toString(),
     status: project.status,
+    video_url: project.video_url || '',
   })
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
@@ -139,6 +141,12 @@ export default function EditProjectClient({ project }: EditProjectClientProps) {
           min="0"
         />
       </div>
+
+      {/* Video Section */}
+      <VideoSection
+        videoUrl={formData.video_url}
+        onVideoUrlChange={(url) => setFormData({ ...formData, video_url: url })}
+      />
 
       {/* Buttons */}
       <div className="flex gap-4 justify-end">

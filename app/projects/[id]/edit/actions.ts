@@ -13,6 +13,7 @@ export async function updateProject(
     description: string
     funding_goal: string
     status: string
+    video_url?: string
   }
 ) {
   try {
@@ -40,6 +41,7 @@ export async function updateProject(
       description: sanitizeText(data.description),
       funding_goal: parseFloat(data.funding_goal),
       status: data.status,
+      video_url: data.video_url || null,
     }).eq('id', projectId)
 
     if (error) {
