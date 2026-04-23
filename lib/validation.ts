@@ -14,10 +14,15 @@ export interface ValidationResult {
 }
 
 /**
- * Email validation
+ * Email validation - RFC 5321 compliant
+ * BUG #11 FIX: Allows "+" character in local part (before @)
+ * Example: autotest+20260420@example.com ✅
  */
 export function validateEmail(email: string): boolean {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // RFC 5321 compliant regex that allows:
+  // - Letters, numbers, dots, hyphens, underscores, and + in local part
+  // - Valid domain structure with at least one dot
+  const regex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   return regex.test(email) && email.length <= 254;
 }
 

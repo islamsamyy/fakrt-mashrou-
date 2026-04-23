@@ -75,6 +75,43 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(`/dashboard/${role}`, request.url))
   }
 
+  // BUG #16 FIX: Role-based access control for protected routes
+  if (isProtectedPath && user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+
+    const userRole = (profile?.role as 'investor' | 'founder' | 'admin') ?? 'founder'
+    const pathname = request.nextUrl.pathname
+
+    // Define role requirements for each protected route
+    const roleRequirements: Record<string, string[]> = {
+      '/admin': ['admin'],
+      '/dashboard/investor': ['investor', 'admin'],
+      '/dashboard/founder': ['founder', 'admin'],
+      '/portfolio': ['investor', 'admin'],
+      '/saved': ['investor', 'admin'],
+    }
+
+    // Check if user's role has access to this route
+    let hasAccess = true
+    for (const [route, allowedRoles] of Object.entries(roleRequirements)) {
+      if (pathname.startsWith(route)) {
+        hasAccess = allowedRoles.includes(userRole)
+        break
+      }
+    }
+
+    // If user doesn't have access to this route, redirect to their dashboard
+    if (!hasAccess) {
+      return NextResponse.redirect(
+        new URL(`/dashboard/${userRole}`, request.url)
+      )
+    }
+  }
+
   return supabaseResponse
 }
 
