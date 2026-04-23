@@ -1,0 +1,832 @@
+﻿project_name: IDEA BUSINESS
+project_description: A Saudi-first investment platform connecting entrepreneurs with verified investors using AI-powered matching. Arabic-first platform for project funding and investment opportunities aligned with Saudi Vision 2030.
+
+tech_stack:
+  framework: Next.js 16.2.3
+  language: TypeScript
+  runtime: Node.js
+  react_version: 19.2.4
+  database: 
+    type: Supabase (PostgreSQL)
+    orm: PostgREST API
+  authentication:
+    provider: Supabase Auth
+    mfa: Enabled
+    password_recovery: Yes
+  styling:
+    framework: Tailwind CSS 4.0
+    tailwind_plugin: '@tailwindcss/postcss'
+    color_system: Material Design 3 tokens
+  ui_components:
+    - shadcn/ui (via component library)
+    - Base UI React 1.3.0
+    - Lucide React 1.8.0 (icons)
+    - Sonner 2.0.7 (toast notifications)
+    - Material Symbols (embedded icon system)
+  payments:
+    provider: Stripe 22.0.2
+    webhook_processing: Yes
+    supported_currencies: USD, SAR
+  forms_validation: Custom validation library at /lib/validation.ts
+  email: Planned (infrastructure in place)
+  analytics:
+    - Vercel Analytics 2.0.1
+    - Vercel Speed Insights 2.0.0
+  testing:
+    playwright: 1.59.1
+    playwright_test: 1.59.1
+  deployment: Vercel (Next.js optimized)
+  storage: Supabase Storage (document management)
+  deployment_framework: Next.js 16.2.3
+  react_compiler: Enabled (babel-plugin-react-compiler 1.0.0)
+
+features:
+  - name: User Authentication & Onboarding
+    description: Multi-role authentication with Supabase. Support for founder, investor, and admin roles. Email-based login and password recovery.
+    routes:
+      - /login - Login page
+      - /register - Account registration
+      - /forgot-password - Password reset
+      - /reset-password - Password reset completion
+      - /onboarding - Guided onboarding flow
+      - /auth/callback - OAuth callback handler
+
+  - name: Project/Idea Management
+    description: Founders can create, edit, and manage their project listings with rich descriptions, funding goals, and progress tracking.
+    routes:
+      - /add-idea - Create new project/idea
+      - /projects - List all founder projects
+      - /projects/[id] - View project details
+      - /projects/[id]/edit - Edit project information
+      - /projects/[id]/funding - View funding progress
+    features:
+      - Project creation with title, category, description, funding goal
+      - Automatic AI scoring of projects
+      - Project status management (active/inactive/draft)
+      - Document upload for verification
+      - Real-time funding progress tracking
+      - Category tags (AI, FinTech, HealthTech, CleanEnergy, SaaS)
+      - Image/banner management
+
+  - name: Investment Discovery & Browsing
+    description: Dynamic project discovery platform with AI-powered recommendations and advanced filtering.
+    routes:
+      - /opportunities - Browse all investment opportunities
+      - /opportunities/[id] - View opportunity details
+      - /discover - Filtered discovery with category selection
+      - /trending - Trending/popular projects
+      - /leaderboard - Top projects and investors leaderboard
+    features:
+      - Category-based filtering (AI, FinTech, HealthTech, CleanEnergy, SaaS)
+      - Founder profile information
+      - Funding progress visualization
+      - AI match scoring (percentage match between investor and project)
+      - Verified project badges
+      - Save/bookmark opportunities feature
+
+  - name: Investment Management
+    description: Complete investment lifecycle from discovery to portfolio management.
+    routes:
+      - /checkout - Investment confirmation page
+      - /checkout/success - Success confirmation page
+      - /portfolio - View investment portfolio
+      - /funding-progress - Track project funding status
+    features:
+      - Investment amount validation (1K - 10M SAR minimum/maximum)
+      - Stripe payment integration with webhook support
+      - Investment status tracking (pending, paid, cancelled)
+      - Portfolio analytics and returns tracking
+      - Saved opportunities management
+      - Investment history and transaction records
+
+  - name: Messaging System
+    description: Direct communication between investors and founders.
+    routes:
+      - /messages - Conversation list and chat interface
+    features:
+      - Real-time messaging between users
+      - Message read status tracking
+      - Participant profile information in messages
+      - Message history persistence
+      - Support for direct investor-founder communication
+
+  - name: Notifications System
+    description: Real-time user notifications for important platform events.
+    features:
+      - Investment confirmation notifications
+      - New message alerts
+      - Project status updates
+      - KYC status changes
+      - Email and in-app notification support
+      - Notification routing by event type (investment, message, status)
+
+  - name: KYC (Know Your Customer) Verification
+    description: Multi-step identity verification process for regulatory compliance.
+    routes:
+      - /kyc - KYC process
+    features:
+      - Step 1: ID document verification (national ID, passport, residency)
+      - Step 2: Address verification with proof of residence
+      - Step 3: Tax information and self-certification
+      - Document upload to Supabase Storage (kyc-documents bucket)
+      - Status tracking (pending, approved, rejected)
+      - Support for multiple document types
+      - End-to-end encryption for sensitive documents
+      - Automatic compliance with GDPR and Saudi financial regulations
+
+  - name: User Profiles & Settings
+    description: User account management and profile customization.
+    routes:
+      - /settings - Account settings and preferences
+      - /profile/[id] - Public user profile view
+    features:
+      - Profile information management
+      - Role selection and management
+      - KYC data storage in JSON format
+      - Avatar/profile picture support
+      - Full name and contact information
+      - Investment preferences configuration
+      - Privacy settings
+
+  - name: Dashboard System
+    description: Role-based dashboards with comprehensive analytics and insights.
+    routes:
+      - /dashboard - Base dashboard redirect
+      - /dashboard/founder - Founder-specific dashboard
+      - /dashboard/investor - Investor-specific dashboard
+    features_founder:
+      - Project performance overview
+      - Investor interest metrics
+      - AI success score (88% recommendation example)
+      - Recent activity feed
+      - Market insights and trends
+      - Investor messages and inquiries
+      - Fund raised vs. funding goal progress
+      - Top 3% AI rating display
+    features_investor:
+      - Total portfolio value
+      - Interested opportunities count
+      - Upcoming meetings tracking
+      - Unread messages counter
+      - AI-powered investment recommendations
+      - Saved opportunities list
+      - Investment analytics and returns
+
+  - name: Admin Panel
+    description: Administrative controls for platform management and moderation.
+    routes:
+      - /admin - Admin dashboard
+      - /admin/users - User management
+      - /admin/kyc - KYC approval/rejection
+    features:
+      - User metrics (total users, pending KYC count, active projects)
+      - Total invested capital tracking
+      - KYC verification approval workflow
+      - User status management
+      - Platform statistics dashboard
+      - Content moderation tools
+
+  - name: Static Pages
+    description: Information and legal pages.
+    routes:
+      - / - Homepage with hero section and features
+      - /pricing - Pricing and plan information
+      - /privacy - Privacy policy
+      - /terms - Terms and conditions
+      - /trust - Trust and security information
+      - /contact - Contact form and support
+    features:
+      - Hero section with platform status
+      - Live market ticker
+      - Platform statistics (projects, investors, deals, capital)
+      - Feature showcase grid
+      - Role selection cards
+      - Trending ideas section
+      - FAQ section
+      - Trust indicators and security badges
+
+  - name: Matching Engine
+    description: AI-powered project-to-investor matching algorithm.
+    location: /lib/matching.ts
+    features:
+      - Intelligent matching based on investor preferences
+      - AI scoring system
+      - Category-based recommendations
+      - Interest level calculations
+      - Performance analytics for match success
+
+  - name: Email System
+    description: Transactional and notification emails.
+    location: /lib/email.ts
+    features:
+      - Investment confirmation emails
+      - KYC status updates
+      - New message notifications
+      - Welcome emails
+      - Password reset emails
+
+  - name: Leaderboard
+    description: Competitive rankings for projects and investors.
+    location: /lib/leaderboard.ts
+    route: /leaderboard
+    features:
+      - Top projects ranking
+      - Top investors ranking
+      - Performance metrics
+      - Historical data tracking
+
+pages_detailed:
+  - path: /
+    name: Homepage
+    type: Public
+    auth_required: false
+    description: Landing page with feature showcase, statistics, and role selection
+    sections:
+      - Hero section with platform status
+      - Live market ticker
+      - Platform statistics grid
+      - Feature cards (6 features)
+      - Role pathway selection (Investor, Founder, Idea Owner)
+      - Trending ideas section
+      - FAQ section
+      - Footer with links and social media
+
+  - path: /login
+    name: Login
+    type: Public
+    auth_required: false
+    description: User authentication entry point
+
+  - path: /register
+    name: Registration
+    type: Public
+    auth_required: false
+    description: New account creation
+
+  - path: /onboarding
+    name: Onboarding
+    type: Protected
+    auth_required: true
+    roles: [founder, investor, admin]
+    description: Guided setup and profile completion
+
+  - path: /dashboard
+    name: Dashboard Root
+    type: Protected
+    auth_required: true
+    description: Redirects based on user role
+
+  - path: /dashboard/founder
+    name: Founder Dashboard
+    type: Protected
+    auth_required: true
+    roles: [founder, admin]
+    description: Project overview, investor interest, activity feed
+    stats:
+      - Funding goal vs. raised
+      - Investor interest count
+      - AI success score
+      - Total documents uploaded
+      - Discussion count
+
+  - path: /dashboard/investor
+    name: Investor Dashboard
+    type: Protected
+    auth_required: true
+    roles: [investor, admin]
+    description: Portfolio overview, recommendations, saved opportunities
+    stats:
+      - Total portfolio value
+      - Interested opportunities
+      - Unread messages
+      - Upcoming meetings
+
+  - path: /admin
+    name: Admin Dashboard
+    type: Protected
+    auth_required: true
+    roles: [admin]
+    description: Platform management and statistics
+    metrics:
+      - Total users
+      - Pending KYC count
+      - Active projects
+      - Total invested capital
+
+  - path: /admin/users
+    name: User Management
+    type: Protected
+    auth_required: true
+    roles: [admin]
+    description: User list and management tools
+
+  - path: /admin/kyc
+    name: KYC Management
+    type: Protected
+    auth_required: true
+    roles: [admin]
+    description: KYC application review and approval
+
+  - path: /discover
+    name: Discover Projects
+    type: Protected
+    auth_required: true
+    roles: [investor, admin]
+    description: Browse and filter investment opportunities
+
+  - path: /opportunities
+    name: All Opportunities
+    type: Public/Protected
+    auth_required: false (view), true (invest)
+    description: Main opportunity browsing interface
+    features:
+      - Category filters
+      - Search functionality
+      - Project cards with progress bars
+      - Founder information
+      - Verified badges
+
+  - path: /opportunities/[id]
+    name: Opportunity Details
+    type: Public/Protected
+    auth_required: false (view), true (invest)
+    description: Detailed project/opportunity view with investment CTA
+
+  - path: /add-idea
+    name: Add Project/Idea
+    type: Protected
+    auth_required: true
+    roles: [founder, admin]
+    description: Create new project listing
+    form_fields:
+      - Title
+      - Category
+      - Description
+      - Funding goal/target amount
+      - Project image/banner
+
+  - path: /projects
+    name: My Projects
+    type: Protected
+    auth_required: true
+    roles: [founder, admin]
+    description: Founder's project list with management options
+
+  - path: /projects/[id]
+    name: Project Details
+    type: Protected
+    auth_required: true
+    description: Full project view with status and metrics
+
+  - path: /projects/[id]/edit
+    name: Edit Project
+    type: Protected
+    auth_required: true
+    roles: [founder, admin]
+    description: Update project information
+
+  - path: /projects/[id]/funding
+    name: Funding Progress
+    type: Protected
+    auth_required: true
+    description: Track project funding progress and investors
+
+  - path: /checkout
+    name: Investment Checkout
+    type: Protected
+    auth_required: true
+    roles: [investor, admin]
+    description: Investment confirmation and payment
+    features:
+      - Amount input (1K-10M SAR)
+      - Fee calculation (1.5% platform fee)
+      - Payment method selection
+      - Legal/Terms acceptance
+      - Stripe payment processing
+
+  - path: /checkout/success
+    name: Checkout Success
+    type: Protected
+    auth_required: true
+    roles: [investor, admin]
+    description: Investment confirmation success page
+
+  - path: /portfolio
+    name: Investment Portfolio
+    type: Protected
+    auth_required: true
+    roles: [investor, admin]
+    description: View and manage investments
+    metrics:
+      - Total invested
+      - Active investments count
+      - Paid investments
+      - Investment list with status
+
+  - path: /messages
+    name: Messages/Chat
+    type: Protected
+    auth_required: true
+    roles: [founder, investor, admin]
+    description: Direct messaging between users
+
+  - path: /kyc
+    name: Know Your Customer
+    type: Protected
+    auth_required: true
+    roles: [founder, investor, admin]
+    description: Multi-step identity verification
+    steps:
+      - Step 1: ID Document upload
+      - Step 2: Address verification
+      - Step 3: Tax information
+      - Step 4: Review and confirmation
+
+  - path: /settings
+    name: Account Settings
+    type: Protected
+    auth_required: true
+    roles: [founder, investor, admin]
+    description: User profile and preference management
+
+  - path: /profile/[id]
+    name: Public Profile
+    type: Public
+    auth_required: false
+    description: View user profile (investor or founder)
+
+  - path: /saved
+    name: Saved Opportunities
+    type: Protected
+    auth_required: true
+    roles: [investor, admin]
+    description: Bookmarked investment opportunities
+
+  - path: /funding-progress
+    name: Funding Progress View
+    type: Protected
+    auth_required: true
+    roles: [investor, admin]
+    description: Track project funding status
+
+  - path: /notifications
+    name: Notifications
+    type: Protected
+    auth_required: true
+    roles: [founder, investor, admin]
+    description: View all user notifications
+
+  - path: /trending
+    name: Trending Projects
+    type: Public/Protected
+    auth_required: false
+    description: Most popular and trending projects
+
+  - path: /leaderboard
+    name: Leaderboard
+    type: Public
+    auth_required: false
+    description: Top projects and investors rankings
+
+  - path: /investors
+    name: Top Investors
+    type: Public
+    auth_required: false
+    description: Browse active investors
+
+  - path: /pricing
+    name: Pricing
+    type: Public
+    auth_required: false
+    description: Platform pricing and plans
+
+  - path: /privacy
+    name: Privacy Policy
+    type: Public
+    auth_required: false
+    description: Privacy and data protection policy
+
+  - path: /terms
+    name: Terms & Conditions
+    type: Public
+    auth_required: false
+    description: Terms of service and user agreement
+
+  - path: /trust
+    name: Trust & Security
+    type: Public
+    auth_required: false
+    description: Security information and trust indicators
+
+  - path: /contact
+    name: Contact
+    type: Public
+    auth_required: false
+    description: Contact form and support information
+
+api_routes:
+  - path: /api/invest
+    method: POST
+    auth_required: true
+    rate_limit: Standard
+    description: Create new investment record
+    validation:
+      - projectId (required, string)
+      - amount (required, number, 1000-10000000 SAR)
+      - notes (optional, string)
+    response_format:
+      success: boolean
+      data:
+        investmentId: string
+        projectId: string
+        amount: number
+        status: string (pending)
+      error: string
+      statusCode: number
+    error_cases:
+      - 400: Invalid project ID, amount not a number, amount too low/high
+      - 401: User not authenticated
+      - 403: Investor trying to invest in own project
+      - 404: Project not found
+      - 409: Project not accepting investments, duplicate investment attempt
+
+  - path: /api/webhooks/stripe
+    method: POST
+    auth_required: false
+    description: Stripe webhook for payment confirmation
+    events_handled:
+      - checkout.session.completed
+    actions:
+      - Update investment status to 'paid'
+      - Send investment confirmation notification
+    security:
+      - Signature verification required
+      - Metadata validation
+
+  - path: /auth/callback
+    method: GET
+    auth_required: false
+    description: OAuth callback handler for Supabase Auth
+
+database_schema:
+  tables:
+    - name: profiles
+      purpose: User account information
+      columns:
+        - id (UUID, PK, FK auth.users)
+        - email (string)
+        - full_name (string)
+        - avatar_url (string)
+        - role (enum: founder, investor, admin)
+        - kyc_status (enum: pending, approved, rejected)
+        - kyc_data (jsonb)
+        - created_at (timestamp)
+        - updated_at (timestamp)
+
+    - name: projects
+      purpose: Investment opportunities/ideas
+      columns:
+        - id (UUID, PK)
+        - founder_id (UUID, FK profiles)
+        - title (string)
+        - description (text)
+        - category (string)
+        - funding_goal (number)
+        - amount_raised (number)
+        - status (enum: draft, active, inactive, completed, cancelled)
+        - verified (boolean)
+        - ai_score (number)
+        - img (string)
+        - min_invest (number)
+        - created_at (timestamp)
+        - updated_at (timestamp)
+
+    - name: investments
+      purpose: Investment transactions
+      columns:
+        - id (UUID, PK)
+        - investor_id (UUID, FK profiles)
+        - project_id (UUID, FK projects)
+        - amount (number)
+        - status (enum: pending, committed, paid, cancelled)
+        - notes (text)
+        - created_at (timestamp)
+        - updated_at (timestamp)
+
+    - name: messages
+      purpose: User-to-user communication
+      columns:
+        - id (UUID, PK)
+        - sender_id (UUID, FK profiles)
+        - receiver_id (UUID, FK profiles)
+        - content (text)
+        - read (boolean)
+        - created_at (timestamp)
+
+    - name: saved_opportunities
+      purpose: Bookmarked projects
+      columns:
+        - id (UUID, PK)
+        - user_id (UUID, FK profiles)
+        - project_id (UUID, FK projects)
+        - created_at (timestamp)
+
+    - name: notifications
+      purpose: User notifications
+      columns:
+        - id (UUID, PK)
+        - user_id (UUID, FK profiles)
+        - type (enum: investment, message, status, kyc)
+        - title (string)
+        - message (text)
+        - link (string)
+        - read (boolean)
+        - created_at (timestamp)
+
+user_roles:
+  - name: founder
+    description: Project/idea creators seeking investment
+    permissions:
+      - create_project
+      - edit_own_project
+      - view_dashboard_founder
+      - receive_messages
+      - send_messages
+      - view_investors
+      - access_funding_progress
+    dashboard_access: /dashboard/founder
+    protected_routes:
+      - /add-idea
+      - /projects
+      - /projects/[id]/edit
+      - /projects/[id]/funding
+
+  - name: investor
+    description: Capital providers looking for investment opportunities
+    permissions:
+      - browse_opportunities
+      - make_investments
+      - view_portfolio
+      - save_opportunities
+      - message_founders
+      - view_leaderboard
+      - complete_kyc
+    dashboard_access: /dashboard/investor
+    protected_routes:
+      - /opportunities
+      - /discover
+      - /portfolio
+      - /saved
+      - /checkout
+      - /funding-progress
+
+  - name: admin
+    description: Platform administrators with full access
+    permissions:
+      - view_all_content
+      - manage_users
+      - approve_kyc
+      - manage_projects
+      - access_admin_panel
+      - view_analytics
+    dashboard_access: /admin
+    protected_routes:
+      - /admin
+      - /admin/users
+      - /admin/kyc
+
+middleware_config:
+  protected_paths:
+    - /onboarding
+    - /dashboard
+    - /add-idea
+    - /messages
+    - /settings
+    - /kyc
+    - /portfolio
+    - /saved
+    - /funding-progress
+    - /checkout
+    - /admin
+    - /notifications
+  role_based_routes:
+    /admin: [admin]
+    /dashboard/investor: [investor, admin]
+    /dashboard/founder: [founder, admin]
+    /portfolio: [investor, admin]
+    /saved: [investor, admin]
+  auth_redirect: /login
+  dashboard_redirect_by_role:
+    founder: /dashboard/founder
+    investor: /dashboard/investor
+    admin: /admin
+
+environment_variables:
+  required:
+    - NEXT_PUBLIC_SUPABASE_URL
+    - NEXT_PUBLIC_SUPABASE_ANON_KEY
+    - STRIPE_SECRET_KEY
+    - STRIPE_PUBLISHABLE_KEY
+    - STRIPE_WEBHOOK_SECRET
+    - NEXT_PUBLIC_APP_URL
+
+key_utilities:
+  - path: /lib/supabase/client.ts
+    purpose: Client-side Supabase initialization
+  - path: /lib/supabase/server.ts
+    purpose: Server-side Supabase initialization with SSR
+  - path: /lib/stripe.ts
+    purpose: Stripe payment processing
+  - path: /lib/validation.ts
+    purpose: Form validation schemas and rules
+  - path: /lib/email.ts
+    purpose: Email template generation and sending
+  - path: /lib/matching.ts
+    purpose: AI matching algorithm
+  - path: /lib/leaderboard.ts
+    purpose: Leaderboard calculations
+  - path: /lib/notifications.ts
+    purpose: Notification creation and dispatch
+  - path: /lib/sanitize.ts
+    purpose: Input sanitization and XSS prevention
+  - path: /lib/types.ts
+    purpose: TypeScript type definitions
+
+security_features:
+  - Supabase Row Level Security (RLS) policies
+  - Role-based access control (RBAC)
+  - JWT authentication via Supabase Auth
+  - Stripe webhook signature verification
+  - HTTPS only communication
+  - AES-256 encryption for sensitive data
+  - GDPR compliance for EU users
+  - Saudi financial regulation compliance
+  - End-to-end encryption for KYC documents
+  - Input validation and sanitization
+  - SQL injection prevention via parameterized queries
+  - XSS protection via React escaping
+  - CSRF token support
+
+performance_optimizations:
+  - React Compiler enabled (babel-plugin-react-compiler)
+  - Image optimization via Next.js Image component
+  - Lazy loading for components
+  - Server-side rendering for SEO
+  - Vercel Analytics and Speed Insights
+  - Code splitting and bundle optimization
+  - Caching strategies via HTTP headers
+  - Database query optimization with indexes
+
+i18n_localization:
+  - Primary Language: Arabic (RTL)
+  - Secondary Language: English (LTR)
+  - locale: ar-SA (default)
+  - Direction: RTL (Arabic), LTR (English)
+  - Currency: SAR (Saudi Arabian Riyal), USD
+
+testing_infrastructure:
+  framework: Playwright 1.59.1
+  type: E2E testing
+  test_location: /tests directory
+  capabilities:
+    - Cross-browser testing
+    - Visual regression testing
+    - Performance testing
+
+design_system:
+  color_tokens: Material Design 3
+  primary_color: Cyan/Turquoise (#00ffd1)
+  secondary_color: Secondary container
+  tertiary_color: Tertiary fixed dim
+  dark_mode: Supported
+  typography:
+    - headline font (Material 3 style)
+    - body font (Roboto style)
+    - data font (monospace for numbers/codes)
+  components:
+    - Gradient backgrounds
+    - Clip-button custom buttons
+    - Bracket accents (l-bracket-tr, l-bracket-bl)
+    - Neon grid background
+    - Scanline effects
+    - Hex grid patterns
+
+deployment_info:
+  platform: Vercel
+  node_version: 20+ (from tsconfig)
+  build_command: npm run build
+  dev_command: npm run dev
+  start_command: npm run start
+  monitoring:
+    - Vercel Analytics
+    - Vercel Speed Insights
+  database: Supabase (cloud-hosted PostgreSQL)
+  storage: Supabase Storage for documents/images
+  cdn: Vercel CDN (included)
+
+known_issues_and_fixes:
+  - BUG #4: Return proper JSON response from /api/invest
+  - BUG #8: Validate investment amount in API
+  - BUG #9: Validate project exists before processing investment
+  - BUG #10: Create /invest POST endpoint with validation
+  - BUG #16: Role-based access control for protected routes

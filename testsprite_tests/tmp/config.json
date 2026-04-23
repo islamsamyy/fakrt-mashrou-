@@ -1,0 +1,19 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "IDEA BUSINESS",
+    "projectPath": "D:\\IDEA BUSINESS",
+    "testIds": [],
+    "additionalInstruction": "Fixed: register route now accepts both fullName and name fields. All auth endpoints working: POST /api/auth/login, POST /api/auth/register. Investment endpoint: POST /api/invest. Test with: email+timestamp to avoid duplicates, 1K-10M SAR investment range validation, empty field validation returning 400, wrong credentials returning 401, public pages 200, protected pages redirect.",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-_EnCj1jfY1oiMOcP_Z4StihSZ4DJiXWORZE4jfetz7cT1jIapXzQ3SVhIL2hr-d4FKd27UDRY-FqgDIYkns7QppFpKe-5SzMk5vr63XPQYnf9o1cMySN1B47llXDiq933U4"
+    }
+  },
+  "serverPort": 12724,
+  "proxy": "http://2ef1a967-408a-4b9a-b4e4-e26a7062b3e4:xP1pWEVAep6qvxlNVPtes8Yd0pYz2dxo@tun.testsprite.com:8080"
+}

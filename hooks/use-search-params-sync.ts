@@ -156,43 +156,15 @@ export function useSearchParamsSync() {
   }
 }
 
-/**
- * Example usage in a component:
- *
- * export function DiscoverPage() {
- *   const { setSearch, setCategory, setPage, getParam, getNumberParam } = useSearchParamsSync()
- *   const [projects, setProjects] = useState([])
- *
- *   // Load projects based on current URL params
- *   useEffect(() => {
- *     const search = getParam('search') || ''
- *     const category = getParam('category') || ''
- *     const page = getNumberParam('page') || 1
- *
- *     loadProjects({ search, category, page })
- *   }, [getParam, getNumberParam])
- *
- *   return (
- *     <div>
- *       {/* Search input */}
- *       <input
- *         onChange={(e) => setSearch(e.target.value)}
- *         value={getParam('search') || ''}
- *         placeholder="ابحث عن مشاريع..."
- *       />
- *
- *       {/* Category filter */}
- *       <select onChange={(e) => setCategory(e.target.value)}>
- *         <option value="">جميع الفئات</option>
- *         <option value="AI">AI</option>
- *         <option value="FinTech">FinTech</option>
- *       </select>
- *
- *       {/* Pagination */}
- *       <button onClick={() => setPage((getNumberParam('page') || 1) + 1)}>
- *         الصفحة التالية
- *       </button>
- *     </div>
- *   )
- * }
- */
+// Example usage in a component:
+// export function DiscoverPage() {
+//   const { setSearch, setCategory, setPage, getParam, getNumberParam } = useSearchParamsSync()
+//   const [projects, setProjects] = useState([])
+//
+//   useEffect(() => {
+//     const search = getParam('search') || ''
+//     const category = getParam('category') || ''
+//     const page = getNumberParam('page') || 1
+//     loadProjects({ search, category, page })
+//   }, [getParam, getNumberParam])
+// }

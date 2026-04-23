@@ -118,27 +118,19 @@ export const NAVBAR_LINKS: NavLink[] = [
   { href: '/leaderboard', label: 'لوحة الصدارة', icon: 'leaderboard' },
 ]
 
-/**
- * Example usage in Navbar:
- *
- * import { MobileNavMenu, NAVBAR_LINKS } from '@/components/mobile-nav-menu'
- *
- * export function Navbar() {
- *   return (
- *     <nav className="flex items-center justify-between gap-4">
- *       {/* Logo */}
- *       <Link href="/" className="font-bold">IDEA BUSINESS</Link>
- *
- *       {/* Desktop Navigation - hidden on mobile */}
- *       <div className="hidden md:flex gap-6">
- *         {NAVBAR_LINKS.map(link => (
- *           <Link key={link.href} href={link.href}>{link.label}</Link>
- *         ))}
- *       </div>
- *
- *       {/* Mobile Hamburger Menu - visible only on mobile */}
- *       <MobileNavMenu links={NAVBAR_LINKS} />
- *     </nav>
- *   )
- * }
- */
+// Example usage in Navbar:
+// import { MobileNavMenu, NAVBAR_LINKS } from '@/components/mobile-nav-menu'
+//
+// export function Navbar() {
+//   return (
+//     <nav className="flex items-center justify-between gap-4">
+//       <Link href="/" className="font-bold">IDEA BUSINESS</Link>
+//       <div className="hidden md:flex gap-6">
+//         {NAVBAR_LINKS.map(link => (
+//           <Link key={link.href} href={link.href}>{link.label}</Link>
+//         ))}
+//       </div>
+//       <MobileNavMenu links={NAVBAR_LINKS} />
+//     </nav>
+//   )
+// }

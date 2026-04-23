@@ -1,0 +1,82 @@
+[
+  {
+    "id": "TC001",
+    "title": "post api invest create new investment record",
+    "description": "Verify that authenticated investors can create a new investment record with valid projectId and amount within allowed range, receiving 201 Created with investment details and status 'pending'. Validate error responses for invalid projectId, amount out of range, investing in own project, unauthenticated access, project not found, and duplicate investments."
+  },
+  {
+    "id": "TC002",
+    "title": "post api auth register with valid data returns 200",
+    "description": "Call POST /api/auth/register with valid body {fullName: 'Test User', email: 'testuser_<timestamp>@example.com', password: 'StrongPass123', role: 'investor'}. Expect HTTP 200 and response body with success: true and a user object containing id and email."
+  },
+  {
+    "id": "TC003",
+    "title": "post api auth register duplicate email returns 409",
+    "description": "Register the same email twice via POST /api/auth/register. The second request should return HTTP 409 Conflict with success: false and an error message indicating duplicate email."
+  },
+  {
+    "id": "TC004",
+    "title": "post api auth register with plus sign in email is accepted",
+    "description": "Call POST /api/auth/register with email containing a plus sign e.g. 'autotest+<timestamp>@example.com'. Expect HTTP 200 and success: true. The + character is RFC 5321 compliant and must not be rejected."
+  },
+  {
+    "id": "TC005",
+    "title": "post api auth register missing required fields returns 400",
+    "description": "Call POST /api/auth/register with missing fields: first with no email, then no password, then no fullName. Each should return HTTP 400 with success: false and an Arabic error message indicating which field is missing."
+  },
+  {
+    "id": "TC006",
+    "title": "post api auth login with correct credentials returns 200 and token",
+    "description": "First register a new user via POST /api/auth/register, then call POST /api/auth/login with the same email and password. Expect HTTP 200 with success: true, a data object containing token (string) and user object with id, email, full_name."
+  },
+  {
+    "id": "TC007",
+    "title": "post api auth login with wrong password returns 401",
+    "description": "Call POST /api/auth/login with a valid registered email but incorrect password. Expect HTTP 401 with success: false and an error message in Arabic indicating invalid credentials."
+  },
+  {
+    "id": "TC008",
+    "title": "post api auth login with non-existent email returns 401",
+    "description": "Call POST /api/auth/login with an email that was never registered e.g. 'nonexistent_<timestamp>@example.com'. Expect HTTP 401 with success: false. Must NOT return 200 or 404."
+  },
+  {
+    "id": "TC009",
+    "title": "post api auth login with empty email returns 400",
+    "description": "Call POST /api/auth/login with empty string for email. Expect HTTP 400 with success: false and Arabic error message indicating email is required."
+  },
+  {
+    "id": "TC010",
+    "title": "post api auth login with empty password returns 400",
+    "description": "Call POST /api/auth/login with valid email but empty string for password. Expect HTTP 400 with success: false and Arabic error message indicating password is required."
+  },
+  {
+    "id": "TC011",
+    "title": "post api invest with amount below minimum returns 400",
+    "description": "Register and login as investor, then call POST /api/invest with a valid projectId but amount: 500 (below 1000 SAR minimum). Expect HTTP 400 with success: false and error message about minimum investment amount."
+  },
+  {
+    "id": "TC012",
+    "title": "post api invest with amount above maximum returns 400",
+    "description": "Register and login as investor, then call POST /api/invest with a valid projectId but amount: 20000000 (above 10000000 SAR maximum). Expect HTTP 400 with success: false and error message about maximum investment amount."
+  },
+  {
+    "id": "TC013",
+    "title": "post api invest without authentication returns 401",
+    "description": "Call POST /api/invest with valid projectId and amount: 5000 but with no Authorization header or session cookie. Expect HTTP 401 with success: false."
+  },
+  {
+    "id": "TC014",
+    "title": "post api invest with missing projectId returns 400",
+    "description": "Register and login as investor, then call POST /api/invest with only {amount: 5000} and no projectId field. Expect HTTP 400 with success: false and error about missing projectId."
+  },
+  {
+    "id": "TC015",
+    "title": "get public pages return 200 without authentication",
+    "description": "Send GET requests to public pages: /, /discover, /trending, /leaderboard, /login, /register, /about, /terms, /privacy. Each should return HTTP 200 without requiring authentication."
+  },
+  {
+    "id": "TC016",
+    "title": "get protected pages redirect unauthenticated users to login",
+    "description": "Send GET requests to protected routes /dashboard/investor, /dashboard/founder, /portfolio, /saved, /settings, /notifications without a session cookie. Expect HTTP 307 redirect to /login or the response URL contains /login."
+  }
+]
