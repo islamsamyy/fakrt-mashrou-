@@ -114,12 +114,46 @@ export default function OpportunityDetail(props: { params: Promise<{ id: string 
           <div className="absolute inset-0 border-4 border-primary-container/20 rounded-full" />
           <div className="absolute inset-0 border-t-4 border-primary-container rounded-full animate-spin shadow-[0_0_20px_#00ffd1]" />
         </div>
-        <p className="mt-8 text-primary-container font-data tracking-[0.4em] uppercase animate-pulse">Decrypting opportunity data...</p>
+        <p className="mt-8 text-primary-container font-data tracking-[0.4em] uppercase animate-pulse">... جاري فك تشفير بيانات الفرصة</p>
       </div>
     )
   }
 
   if (!project) return null
+
+  // Arabic translations
+  const t = {
+    established: 'تأسس في',
+    entityId: 'معرّف الكيان',
+    summary: 'الملخص التنفيذي',
+    marketStatus: 'حالة السوق',
+    highDemand: 'طلب عالي',
+    locked: 'مُقفل',
+    entryThreshold: 'الحد الأدنى للاستثمار',
+    projectedRoi: 'العائد المتوقع',
+    analysing: 'قيد التحليل',
+    fundingProtocol: 'بروتوكول التمويل',
+    targetCapital: 'رأس المال المستهدف',
+    percentage: 'النسبة',
+    connectionSecure: 'الاتصال آمن',
+    remaining: 'المتبقي',
+    disclaimer: 'إخلاء المسؤولية',
+    minParticipation: 'الحد الأدنى للمشاركة',
+    initiateInvestment: 'بدء الاستثمار',
+    messageEntity: 'راسل المؤسس',
+    archiveIntel: 'حفظ',
+    entitySecured: '✓ تم الحفظ',
+    updating: 'جاري التحديث',
+    initialising: 'جاري التهيئة',
+    verifiedFounder: 'مؤسس موثق',
+    requestLink: 'طلب الاتصال ←',
+    editEntity: 'تعديل المشروع',
+    noData: 'بيانات غير متاحة',
+    encrypted: 'جميع المعاملات مشفرة وآمنة',
+    active: 'نشط',
+    inactive: 'غير نشط',
+    verified: 'مُتحقّق'
+  }
 
   const founder = Array.isArray(project.founder) ? project.founder[0] : project.founder
   const raised = project.amount_raised || 0
@@ -130,11 +164,12 @@ export default function OpportunityDetail(props: { params: Promise<{ id: string 
 
   return (
     <div className="bg-background text-on-surface font-body min-h-screen relative overflow-x-hidden text-right" dir="rtl">
-      {/* Background Effects */}
+      {/* Enhanced Background Effects */}
       <div className="fixed inset-0 neon-grid opacity-[0.15] pointer-events-none z-0" />
       <div className="fixed inset-0 scanline opacity-10 pointer-events-none z-0" />
       <div className="fixed inset-0 data-stream opacity-[0.05] pointer-events-none z-0" />
-      
+      <div className="fixed inset-0 bg-gradient-to-br from-primary-container/5 via-transparent to-secondary/5 pointer-events-none z-0" />
+
       <Navbar />
 
       <main className="container mx-auto px-6 pt-32 pb-24 relative z-10">
@@ -143,133 +178,131 @@ export default function OpportunityDetail(props: { params: Promise<{ id: string 
           {/* Main Content */}
           <div className="flex-grow space-y-16">
             <header className="relative">
-              <div className="flex items-center gap-4 mb-8">
-                <span className="bg-primary-container/10 text-primary-container text-[10px] font-black px-4 py-1.5 border border-primary-container/20 uppercase tracking-[0.2em] clip-button holographic-reflection">
-                  {project.category || 'GENERAL_INTEL'}
+              <div className="flex items-center gap-4 mb-8 flex-wrap">
+                <span className="bg-gradient-to-r from-primary-container/20 to-primary-container/5 text-primary-container text-[11px] font-black px-5 py-2 border border-primary-container/30 rounded-lg clip-button holographic-reflection shadow-lg shadow-primary-container/10">
+                  {project.category || 'عام'}
                 </span>
                 {project.verified && (
-                  <span className="flex items-center gap-1.5 text-secondary text-[10px] font-black uppercase tracking-[0.2em]">
+                  <span className="flex items-center gap-2 text-secondary text-[11px] font-black px-4 py-2 bg-secondary/5 border border-secondary/20 rounded-lg">
                     <span className="material-symbols-outlined text-sm">verified</span>
-                    SECURITY_VERIFIED
+                    {t.verified}
                   </span>
                 )}
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-white/5 border border-white/10 rounded-full">
-                  <div className={`w-2 h-2 rounded-full animate-pulse ${project.status === 'active' ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-slate-500'}`} />
-                  <span className="text-[10px] font-black text-white uppercase tracking-widest leading-none">
-                    {project.status === 'active' ? 'Link_Established' : 'Link_Severed'}
+                <div className="flex items-center gap-3 px-5 py-2 bg-gradient-to-r from-green-500/10 to-green-500/5 border border-green-500/30 rounded-lg">
+                  <div className={`w-3 h-3 rounded-full animate-pulse ${project.status === 'active' ? 'bg-green-500 shadow-[0_0_10px_#22c55e]' : 'bg-slate-500'}`} />
+                  <span className="text-[11px] font-black text-green-400 uppercase tracking-widest leading-none">
+                    {project.status === 'active' ? t.active : t.inactive}
                   </span>
                 </div>
               </div>
 
-              <h1 className="font-headline text-5xl md:text-7xl font-black text-white mb-8 leading-tight uppercase tracking-tighter glitch-layers" data-text={project.title}>
+              <h1 className="font-headline text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-primary-container to-white mb-8 leading-tight tracking-tighter" data-text={project.title}>
                 {project.title}
               </h1>
 
-              <div className="flex flex-wrap gap-8 text-slate-500 font-data text-[10px] font-bold uppercase tracking-[0.3em] border-y border-white/5 py-8">
+              <div className="flex flex-wrap gap-8 text-slate-400 font-data text-[11px] font-bold tracking-[0.2em] border-y border-white/10 py-8 backdrop-blur-sm bg-white/5 px-8 rounded-lg">
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-primary-container text-base">calendar_month</span>
-                  <span>Established: {new Date(project.created_at).toLocaleDateString('ar-SA')}</span>
+                  <span>{t.established}: {new Date(project.created_at).toLocaleDateString('ar-SA')}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="material-symbols-outlined text-primary-container text-base">fingerprint</span>
-                  <span>Entity_ID: {project.id.slice(0, 12).toUpperCase()}</span>
+                  <span>{t.entityId}: {project.id.slice(0, 12).toUpperCase()}</span>
                 </div>
               </div>
             </header>
 
-            <section className="relative p-10 bg-[#020406]/60 backdrop-blur-xl border border-white/10 clip-card group">
-              <div className="l-bracket-tr" />
-              <div className="l-bracket-bl" />
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-container/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-              
-              <h3 className="text-2xl font-black text-white mb-8 font-headline uppercase tracking-tighter flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-primary-container" />
-                Executive Summary
+            <section className="relative p-12 bg-gradient-to-br from-[#020406]/80 to-[#0a0e1a]/60 backdrop-blur-xl border border-primary-container/20 rounded-2xl group overflow-hidden">
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary-container/10 blur-3xl rounded-full group-hover:blur-2xl transition-all duration-700" />
+              <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-secondary/10 blur-3xl rounded-full group-hover:blur-2xl transition-all duration-700" />
+
+              <h3 className="text-2xl font-black text-white mb-8 font-headline uppercase tracking-tighter flex items-center gap-3 relative z-10">
+                <span className="w-8 h-[3px] bg-gradient-to-r from-primary-container to-secondary rounded-full" />
+                {t.summary}
               </h3>
-              <p className="text-slate-400 leading-relaxed text-xl font-body group-hover:text-slate-300 transition-colors">
-                {project.description || 'No detailed intel available for this entity.'}
+              <p className="text-slate-300 leading-relaxed text-lg font-body group-hover:text-slate-200 transition-colors relative z-10 text-justify">
+                {project.description || t.noData}
               </p>
             </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: 'Market Status', value: project.status === 'active' ? 'HIGH_DEMAND' : 'LOCKED', color: 'text-primary-container', icon: 'monitoring' },
-                { label: 'Entry Threshold', value: `${(project.min_invest || 0).toLocaleString()} SAR`, color: 'text-secondary', icon: 'token' },
-                { label: 'Projected ROI', value: project.roi || 'ANALYSING...', color: 'text-tertiary', icon: 'show_chart' },
+                { label: t.marketStatus, value: project.status === 'active' ? t.highDemand : t.locked, color: 'from-primary-container to-cyan-400', icon: 'trending_up' },
+                { label: t.entryThreshold, value: `${(project.min_invest || 0).toLocaleString('ar-SA')} ر.س`, color: 'from-secondary to-emerald-400', icon: 'savings' },
+                { label: t.projectedRoi, value: project.roi || t.analysing, color: 'from-tertiary to-violet-400', icon: 'show_chart' },
               ].map((stat, i) => (
-                <div key={i} className="bg-[#020406]/40 border border-white/5 p-8 text-right rounded-2xl relative overflow-hidden group hover:border-primary-container/30 transition-all">
-                  <div className="absolute -top-4 -left-4 w-12 h-12 bg-white/5 blur-xl group-hover:bg-primary-container/10 transition-colors" />
-                  <span className="material-symbols-outlined text-slate-700 text-3xl mb-4 block">{stat.icon}</span>
-                  <span className={`block text-xl font-black font-data mb-2 tracking-tighter uppercase ${stat.color}`}>{stat.value}</span>
-                  <span className="text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">{stat.label}</span>
+                <div key={i} className={`bg-gradient-to-br from-[#020406]/60 to-[#0a0e1a]/40 border border-white/10 p-8 text-right rounded-2xl relative overflow-hidden group hover:border-primary-container/40 transition-all hover:shadow-2xl hover:shadow-primary-container/20 backdrop-blur-sm`}>
+                  <div className={`absolute -top-6 -left-6 w-24 h-24 bg-gradient-to-br ${stat.color} blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 rounded-full`} />
+                  <span className={`material-symbols-outlined text-4xl mb-6 block bg-gradient-to-br ${stat.color} bg-clip-text text-transparent`}>{stat.icon}</span>
+                  <span className={`block text-2xl font-black font-data mb-3 tracking-tighter text-transparent bg-clip-text bg-gradient-to-r ${stat.color}`}>{stat.value}</span>
+                  <span className="text-slate-500 text-[11px] font-black uppercase tracking-[0.2em]">{stat.label}</span>
                 </div>
               ))}
             </div>
 
             {isOwner && (
-              <Link href={`/projects/${id}/edit`} className="inline-flex items-center gap-3 bg-primary-container/10 border border-primary-container text-primary-container font-black px-10 py-5 text-sm uppercase tracking-[0.3em] hover:bg-primary-container hover:text-background transition-all clip-button shadow-neon-sm">
+              <Link href={`/projects/${id}/edit`} className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-container/20 to-primary-container/10 border border-primary-container/50 text-primary-container font-black px-10 py-5 text-sm uppercase tracking-[0.3em] hover:from-primary-container/30 hover:to-primary-container/20 hover:border-primary-container/80 transition-all rounded-lg shadow-lg shadow-primary-container/20 hover:shadow-xl hover:shadow-primary-container/40">
                 <span className="material-symbols-outlined text-base">edit_note</span>
-                Modify_Entity_Parameters
+                {t.editEntity}
               </Link>
             )}
           </div>
 
           {/* Sidebar */}
-          <aside className="lg:w-[480px] space-y-10 shrink-0">
-            <div className="bg-[#020406]/90 border border-primary-container/30 p-10 clip-card relative shadow-[0_0_60px_rgba(0,255,209,0.1)] group">
-              <div className="absolute inset-0 scanline-overlay opacity-5 animate-scanline" />
-              <div className="l-bracket-tr text-primary-container" />
-              
-              <div className="absolute top-0 right-0 w-full h-[1px] bg-gradient-to-l from-primary-container via-transparent to-transparent" />
+          <aside className="lg:w-[500px] space-y-10 shrink-0">
+            <div className="bg-gradient-to-br from-[#020406]/95 to-[#0a0e1a]/80 border border-primary-container/40 p-12 rounded-2xl relative shadow-2xl shadow-primary-container/20 group overflow-hidden">
+              <div className="absolute inset-0 scanline-overlay opacity-5 animate-scanline pointer-events-none" />
+              <div className="absolute -top-12 -right-12 w-32 h-32 bg-primary-container/10 blur-3xl rounded-full group-hover:blur-2xl transition-all duration-700" />
 
-              <h3 className="text-3xl font-black text-white mb-10 font-headline text-center uppercase tracking-tighter">Funding_Protocol</h3>
+              <div className="absolute top-0 right-0 w-full h-[2px] bg-gradient-to-l from-primary-container via-cyan-500 to-transparent" />
 
-              <div className="space-y-8 mb-12">
-                <div className="flex justify-between items-end px-2">
-                  <div className="space-y-1">
-                    <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">Target Capital</p>
-                    <p className="text-white font-data text-3xl font-black tabular-nums tracking-tighter">{target.toLocaleString()} SAR</p>
+              <h3 className="text-3xl font-black text-white mb-10 font-headline text-center uppercase tracking-tighter relative z-10">{t.fundingProtocol}</h3>
+
+              <div className="space-y-8 mb-12 relative z-10">
+                <div className="flex justify-between items-end px-2 bg-white/5 p-6 rounded-xl border border-white/10">
+                  <div className="space-y-2">
+                    <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.2em]">{t.targetCapital}</p>
+                    <p className="text-white font-data text-3xl font-black tabular-nums tracking-tighter">{target.toLocaleString('ar-SA')} ر.س</p>
                   </div>
                   <div className="text-left" dir="ltr">
-                    <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">Percentage</p>
-                    <span className="text-4xl font-black text-primary-container tabular-nums italic leading-none">{percentage}%</span>
+                    <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.2em]">{t.percentage}</p>
+                    <span className="text-4xl font-black bg-gradient-to-r from-primary-container to-cyan-400 bg-clip-text text-transparent tabular-nums italic leading-none">{percentage}%</span>
                   </div>
                 </div>
-                
-                <div className="relative h-4 w-full bg-white/5 rounded-full overflow-hidden p-[2px] border border-white/10">
-                  <div className="absolute inset-0 scanline-overlay opacity-20 animate-scanline" />
+
+                <div className="relative h-5 w-full bg-white/5 rounded-full overflow-hidden p-[3px] border border-primary-container/30 shadow-lg shadow-primary-container/10">
+                  <div className="absolute inset-0 scanline-overlay opacity-20 animate-scanline pointer-events-none" />
                   <div
-                    className="h-full bg-gradient-to-r from-primary-container via-[#00d9b5] to-secondary rounded-full shadow-[0_0_20px_rgba(0,255,209,0.6)] transition-all duration-1000 ease-out relative"
+                    className="h-full bg-gradient-to-r from-primary-container via-cyan-400 to-emerald-400 rounded-full shadow-[0_0_30px_rgba(0,255,209,0.8)] transition-all duration-1000 ease-out relative"
                     style={{ width: `${percentage}%` }}
                   >
-                    <div className="absolute inset-0 bg-white/20 animate-shimmer" />
+                    <div className="absolute inset-0 bg-white/30 animate-shimmer" />
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between px-2 text-[11px] font-black uppercase tracking-widest">
-                  <span className="text-primary-container animate-pulse">Connection_Secure</span>
-                  <span className="text-slate-500 italic">Remaining: {remaining.toLocaleString()} SAR</span>
+                  <span className="text-primary-container animate-pulse font-headline">{t.connectionSecure}</span>
+                  <span className="text-slate-400">{t.remaining}: {remaining.toLocaleString('ar-SA')} ر.س</span>
                 </div>
               </div>
 
-              <div className="p-6 bg-secondary/5 border border-secondary/20 rounded-2xl flex gap-5 items-start mb-12 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-1 h-full bg-secondary/30" />
-                <span className="material-symbols-outlined text-secondary text-2xl">verified_user</span>
-                <p className="text-xs text-slate-400 leading-relaxed font-body">
-                  <span className="text-secondary font-black block mb-1">INVESTMENT_DISCLAIMER</span>
-                  Minimum participation is {(project.min_invest || 0).toLocaleString()} SAR. 
-                  All transactions are encrypted and processed through the secure network node.
+              <div className="p-6 bg-gradient-to-r from-secondary/10 to-cyan-500/5 border border-secondary/30 rounded-xl flex gap-4 items-start mb-12 relative overflow-hidden group/disclaimer">
+                <div className="absolute top-0 right-0 w-1 h-full bg-gradient-to-b from-secondary to-transparent" />
+                <span className="material-symbols-outlined text-secondary text-2xl shrink-0 group-hover/disclaimer:scale-110 transition-transform">shield_alert</span>
+                <p className="text-xs text-slate-300 leading-relaxed font-body">
+                  <span className="text-secondary font-black block mb-2">{t.disclaimer}</span>
+                  {t.minParticipation}: {(project.min_invest || 0).toLocaleString('ar-SA')} ر.س. {t.encrypted}
                 </p>
               </div>
 
-              <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-4 relative z-10">
                 {/* Invest Now */}
                 {!isOwner && project.status === 'active' && (
                   <button
                     onClick={handleInvest}
-                    className="w-full bg-primary-container text-background font-black py-6 text-xl clip-button text-center shadow-neon hover:brightness-110 active:scale-95 transition-all uppercase tracking-[0.3em] holographic-reflection"
+                    className="w-full bg-gradient-to-r from-primary-container to-cyan-400 hover:from-cyan-400 hover:to-primary-container text-background font-black py-6 text-lg rounded-lg text-center shadow-lg shadow-primary-container/40 hover:shadow-xl hover:shadow-primary-container/60 active:scale-95 transition-all uppercase tracking-[0.3em] holographic-reflection"
                   >
-                    Initiate_Investment
+                    {t.initiateInvestment}
                   </button>
                 )}
 
@@ -278,9 +311,9 @@ export default function OpportunityDetail(props: { params: Promise<{ id: string 
                   <button
                     onClick={handleMessage}
                     disabled={messagePending}
-                    className="w-full bg-secondary/10 border border-secondary/30 text-secondary font-black py-6 text-xl clip-button text-center hover:bg-secondary/20 active:scale-95 transition-all disabled:opacity-50 uppercase tracking-[0.2em] holographic-reflection"
+                    className="w-full bg-secondary/10 border-2 border-secondary/40 text-secondary font-black py-5 text-lg rounded-lg text-center hover:bg-secondary/20 hover:border-secondary/60 active:scale-95 transition-all disabled:opacity-50 uppercase tracking-[0.2em]"
                   >
-                    {messagePending ? 'INITIALISING...' : 'Message_Entity'}
+                    {messagePending ? t.initialising : t.messageEntity}
                   </button>
                 )}
 
@@ -289,13 +322,13 @@ export default function OpportunityDetail(props: { params: Promise<{ id: string 
                   <button
                     onClick={handleSave}
                     disabled={savePending}
-                    className={`w-full border font-black py-6 text-xl clip-button text-center active:scale-95 transition-all disabled:opacity-50 uppercase tracking-[0.2em] holographic-reflection ${
+                    className={`w-full border-2 font-black py-5 text-lg rounded-lg text-center active:scale-95 transition-all disabled:opacity-50 uppercase tracking-[0.2em] ${
                       saved
-                        ? 'bg-primary-container/10 border-primary-container/50 text-primary-container'
-                        : 'border-white/10 text-white hover:bg-white/5'
+                        ? 'bg-primary-container/10 border-primary-container/60 text-primary-container hover:bg-primary-container/20'
+                        : 'border-white/20 text-white hover:bg-white/10 hover:border-white/40'
                     }`}
                   >
-                    {savePending ? 'UPDATING...' : saved ? '✓ ENTITY_SECURED' : 'Archive_intel'}
+                    {savePending ? t.updating : saved ? t.entitySecured : t.archiveIntel}
                   </button>
                 )}
               </div>
@@ -305,34 +338,35 @@ export default function OpportunityDetail(props: { params: Promise<{ id: string 
             {founder && (
               <div
                 onClick={() => !isOwner && router.push(`/messages?user=${founder.id}`)}
-                className="bg-[#020406]/60 backdrop-blur-xl border border-white/10 p-10 relative hover:border-primary-container/40 transition-all cursor-pointer group clip-card"
+                className="bg-gradient-to-br from-[#020406]/80 to-[#0a0e1a]/60 backdrop-blur-xl border border-white/10 p-10 relative hover:border-primary-container/50 transition-all cursor-pointer group rounded-2xl overflow-hidden hover:shadow-2xl hover:shadow-primary-container/20"
               >
-                <div className="absolute top-0 right-0 w-12 h-[1px] bg-white/20" />
-                <div className="absolute top-0 right-0 w-[1px] h-12 bg-white/20" />
-                
-                <div className="flex gap-8 items-center">
+                <div className="absolute top-0 right-0 w-16 h-[2px] bg-gradient-to-l from-primary-container to-transparent" />
+                <div className="absolute top-0 right-0 w-[2px] h-16 bg-gradient-to-b from-primary-container to-transparent" />
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary-container/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-full" />
+
+                <div className="flex gap-8 items-center relative z-10">
                   <div className="relative">
-                    <div className="w-24 h-24 rounded-2xl border-2 border-white/10 overflow-hidden shrink-0 group-hover:border-primary-container transition-all duration-500 relative z-10">
+                    <div className="w-28 h-28 rounded-xl border-3 border-primary-container/30 overflow-hidden shrink-0 group-hover:border-primary-container/80 transition-all duration-500 relative z-10 shadow-lg shadow-primary-container/20 group-hover:shadow-xl group-hover:shadow-primary-container/40">
                       <Image
-                        width={96} height={96}
+                        width={112} height={112}
                         src={founder.avatar_url || `https://api.dicebear.com/7.x/bottts/svg?seed=${founder.full_name}`}
-                        alt={founder.full_name || 'FOUNDER'}
+                        alt={founder.full_name || 'مؤسس'}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
                     </div>
-                    <div className="absolute inset-0 bg-primary-container/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-container/40 to-transparent blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
                   </div>
-                  
+
                   <div className="flex-1 min-w-0">
-                    <h4 className="text-2xl font-black text-white font-headline group-hover:text-primary-container transition-all duration-300 uppercase tracking-tighter truncate">{founder.full_name || 'ANONYMOUS_SOURCE'}</h4>
-                    <p className="text-slate-500 text-sm mb-4 font-body line-clamp-2">{founder.bio || 'Entity bios unavailable.'}</p>
+                    <h4 className="text-2xl font-black text-white font-headline group-hover:text-primary-container transition-all duration-300 uppercase tracking-tighter truncate">{founder.full_name || 'مؤسس'}</h4>
+                    <p className="text-slate-400 text-sm mb-4 font-body line-clamp-2 group-hover:text-slate-300 transition-colors">{founder.bio || t.noData}</p>
                     {founder.kyc_status === 'verified' && (
-                      <span className="text-primary-container font-data text-[10px] font-black uppercase tracking-[0.3em] border border-primary-container/30 px-3 py-1 bg-primary-container/5">Rank: Verified_Founder</span>
+                      <span className="text-emerald-400 font-data text-[11px] font-black uppercase tracking-[0.3em] border border-emerald-400/40 px-3 py-1.5 bg-emerald-400/5 rounded-lg inline-block">✓ {t.verifiedFounder}</span>
                     )}
                   </div>
                 </div>
                 {!isOwner && (
-                  <p className="text-[10px] text-slate-600 mt-6 text-center font-data font-black uppercase tracking-[0.4em] group-hover:text-primary-container transition-colors animate-pulse">Request_Direct_Link ←</p>
+                  <p className="text-[11px] text-slate-500 mt-6 text-center font-data font-black uppercase tracking-[0.4em] group-hover:text-primary-container transition-colors animate-pulse">{t.requestLink}</p>
                 )}
               </div>
             )}

@@ -15,8 +15,6 @@ export async function updateProfileInfo(formData: FormData) {
 
     const fullName = sanitizeShortText(formData.get('full_name') as string)
     const bio = sanitizeText(formData.get('bio') as string)
-    const phone = (formData.get('phone') as string).trim()
-    const interests = JSON.parse(formData.get('interests') as string) as string[]
     const avatarFile = formData.get('avatar') as File | null
 
     if (!fullName) {
@@ -25,30 +23,30 @@ export async function updateProfileInfo(formData: FormData) {
 
     let avatarUrl: string | null = null
 
-    // Upload avatar if provided
+    // Upload avatar if provided (optional - skip on storage errors)
     if (avatarFile && avatarFile.size > 0) {
-      const ext = avatarFile.name.split('.').pop()
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(`${user.id}/avatar.${ext}`, avatarFile, { upsert: true })
+      try {
+        const ext = avatarFile.name.split('.').pop()
+        const fileBuffer = await avatarFile.arrayBuffer()
+        const { error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(`${user.id}/avatar.${ext}`, fileBuffer, { upsert: true, contentType: avatarFile.type })
 
-      if (uploadError) {
-        return { error: 'فشل تحميل الصورة' }
+        if (!uploadError) {
+          const { data: { publicUrl } } = supabase.storage
+            .from('avatars')
+            .getPublicUrl(`${user.id}/avatar.${ext}`)
+          avatarUrl = publicUrl
+        }
+      } catch (err) {
+        console.error('Avatar upload error:', err)
       }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(`${user.id}/avatar.${ext}`)
-
-      avatarUrl = publicUrl
     }
 
     // Build update payload
     const updatePayload: Record<string, unknown> = {
       full_name: fullName,
       bio,
-      phone,
-      interests,
     }
 
     if (avatarUrl) {

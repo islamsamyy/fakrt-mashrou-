@@ -41,7 +41,7 @@ export default function SettingsClient({ profile, userEmail }: SettingsClientPro
     }
   }
 
-  const handleProfileSubmit = async (e: React.FormEvent) => {
+  const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!fullName.trim()) {
       toast.error('يجب إدخال الاسم الكامل')
@@ -51,10 +51,14 @@ export default function SettingsClient({ profile, userEmail }: SettingsClientPro
     formData.append('full_name', fullName)
     formData.append('bio', bio)
     if (avatarFile) formData.append('avatar', avatarFile)
+
     startTransition(async () => {
       const result = await updateProfileInfo(formData)
-      if (result?.error) toast.error(result.error)
-      else toast.success('تم تحديث الملف الشخصي بنجاح')
+      if (result?.error) {
+        toast.error(result.error)
+      } else {
+        toast.success('تم تحديث الملف الشخصي بنجاح')
+      }
     })
   }
 

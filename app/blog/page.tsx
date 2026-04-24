@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import { SystemLog } from '@/components/blog/SystemLog';
 import { ParallaxCard } from '@/components/ui/ParallaxCard';
+import { Navbar } from '@/components/layout/Navbar';
 import { emitSystemLog } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
@@ -50,7 +51,9 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
   const categories = ['الكل', ...uniqueCategories];
 
   return (
-    <main className="min-h-screen bg-background text-foreground pt-32 pb-20 px-4 md:px-8 relative overflow-hidden" dir="rtl">
+    <>
+      <Navbar />
+      <main className="min-h-screen bg-background text-foreground pt-32 pb-20 px-4 md:px-8 relative overflow-hidden" dir="rtl">
       {/* Cyber Background & Ambient Effects */}
       <div className="absolute inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute inset-0 neon-grid opacity-20 dark:opacity-10"></div>
@@ -331,5 +334,6 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
 
       <SystemLog />
     </main>
+    </>
   );
 }

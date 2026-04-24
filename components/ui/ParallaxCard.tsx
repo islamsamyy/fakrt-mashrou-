@@ -5,9 +5,10 @@ import React, { useRef, useState } from 'react';
 interface ParallaxCardProps {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function ParallaxCard({ children, className = "" }: ParallaxCardProps) {
+export function ParallaxCard({ children, className = "", style }: ParallaxCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
 
@@ -37,9 +38,10 @@ export function ParallaxCard({ children, className = "" }: ParallaxCardProps) {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`parallax-card ${className}`}
-      style={{ 
-        '--rotate-x': `${rotate.x}deg`, 
-        '--rotate-y': `${rotate.y}deg` 
+      style={{
+        '--rotate-x': `${rotate.x}deg`,
+        '--rotate-y': `${rotate.y}deg`,
+        ...style
       } as React.CSSProperties}
     >
       {children}
