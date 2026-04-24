@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
 export interface RealtimeNotification {
   id: string
@@ -16,7 +17,8 @@ export interface RealtimeNotification {
 }
 
 /**
- * Hook for real-time notifications using Supabase Realtime
+ * Enhanced Hook for real-time notifications using Supabase Realtime
+ * Persists notifications to database
  * Listens for new investments, messages, and milestones
  */
 export function useRealtimeNotifications(userId: string | undefined) {
@@ -39,20 +41,37 @@ export function useRealtimeNotifications(userId: string | undefined) {
           event: 'INSERT',
           schema: 'public',
           table: 'investments',
-          filter: `owner_id=eq.${userId}`,
+          filter: `project_id=in.(SELECT id FROM projects WHERE founder_id='${userId}')`,
         },
-        payload => {
+        async payload => {
           const notification: RealtimeNotification = {
             id: `inv-${payload.new.id}`,
             type: 'investment',
-            title: 'নতুন বিনিয়োগ',
-            message: `আপনার প্রকল্পে ${payload.new.amount.toLocaleString()} ريال বিনিয়োগ হয়েছে`,
+            title: 'استثمار جديد',
+            message: `تم استثمار ${payload.new.amount?.toLocaleString()} في مشروعك`,
             timestamp: new Date(),
             read: false,
             actionUrl: `/dashboard/founder#investment-${payload.new.id}`,
           }
+
+          // Save to database
+          try {
+            await supabase.from('notifications').insert({
+              user_id: userId,
+              title: notification.title,
+              message: notification.message,
+              event_type: 'investment',
+              read: false,
+              related_user_id: payload.new.investor_id,
+              created_at: new Date().toISOString(),
+            })
+          } catch (error) {
+            console.error('Error saving investment notification:', error)
+          }
+
           setNotifications(prev => [notification, ...prev])
           setUnreadCount(prev => prev + 1)
+          toast.success(notification.message)
         }
       )
       .subscribe()
@@ -66,20 +85,37 @@ export function useRealtimeNotifications(userId: string | undefined) {
           event: 'INSERT',
           schema: 'public',
           table: 'messages',
-          filter: `recipient_id=eq.${userId}`,
+          filter: `receiver_id=eq.${userId}`,
         },
-        payload => {
+        async payload => {
           const notification: RealtimeNotification = {
             id: `msg-${payload.new.id}`,
             type: 'message',
-            title: 'نرسالة جديدة',
-            message: payload.new.content.substring(0, 50) + '...',
+            title: 'رسالة جديدة',
+            message: payload.new.content?.substring(0, 50) + '...',
             timestamp: new Date(),
             read: false,
             actionUrl: `/messages?conversation=${payload.new.sender_id}`,
           }
+
+          // Save to database
+          try {
+            await supabase.from('notifications').insert({
+              user_id: userId,
+              title: notification.title,
+              message: notification.message,
+              event_type: 'message',
+              read: false,
+              related_user_id: payload.new.sender_id,
+              created_at: new Date().toISOString(),
+            })
+          } catch (error) {
+            console.error('Error saving message notification:', error)
+          }
+
           setNotifications(prev => [notification, ...prev])
           setUnreadCount(prev => prev + 1)
+          toast.info(notification.message)
         }
       )
       .subscribe()
@@ -93,6 +129,13 @@ export function useRealtimeNotifications(userId: string | undefined) {
   // Mark notification as read
   const markAsRead = useCallback(
     async (notificationId: string) => {
+      const supabase = createClient()
+      try {
+        await supabase.from('notifications').update({ read: true }).eq('id', notificationId)
+      } catch (error) {
+        console.error('Error marking notification as read:', error)
+      }
+
       setNotifications(prev =>
         prev.map(n =>
           n.id === notificationId ? { ...n, read: true } : n
@@ -103,16 +146,39 @@ export function useRealtimeNotifications(userId: string | undefined) {
     []
   )
 
+  // Mark all as read
+  const markAllAsRead = useCallback(async () => {
+    if (!userId) return
+    const supabase = createClient()
+    try {
+      await supabase.from('notifications').update({ read: true }).eq('user_id', userId).eq('read', false)
+    } catch (error) {
+      console.error('Error marking all as read:', error)
+    }
+
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })))
+    setUnreadCount(0)
+  }, [userId])
+
   // Clear all notifications
-  const clearAll = useCallback(() => {
+  const clearAll = useCallback(async () => {
+    if (!userId) return
+    const supabase = createClient()
+    try {
+      await supabase.from('notifications').delete().eq('user_id', userId)
+    } catch (error) {
+      console.error('Error clearing notifications:', error)
+    }
+
     setNotifications([])
     setUnreadCount(0)
-  }, [])
+  }, [userId])
 
   return {
     notifications,
     unreadCount,
     markAsRead,
+    markAllAsRead,
     clearAll,
   }
 }

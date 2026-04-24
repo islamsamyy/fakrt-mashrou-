@@ -43,7 +43,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground font-body selection:bg-primary-container/30 selection:text-primary-container">
+      <body 
+        className="min-h-full flex flex-col bg-background text-foreground font-body selection:bg-primary-container/30 selection:text-primary-container"
+        suppressHydrationWarning
+      >
         <ThemeProvider>
           {children}
           <Toaster position="bottom-right" theme="dark" />

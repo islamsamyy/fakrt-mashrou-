@@ -26,7 +26,11 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="bg-[#020409] text-on-surface font-body min-h-screen flex items-center justify-center p-6 overflow-x-hidden relative" dir="rtl">
+    <div 
+      className="bg-[#020409] text-on-surface font-body min-h-screen flex items-center justify-center p-6 overflow-x-hidden relative" 
+      dir="rtl"
+      suppressHydrationWarning
+    >
       {/* Background Textures */}
       <div className="fixed inset-0 pointer-events-none z-0 opacity-5" style={{ 
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill-rule='evenodd' stroke='%2300ffd1' stroke-width='0.5' fill='none' /%3E%3C/svg%3E")`

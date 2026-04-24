@@ -1,6 +1,17 @@
-# Infrastructure & Scaling Plan
+# IDEA BUSINESS Infrastructure & Compliance Plan
 
-## Current Stack
+**Date**: April 24, 2026  
+**Version**: 2.0  
+**Status**: Production-Ready
+
+## Overview
+
+Complete infrastructure setup, scaling strategies, and compliance framework for IDEA BUSINESS. Covers KYC/AML compliance, audit logging, multi-currency support, caching, CDN optimization, and monitoring.
+
+---
+
+## 1. Current Stack
+
 - **Frontend**: Next.js 16.2.3 on Vercel
 - **Backend**: Next.js API routes + Supabase
 - **Database**: PostgreSQL (Supabase)
@@ -12,245 +23,543 @@
 
 ---
 
-## Phase 2: Scaling Infrastructure
+## 2. KYC/AML Compliance Framework
 
-### 1. Caching Layer (Redis)
+### 2.1 Database Schema
 
-**Purpose**: Reduce database load for frequently accessed data
+**Table: `kyc_data`** - Complete KYC verification state
 
-**Implementation**:
+**Key Columns:**
+- `id` - Unique identifier
+- `user_id` - Reference to profiles
+- `status` - unverified | pending | verified
+- `current_step` - 1-4 (identity → national ID → selfie → verification)
+- `full_name`, `date_of_birth`, `nationality`, `country_of_residence`
+- `national_id_type` - passport | id_card | driver_license
+- `national_id_document` - JSONB: {url, size, uploaded_at, verification_status}
+- `selfie_url` - Verified selfie image URL
+- `is_high_risk_country` - Boolean risk flag
+- `risk_flags` - Array of patterns
+- `risk_score` - 0-100 scale
+- `verification_provider` - jumio | onfido | sumsub
+- `verification_id` - External provider ID
+- `verified_at` - Approval timestamp
+- `verified_by` - Admin user ID
+
+**Migration**: `20260424_add_kyc_table.sql`
+
+### 2.2 Four-Step KYC Flow
+
+**Step 1: Identity Information**
+```
+POST /api/kyc/identity
+{
+  "full_name": "John Smith",
+  "date_of_birth": "1990-01-15",
+  "nationality": "US",
+  "country_of_residence": "SA"
+}
+```
+
+**Step 2: National ID Upload**
+```
+POST /api/kyc/identity-document
+{
+  "document_type": "passport",
+  "document_number": "K12345678",
+  "file": <binary>
+}
+```
+
+**Step 3: Selfie Verification**
+```
+POST /api/kyc/selfie
+{
+  "file": <binary>
+}
+```
+
+**Step 4: Provider Verification**
+- Automated review + manual approval
+- Admin approval at `/admin/kyc`
+
+### 2.3 Compliance Checks
+
+**High-Risk Countries:**
+- North Korea (KP)
+- Iran (IR)
+- Syria (SY)
+- Cuba (CU)
+- Burundi (BI)
+- Zimbabwe (ZW)
+
+**Risk Scoring:**
+- High-risk country: +40 points
+- Multiple failed attempts: +20 points
+- Incomplete verification: +15 points
+- Suspicious patterns: +10-25 points
+
+**Actions:**
+- 0-30: Approved immediately
+- 31-60: Manual review required
+- 61-100: Rejection/enhanced verification
+
+### 2.4 Third-Party Providers
+
+**Jumio** (Recommended)
 ```bash
-# Option A: Use Vercel KV (integrated with Vercel)
+JUMIO_API_TOKEN=your_token
+JUMIO_API_SECRET=your_secret
+JUMIO_BASE_URL=https://api.jumio.com
+```
+
+**Onfido** (Alternative)
+```bash
+ONFIDO_API_TOKEN=your_token
+ONFIDO_BASE_URL=https://api.onfido.com
+```
+
+**Sumsub** (Alternative)
+```bash
+SUMSUB_API_KEY=your_key
+SUMSUB_BASE_URL=https://api.sumsub.com
+```
+
+### 2.5 Webhook Handler
+
+**Endpoint**: `/api/webhooks/kyc-verification`
+
+```typescript
+POST /api/webhooks/kyc-verification
+X-Webhook-Signature: hmac_signature
+
+{
+  "verification_id": "ext_123456",
+  "user_id": "uuid",
+  "status": "verified|rejected",
+  "result": {
+    "document_verified": true,
+    "selfie_verified": true,
+    "liveness_verified": true,
+    "risk_score": 25
+  }
+}
+```
+
+---
+
+## 3. Audit Logging System
+
+### 3.1 Database Schema
+
+**Table: `audit_logs`** - Complete transaction audit trail
+
+**Key Columns:**
+- `id`, `user_id`, `admin_id`
+- `action` - create | update | delete | approve | reject
+- `resource_type` - investment | project | user | kyc | payout
+- `resource_id` - Affected resource ID
+- `old_values`, `new_values` - JSONB state tracking
+- `ip_address`, `user_agent` - Context
+- `status` - success | failure | pending
+- `created_at` - Timestamp
+
+**Migration**: `20260424_create_audit_logs.sql`
+
+### 3.2 Automated Logging
+
+**Investment Creation:**
+```
+Action: create
+Description: "Investment of 50000 SAR created for project..."
+```
+
+**KYC Status Change:**
+```
+Action: approve
+Description: "KYC verified (risk score: 25)"
+```
+
+**User Profile Changes:**
+```
+Action: update
+Description: "User tier=premium, role=investor, kyc=verified"
+```
+
+### 3.3 Admin Dashboard
+
+**Location**: `/admin/audit-logs`
+
+**Features:**
+- Timeline view of all actions
+- Filters by resource type, action, user, date
+- Full change history
+- Export to CSV/JSON
+- Monthly compliance reports
+
+### 3.4 Query Helper
+
+```sql
+SELECT * FROM get_audit_logs(
+  p_limit := 100,
+  p_offset := 0,
+  p_resource_type := 'investment',
+  p_action := 'create'
+);
+```
+
+---
+
+## 4. Multi-Currency Support
+
+### 4.1 Database Changes
+
+**New Enum:**
+```sql
+CREATE TYPE currency_code AS ENUM ('SAR', 'USD', 'EUR', 'GBP', 'AED', 'KWD', 'QAR', 'OMR', 'JOD', 'BHD');
+```
+
+**New Columns:**
+- `investments.currency` - Currency of investment
+- `investments.exchange_rate` - Rate at time of investment
+- `investments.amount_in_original_currency`
+- `projects.currency` - Primary currency
+- `projects.accepted_currencies` - Array
+- `profiles.preferred_currency` - User preference
+
+**Exchange Rates Table:**
+```sql
+CREATE TABLE exchange_rates (
+  from_currency currency_code,
+  to_currency currency_code,
+  rate numeric(10,6),
+  effective_date date,
+  source text
+);
+```
+
+**Migration**: `20260424_multi_currency_support.sql`
+
+### 4.2 Exchange Rate Provider
+
+**OpenExchangeRates API:**
+```bash
+OPENEXCHANGERATES_API_KEY=your_api_key
+```
+
+**Pricing:**
+- Free: 1,000 req/month, USD base only
+- Paid: $99+/month, multiple bases
+
+**Implementation**: `lib/currency.ts`
+
+**Functions:**
+```typescript
+fetchExchangeRates(baseCurrency)      // Fetch from API
+convertCurrency(amount, from, to, rates)
+formatCurrency(amount, currency)
+getCurrencySymbol(currency)
+isValidCurrency(value)
+calculateConversionFee(amount, from, to)
+```
+
+### 4.3 Daily Updates
+
+**Cron Job:**
+```
+0 0 * * * /scripts/update-exchange-rates.sh
+```
+
+### 4.4 Display Format
+
+```typescript
+// Arabic: "٥٠٬٠٠٠٫٠٠ ر.س"
+formatCurrency(50000, 'SAR', 'ar-SA')
+
+// English: "SAR 50,000.00"
+formatCurrency(50000, 'SAR', 'en-US')
+```
+
+---
+
+## 5. Redis Caching Setup
+
+### 5.1 Configuration Options
+
+**Option A: Vercel KV** (Recommended)
+```bash
 npm install @vercel/kv
-
-# Option B: Use Redis Cloud or Railway
-REDIS_URL=redis://...
+KV_URL="redis://..."
+KV_REST_API_URL="https://..."
+KV_REST_API_TOKEN="..."
 ```
 
-**What to cache**:
-- Popular projects (1 hour TTL)
-- Leaderboard data (30 minute TTL)
-- User profiles (1 hour TTL)
-- Investment statistics (hourly TTL)
+**Option B: Railway Redis**
+```bash
+npm install redis
+REDIS_URL="redis://user:password@host:port"
+```
 
-**Cache invalidation triggers**:
-- New investment → invalidate project leaderboard
-- User profile update → invalidate user cache
-- Milestone completion → invalidate founder cache
+**Option C: Self-Hosted**
+```bash
+docker run -d -p 6379:6379 redis:latest
+REDIS_URL="redis://localhost:6379"
+```
+
+### 5.2 Cache Strategy
+
+**Cache Hierarchy:**
+1. Browser Cache (Service Worker) - 1 week
+2. CDN Cache (Vercel) - 1 hour
+3. Application Cache (Redis) - 30 min-1 hour
+4. Database - Source of truth
+
+**Cached Data:**
+
+| Data | TTL | Invalidation |
+|------|-----|--------------|
+| Popular projects | 30 min | On update |
+| Leaderboard | 30 min | Nightly |
+| User profile | 1 hour | On update |
+| Project details | 1 hour | On update |
+| Exchange rates | 1 hour | Daily |
+| Notifications | 5 min | On new |
+
+### 5.3 Cache Functions
+
+**File**: `lib/cache.ts`
+
+```typescript
+// Popular projects
+const projects = await cachePopularProjects(
+  async () => fetchPopularProjects(),
+  { ttl: 1800 }
+);
+
+// Leaderboard
+const leaderboard = await cacheLeaderboard(
+  'month',
+  async () => fetchMonthlyLeaderboard(),
+  { ttl: 1800 }
+);
+
+// User profile
+const profile = await cacheUserProfile(
+  userId,
+  async () => fetchUserProfile(userId),
+  { ttl: 3600 }
+);
+```
+
+### 5.4 Cache Invalidation
+
+```typescript
+// When project updated
+await cache.invalidateProject(projectId);
+// Invalidates: project, popular_projects, leaderboard
+
+// When user updated
+await cache.invalidateUser(userId);
+
+// When investment made
+await cache.invalidateProject(projectId);
+await cache.invalidateLeaderboard();
+```
 
 ---
 
-### 2. Content Delivery Network (CDN)
+## 6. CDN & Asset Optimization
 
-**Current**: Vercel includes automatic CDN (good!)
+### 6.1 Next.js Configuration
 
-**Optimization**:
-- Enable Next.js Image Optimization
-- Compress static assets
-- Set aggressive cache headers
-- Gzip compression in next.config.ts
+**File**: `next.config.ts`
 
-**Configuration**:
 ```typescript
-// next.config.ts
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
-})
+images: {
+  formats: ['image/webp', 'image/avif'],
+  minimumCacheTTL: 31536000, // 1 year
+},
 
-module.exports = withBundleAnalyzer({
-  compress: true,
-  headers: async () => [
+compress: true,
+
+async headers() {
+  return [
     {
-      source: '/:path*.(png|jpg|jpeg|gif|webp)',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=31536000, immutable',
-        },
-      ],
-    },
-  ],
-})
+      source: '/_next/static/:path*',
+      headers: [{
+        key: 'Cache-Control',
+        value: 'public, max-age=31536000, immutable'
+      }]
+    }
+  ];
+}
 ```
 
----
+### 6.2 Image Optimization
 
-### 3. Database Scaling
+```jsx
+import Image from 'next/image';
 
-**Current**: Supabase shared database
-
-**Scaling roadmap**:
-- **1-1000 users**: Use included Supabase database ✅
-- **1000-10k users**: Upgrade to Supabase paid plan
-- **10k+ users**: Dedicated PostgreSQL instance + read replicas
-
-**Performance optimization**:
-- Add indexes on frequently queried columns
-- Archive old investment records
-- Partition large tables by date
-- Monitor slow queries with pg_stat_statements
-
-**Query optimization**:
-```sql
--- Check slow queries
-SELECT query, calls, mean_time
-FROM pg_stat_statements
-WHERE mean_time > 100
-ORDER BY mean_time DESC;
-
--- Add missing indexes
-CREATE INDEX idx_investments_investor_id ON investments(investor_id);
-CREATE INDEX idx_projects_status ON projects(status);
-CREATE INDEX idx_messages_recipient_id ON messages(recipient_id);
+<Image
+  src="/images/project.jpg"
+  alt="Project"
+  width={1200}
+  height={600}
+  priority
+  quality={75}
+/>
 ```
 
----
+**Benefits:**
+- WebP/AVIF conversion
+- Responsive sizes
+- Lazy loading
+- Format optimization
 
-### 4. Monitoring & Observability
+### 6.3 Security Headers
 
-**Error Tracking**: Sentry (configured)
-- Automatic error capture
-- Performance monitoring
-- Release tracking
-
-**Application Metrics**:
-- API response times
-- Database query duration
-- Authentication success/failure rates
-- Investment conversion funnel
-
-**Infrastructure Metrics**:
-- CPU/Memory on Vercel
-- Database connection count
-- API rate limit status
-- Error rate by endpoint
-
-**Dashboard**:
-Create /admin/monitoring page showing:
-- Last 24h error rate
-- P95 response time
-- Database connection health
-- Email delivery rate
-
----
-
-### 5. Audit Logging
-
-**Create migrations**:
-```sql
-CREATE TABLE audit_logs (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users,
-  action VARCHAR(50),
-  resource_type VARCHAR(50),
-  resource_id VARCHAR(255),
-  old_value JSONB,
-  new_value JSONB,
-  timestamp TIMESTAMP DEFAULT now()
-);
-
-CREATE INDEX idx_audit_logs_user_id ON audit_logs(user_id);
-CREATE INDEX idx_audit_logs_timestamp ON audit_logs(timestamp);
-```
-
-**Log events**:
-- User signup/login
-- Investment creation/update
-- Fund transfers
-- Admin actions
-- KYC status changes
-
----
-
-### 6. Security Hardening
-
-**HTTPS/TLS**: Vercel handles automatically ✅
-
-**Environment variables**:
-- All secrets in Vercel Environment Variables
-- Never commit .env.production
-- Rotate keys quarterly
-
-**Rate Limiting**: Supabase handles ✅
-- Email signup: 5/hour
-- Login attempts: 10/15 min
-- API requests: 100/minute (upgrade plan)
-
-**CORS**: Configured in Vercel ✅
-
-**HTTPS headers**:
 ```typescript
-// next.config.ts
-headers: async () => [
-  {
-    source: '/:path*',
-    headers: [
-      {
-        key: 'Strict-Transport-Security',
-        value: 'max-age=31536000; includeSubDomains',
-      },
-      {
-        key: 'X-Content-Type-Options',
-        value: 'nosniff',
-      },
-      {
-        key: 'X-Frame-Options',
-        value: 'DENY',
-      },
-      {
-        key: 'X-XSS-Protection',
-        value: '1; mode=block',
-      },
-    ],
-  },
-]
+{
+  key: 'X-Content-Type-Options',
+  value: 'nosniff'
+},
+{
+  key: 'X-Frame-Options',
+  value: 'DENY'
+},
+{
+  key: 'X-XSS-Protection',
+  value: '1; mode=block'
+}
+```
+
+### 6.4 Vercel Analytics
+
+```typescript
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+
+export default function RootLayout() {
+  return <>
+    <Analytics />
+    <SpeedInsights />
+  </>;
+}
+```
+
+**Metrics:** LCP, FID, CLS, FCP, TTI
+
+---
+
+## 7. Monitoring & Alerting
+
+### 7.1 Error Tracking (Sentry)
+
+```bash
+npm install @sentry/nextjs
+SENTRY_DSN=https://key@id.ingest.sentry.io/project
+```
+
+### 7.2 Performance Thresholds
+
+- Page load: < 3s
+- API response: < 500ms
+- Error rate: < 1%
+
+### 7.3 Business Metrics
+
+**Investment:**
+- Total invested amount
+- Average investment
+- Conversion rate
+- Churn rate
+
+**KYC:**
+- Pending approvals
+- Approval rate
+- Average approval time
+- Risk distribution
+
+**Platform:**
+- Daily active users
+- API uptime (99.9%+)
+- Cache hit rate (>80%)
+
+---
+
+## 8. Environment Variables
+
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxx...
+
+# KYC (Jumio)
+JUMIO_API_TOKEN=xxx
+JUMIO_API_SECRET=xxx
+
+# Currency
+OPENEXCHANGERATES_API_KEY=xxx
+
+# Cache (Vercel KV)
+KV_URL=redis://xxx
+KV_REST_API_URL=https://xxx
+KV_REST_API_TOKEN=xxx
+
+# Error Tracking
+SENTRY_DSN=https://xxx@xxx.ingest.sentry.io/xxx
+
+# Email
+RESEND_API_KEY=xxx
+
+# Stripe
+STRIPE_SECRET_KEY=sk_live_xxx
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_xxx
 ```
 
 ---
 
-### 7. KYC/AML Compliance
+## 9. Deployment Checklist
 
-**Phases**:
-1. **Phase 2B**: Manual KYC (admin reviews documents)
-2. **Phase 2C**: Automated verification (third-party service)
-3. **Phase 3**: Continuous monitoring (AML rules)
+### Pre-Production
+- [ ] KYC migrations applied
+- [ ] Audit logs tested
+- [ ] Currency conversion working
+- [ ] Redis cache configured
+- [ ] Image optimization enabled
+- [ ] Analytics enabled
+- [ ] Error tracking configured
+- [ ] RLS policies verified
 
-**Implementation**:
-```sql
-CREATE TABLE kyc_documents (
-  id UUID PRIMARY KEY,
-  user_id UUID REFERENCES auth.users,
-  document_type VARCHAR(50), -- 'national_id', 'passport', 'selfie'
-  file_url TEXT,
-  verification_status VARCHAR(20), -- 'pending', 'approved', 'rejected'
-  uploaded_at TIMESTAMP,
-  verified_at TIMESTAMP
-);
+### Production
+```bash
+pg_dump $DATABASE_URL > backup_20260424.sql
+./supabase/apply-migrations.sh
+vercel deploy --prod
+npm run test:smoke
 ```
 
----
-
-## Scaling Timeline
-
-| Stage | Users | Infrastructure | Cost | Timeline |
-|---|---|---|---|---|
-| Current | 0-1K | Vercel + Supabase Free | ~$0 | Now |
-| Phase 2A | 1K-5K | Vercel Pro + Supabase Pro | ~$50/mo | Week 4 |
-| Phase 2B | 5K-50K | Dedicated + Redis | ~$500/mo | Month 3 |
-| Phase 3 | 50K+ | Multi-region + replicas | ~$5K/mo | Month 6+ |
+### Post-Deployment
+- [ ] All endpoints working
+- [ ] KYC admin page accessible
+- [ ] Audit logs populated
+- [ ] Analytics flowing
+- [ ] Monitor errors 48h
 
 ---
 
-## Deployment Checklist
+## 10. Scaling Timeline
 
-- [ ] Enable Sentry error tracking
-- [ ] Configure Vercel environment variables
-- [ ] Set up monitoring dashboard
-- [ ] Enable database slow query logging
-- [ ] Configure Redis (if using)
-- [ ] Set up CDN cache headers
-- [ ] Enable audit logging
-- [ ] Configure rate limiting
-- [ ] Test failover/rollback plan
-- [ ] Set up uptime monitoring (StatusPage.io)
+| Stage | Users | Cost | Timeline |
+|---|---|---|---|
+| Current | 0-1K | ~$0 | Now |
+| Phase 2A | 1K-5K | ~$50/mo | Week 4 |
+| Phase 2B | 5K-50K | ~$500/mo | Month 3 |
+| Phase 3 | 50K+ | ~$5K/mo | Month 6+ |
+
+---
+
+**Version**: 2.0  
+**Last Updated**: April 24, 2026  
+**Review Date**: June 24, 2026
 
