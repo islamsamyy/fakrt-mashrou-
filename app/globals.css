@@ -45,6 +45,19 @@
   --color-accent-foreground: #000000;
 
   --shadow-neon: 0 0 30px rgba(0, 255, 209, 0.2);
+
+  --animate-gradient-shift: gradient-shift 6s ease infinite;
+  --animate-pulse-gentle: pulse-gentle 3s ease-in-out infinite;
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes pulse-gentle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
 }
 
 /* ======= LIGHT THEME (default :root) ======= */
@@ -875,23 +888,6 @@
   animation: marquee 20s linear infinite;
 }
 
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.animate-gradient-shift {
-  animation: gradient-shift 6s ease infinite;
-}
-
-@keyframes pulse-gentle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-.animate-pulse-gentle {
-  animation: pulse-gentle 3s ease-in-out infinite;
-}
 
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(30px); }

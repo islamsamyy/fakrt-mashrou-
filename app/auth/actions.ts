@@ -254,11 +254,11 @@ export async function register(formData: FormData): Promise<RegisterResponse> {
       created_at: new Date().toISOString(),
     })
 
-    // Initialize fresh user data based on role
-    await initializeUserData(supabase, data.user.id, role, fullName.trim())
-
     // If session is null, it means email confirmation is required
     if (!data.session) {
+      // Initialize user data even without session
+      await initializeUserData(supabase, data.user.id, role, fullName.trim())
+
       return {
         success: true,
         data: {
@@ -272,6 +272,9 @@ export async function register(formData: FormData): Promise<RegisterResponse> {
         statusCode: 201,
       }
     }
+
+    // Initialize fresh user data based on role
+    await initializeUserData(supabase, data.user.id, role, fullName.trim())
 
     revalidatePath('/', 'layout')
 

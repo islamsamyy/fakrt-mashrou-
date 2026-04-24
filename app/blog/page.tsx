@@ -44,7 +44,10 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
   const featuredBlog = page === 1 && !q && !category ? blogs?.[0] : null;
   const displayBlogs = featuredBlog ? blogs?.slice(1) || [] : blogs || [];
 
-  const categories = ['الكل', 'الذكاء الاصطناعي', 'تحليل الأسواق', 'تكنولوجيا', 'قصص النجاح', 'السيادة الرقمية'];
+  // Fetch unique categories
+  const { data: allCategories } = await supabase.from('blogs').select('category');
+  const uniqueCategories = Array.from(new Set((allCategories || []).map(c => c.category).filter(Boolean)));
+  const categories = ['الكل', ...uniqueCategories];
 
   return (
     <main className="min-h-screen bg-background text-foreground pt-32 pb-20 px-4 md:px-8 relative overflow-hidden" dir="rtl">
@@ -79,13 +82,13 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
 
           <div className="flex justify-center gap-12 mt-12 animate-fade-in" style={{ animationDelay: '0.2s' }}>
             <div className="flex flex-col items-center gap-2">
-              <span className="text-[10px] font-black text-primary-container/40 uppercase tracking-widest">Global_Reach</span>
-              <span className="text-2xl font-black tabular-nums">42.8K</span>
+              <span className="text-[10px] font-black text-primary-container/40 uppercase tracking-widest">Total_Articles</span>
+              <span className="text-2xl font-black tabular-nums">{count || 0}</span>
             </div>
             <div className="w-px h-12 bg-primary-container/10"></div>
             <div className="flex flex-col items-center gap-2">
-              <span className="text-[10px] font-black text-primary-container/40 uppercase tracking-widest">Active_Nodes</span>
-              <span className="text-2xl font-black tabular-nums">1,204</span>
+              <span className="text-[10px] font-black text-primary-container/40 uppercase tracking-widest">Categories</span>
+              <span className="text-2xl font-black tabular-nums">{uniqueCategories.length}</span>
             </div>
             <div className="w-px h-12 bg-primary-container/10"></div>
             <div className="flex flex-col items-center gap-2">
@@ -103,22 +106,12 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
           <div className="animate-ticker whitespace-nowrap flex items-center gap-20">
             {[1, 2, 3].map((_, i) => (
               <div key={i} className="flex items-center gap-20">
-                <div className="flex items-center gap-4">
-                  <span className="text-primary-container font-black text-[10px] uppercase tracking-[0.4em] bg-primary-container/5 px-3 py-1 rounded border border-primary-container/10">[MARKET_SENTIMENT]</span>
-                  <span className="text-foreground/80 text-base font-bold uppercase tracking-tight">AI Stocks surging in Gulf markets (+4.2%) — High Volume Detected</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-secondary font-black text-[10px] uppercase tracking-[0.4em] bg-secondary/5 px-3 py-1 rounded border border-secondary/10">[SECURITY_ALERT]</span>
-                  <span className="text-foreground/80 text-base font-bold uppercase tracking-tight">New quantum-safe encryption protocols deployed in Dubai Financial Hub</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-primary-container font-black text-[10px] uppercase tracking-[0.4em] bg-primary-container/5 px-3 py-1 rounded border border-primary-container/10">[TECH_CORE]</span>
-                  <span className="text-foreground/80 text-base font-bold uppercase tracking-tight">Regional LLM training phase 4 complete // 1.2 Trillion Tokens Processed</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-foreground/40 font-black text-[10px] uppercase tracking-[0.4em] bg-foreground/5 px-3 py-1 rounded border border-foreground/10">[NETWORK_STATS]</span>
-                  <span className="text-foreground/80 text-base font-bold uppercase tracking-tight">Global Node Latency: 12ms // Protocol Stability: 99.99%</span>
-                </div>
+                {blogs?.map((blog) => (
+                  <div key={blog.id} className="flex items-center gap-4">
+                    <span className="text-primary-container font-black text-[10px] uppercase tracking-[0.4em] bg-primary-container/5 px-3 py-1 rounded border border-primary-container/10">[{blog.category || 'INTEL'}]</span>
+                    <span className="text-foreground/80 text-base font-bold uppercase tracking-tight">{blog.title}</span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -136,7 +129,6 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
               <Link 
                 key={cat} 
                 href={cat === 'الكل' ? '/blog' : `/blog?category=${cat}${q ? `&q=${q}` : ''}`}
-                onClick={() => emitSystemLog(`APPLYING_FILTER: ${cat.toUpperCase()}`, 'info')}
                 className={`px-8 py-3 rounded-xl border-2 text-xs font-black tracking-widest transition-all duration-500 uppercase whitespace-nowrap relative group ${
                   isActive 
                     ? 'bg-primary-container text-background border-primary-container shadow-[0_0_30px_rgba(0,255,209,0.5)]' 
@@ -213,7 +205,7 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
                             <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary-container rounded-full border-4 border-background animate-pulse"></div>
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-base font-black tracking-wider uppercase">{featuredBlog.author?.full_name || 'AL-COMMAND SYSTEM'}</span>
+                            <span className="text-base font-black tracking-wider uppercase">{featuredBlog.author?.full_name || 'أدمن النظام'}</span>
                             <span className="text-[10px] text-primary-container font-black uppercase tracking-[0.3em]">Chief Intelligence Officer</span>
                           </div>
                         </div>

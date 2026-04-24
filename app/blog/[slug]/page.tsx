@@ -53,14 +53,19 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     'headline': blog.title,
-    'image': blog.image_url,
+    'image': blog.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2000',
     'datePublished': blog.published_at,
     'author': {
       '@type': 'Person',
-      'name': blog.author?.full_name || 'Admin',
+      'name': blog.author?.full_name || 'أدمن النظام',
     },
     'description': blog.excerpt,
   };
+
+  // Calculate dynamic reading time
+  const wordsPerMinute = 200;
+  const wordCount = blog.content.split(/\s+/).length;
+  const readingTime = Math.ceil(wordCount / wordsPerMinute);
 
   return (
     <main className="min-h-screen bg-background text-foreground pt-32 pb-20 px-4 md:px-8 relative overflow-hidden" dir="rtl">
@@ -137,12 +142,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                     <span className="text-[10px] text-foreground/30 font-black uppercase tracking-widest">Est. Reading Time</span>
                     <span className="text-sm font-bold flex items-center gap-2">
                       <span className="w-1.5 h-1.5 bg-primary-container rounded-full animate-pulse"></span>
-                      12 دقيقة قراءة
+                      {readingTime} دقيقة قراءة
                     </span>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <span className="text-[10px] text-foreground/30 font-black uppercase tracking-widest">Network Impact</span>
-                    <span className="text-sm font-bold text-secondary animate-pulse">CRITICAL</span>
                   </div>
                 </div>
               </div>
@@ -190,45 +191,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   );
                 })}
               </div>
-              
-              <div className="my-24 p-12 glass-strong border-r-8 border-primary-container rounded-[2.5rem] relative overflow-hidden group shadow-[0_0_50px_rgba(0,255,209,0.1)]">
-                <div className="absolute top-[-50px] left-[-50px] w-64 h-64 bg-primary-container/10 blur-[100px] group-hover:bg-primary-container/20 transition-all duration-700"></div>
-                <div className="relative z-10 text-right">
-                  <span className="material-symbols-outlined text-primary-container text-7xl mb-8 opacity-20 block">format_quote</span>
-                  <p className="text-3xl md:text-4xl font-black italic leading-tight text-foreground/90 tracking-tight">
-                    "إن الذكاء الاصطناعي لا يحل محل المستثمر، بل يمنحه مجهراً رقمياً يرى من خلاله فرصاً كانت غير مرئية في السابق."
-                  </p>
-                </div>
-              </div>
-
-              {/* Enhanced Data Visualization */}
-              <div className="my-24 p-10 glass rounded-[2.5rem] border border-primary-container/20 relative overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 neon-grid opacity-10"></div>
-                <div className="relative z-10">
-                  <h4 className="text-2xl font-black text-primary-container mb-12 flex items-center gap-4">
-                    <span className="w-3 h-3 bg-primary-container rounded-full animate-pulse"></span>
-                    مؤشرات الأداء الاستراتيجي
-                    <span className="flex-grow h-[1px] bg-primary-container/20"></span>
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="p-10 glass-cyan rounded-3xl border border-primary-container/20 flex flex-col items-center text-center space-y-6 group hover:border-primary-container/50 transition-all duration-500">
-                      <span className="text-[10px] font-black text-primary-container uppercase tracking-[0.3em]">Predictive Accuracy</span>
-                      <span className="text-6xl font-black tracking-tighter text-primary-container drop-shadow-[0_0_15px_rgba(0,255,209,0.4)] group-hover:scale-110 transition-transform duration-500">98.4%</span>
-                      <div className="w-full h-2 bg-background/50 rounded-full overflow-hidden p-[2px]">
-                        <div className="h-full bg-primary-container rounded-full shadow-neon-sm" style={{ width: '98.4%' }}></div>
-                      </div>
-                    </div>
-                    <div className="p-10 glass-strong rounded-3xl border border-primary-container/10 flex flex-col items-center text-center space-y-6 group hover:border-secondary transition-all duration-500">
-                      <span className="text-[10px] font-black text-foreground/40 uppercase tracking-[0.3em]">Decision Latency</span>
-                      <span className="text-6xl font-black tracking-tighter text-secondary drop-shadow-[0_0_15px_rgba(255,62,112,0.4)] group-hover:scale-110 transition-transform duration-500">12.5ms</span>
-                      <div className="w-full h-2 bg-background/50 rounded-full overflow-hidden p-[2px]">
-                        <div className="h-full bg-secondary rounded-full" style={{ width: '85%' }}></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
             <footer className="pt-16 border-t border-primary-container/10 flex flex-col md:flex-row items-center justify-between gap-10">
               <div className="flex items-center gap-8">
@@ -237,73 +199,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   <ShareButton />
                 </div>
               </div>
-              <div className="flex flex-wrap gap-3">
-                {(blog.tags || ['استثمار', 'ذكاء_اصطناعي', 'سيادة_رقمية']).map((tag: string) => (
-                  <span key={tag} className="px-6 py-2.5 glass border-primary-container/10 rounded-xl text-xs font-black text-foreground/40 hover:text-primary-container hover:border-primary-container hover:shadow-neon-sm cursor-pointer transition-all hover:-translate-y-1">
-                    #{tag}
-                  </span>
-                ))}
-              </div>
             </footer>
-
-            {/* Enhanced Comments Section */}
-            <section className="pt-32 space-y-16">
-              <div className="flex items-center justify-between">
-                <h3 className="text-4xl font-black flex items-center gap-5">
-                  <span className="material-symbols-outlined text-4xl text-primary-container animate-pulse">forum</span>
-                  نقاشات الخبراء
-                  <span className="text-sm font-bold text-foreground/30 bg-foreground/5 px-4 py-1.5 rounded-full border border-foreground/5">34</span>
-                </h3>
-                <div className="flex-grow mx-8 h-[1px] bg-gradient-to-l from-primary-container/20 to-transparent"></div>
-              </div>
-              
-              <div className="space-y-10">
-                <div className="p-10 glass rounded-[2.5rem] border border-primary-container/10 space-y-8 relative group overflow-hidden hover:border-primary-container/30 transition-all duration-500 text-right">
-                  <div className="absolute top-0 right-0 w-2 h-full bg-primary-container/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 rounded-2xl border border-primary-container/30 overflow-hidden shadow-neon-sm">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Avatar" className="w-full h-full object-cover" />
-                      </div>
-                      <div>
-                        <p className="font-black text-xl tracking-tight">م. ليلى السيف</p>
-                        <p className="text-[10px] text-primary-container font-black uppercase tracking-[0.2em] mt-1">Strategy Analyst</p>
-                      </div>
-                    </div>
-                    <span className="text-[10px] text-foreground/30 font-black tracking-widest uppercase">3H_AGO</span>
-                  </div>
-                  <p className="text-xl text-foreground/70 leading-relaxed font-light">
-                    هل تعتقد أن دمج تقنيات ZK-Proofs سيؤدي إلى شفافية أعلى في معاملات المزادات دون الكشف عن هوية المستثمر السيادي؟
-                  </p>
-                  <div className="flex gap-8 pt-6 border-t border-foreground/5">
-                    <button className="flex items-center gap-3 text-xs font-black text-primary-container hover:scale-110 transition-all">
-                      <span className="material-symbols-outlined text-xl">thumb_up</span>
-                      12
-                    </button>
-                    <button className="flex items-center gap-3 text-xs font-black text-foreground/30 hover:text-primary-container hover:scale-110 transition-all">
-                      <span className="material-symbols-outlined text-xl">reply</span>
-                      REPLY_TO_THREAD
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-12 glass-strong rounded-[3rem] border border-primary-container/20 space-y-10 relative overflow-hidden shadow-2xl">
-                <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-primary-container via-transparent to-transparent"></div>
-                <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-primary-container rounded-full animate-pulse"></div>
-                  <h4 className="text-2xl font-black uppercase tracking-[0.2em]">INITIATE_RESPONSE_PROTOCOL</h4>
-                </div>
-                <textarea 
-                  className="w-full h-48 bg-background/50 border-2 border-primary-container/10 rounded-3xl p-8 text-xl font-light focus:border-primary-container/40 outline-none transition-all placeholder:text-foreground/20 resize-none shadow-inner text-right"
-                  placeholder="أدخل تحليلك الاستراتيجي هنا..."
-                ></textarea>
-                <button className="w-full md:w-auto bg-primary-container text-background font-black px-16 py-6 rounded-2xl hover:shadow-[0_0_50px_rgba(0,255,209,0.6)] hover:scale-[1.02] transition-all active:scale-95 text-xl uppercase tracking-tighter shadow-neon-sm">
-                  SEND_TO_NETWORK
-                </button>
-              </div>
-            </section>
           </article>
 
           {/* Sidebar - Enhanced */}
@@ -364,43 +260,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
               </div>
             </div>
 
-            {/* Real-time Telemetry */}
-            <div className="p-12 glass-strong rounded-[3.5rem] border border-primary-container/10 space-y-12 relative overflow-hidden shadow-2xl">
-               <div className="absolute inset-0 scanline opacity-10 pointer-events-none"></div>
-               <div className="flex items-center justify-between">
-                 <h4 className="text-xs font-black tracking-[0.4em] text-foreground/40 flex items-center gap-4">
-                   <span className="material-symbols-outlined text-2xl text-primary-container animate-pulse">sensors</span>
-                   REAL_TIME_TELEMETRY
-                 </h4>
-               </div>
-               <div className="space-y-10">
-                 <div className="space-y-4">
-                    <div className="flex justify-between text-[10px] font-black tracking-[0.2em]">
-                      <span className="text-foreground/40 uppercase">Network Load</span>
-                      <span className="text-primary-container uppercase animate-glow-soft">Optimal_85%</span>
-                    </div>
-                    <div className="w-full h-2.5 bg-background/50 rounded-full overflow-hidden p-[2px] border border-primary-container/5">
-                      <div className="h-full bg-primary-container rounded-full shadow-neon-sm animate-pulse" style={{ width: '85%' }}></div>
-                    </div>
-                 </div>
-                 <div className="space-y-4">
-                    <div className="flex justify-between text-[10px] font-black tracking-[0.2em]">
-                      <span className="text-foreground/40 uppercase">Risk Index</span>
-                      <span className="text-secondary uppercase">Low_32%</span>
-                    </div>
-                    <div className="w-full h-2.5 bg-background/50 rounded-full overflow-hidden p-[2px] border border-primary-container/5">
-                      <div className="h-full bg-secondary rounded-full" style={{ width: '32%' }}></div>
-                    </div>
-                 </div>
-               </div>
-
-               <div className="pt-8 border-t border-foreground/5">
-                 <div className="flex items-center gap-4 text-[10px] font-black text-foreground/30 uppercase tracking-[0.3em]">
-                   <span className="w-2 h-2 bg-secondary rounded-full animate-pulse shadow-[0_0_10px_#ff3e70]"></span>
-                   UPLINK_STABLE_V4.2
-                 </div>
-               </div>
-            </div>
           </aside>
         </div>
       </div>
