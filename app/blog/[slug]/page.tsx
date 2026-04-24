@@ -191,7 +191,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                   );
                 })}
               </div>
-
+            </div>
             <footer className="pt-16 border-t border-primary-container/10 flex flex-col md:flex-row items-center justify-between gap-10">
               <div className="flex items-center gap-8">
                 <span className="text-[10px] font-black text-foreground/30 uppercase tracking-[0.2em]">SHARE INTEL</span>

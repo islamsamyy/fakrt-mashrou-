@@ -1,0 +1,466 @@
+
+> arabic-platform@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.6:3000
+- Environments: .env.local
+✓ Ready in 574ms
+Warning: Custom Cache-Control headers detected for the following routes:
+  - /_next/static/:path*
+
+Setting a custom Cache-Control header can break Next.js development behavior.
+- Experiments (use with caution):
+  · optimizePackageImports
+
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./app/blog/[slug]/page.tsx:203:21
+Expected '</', got 'jsx text'
+  201 |               </div>
+  202 |             </footer>
+> 203 |           </article>
+      |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 204 |
+      | ^
+> 205 |           {/* Sidebar - Enhanced */}
+      | ^^^^^^^^^^
+  206 |           <aside className="lg:w-1/3 space-y-16">
+  207 |             {/* Intelligence Briefing / Subscription */}
+  208 |             <div className="p-12 glass-cyan rounded-[3.5rem] border border-primary-contai...
+
+Parsing ecmascript source code failed 
+    at handleErrors (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/IDEA BUSINESS/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+ GET /login 200 in 4.0s (next.js: 1627ms, proxy.ts: 703ms, application-code: 1667ms)
+ GET /investors 200 in 5.0s (next.js: 2.8s, proxy.ts: 787ms, application-code: 1401ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/profiles?select=*&role=e.. 200 in 834ms (cache skip)
+ │ │ Cache skipped reason: (auto no cache)
+ GET /blog 200 in 6.1s (next.js: 1838ms, proxy.ts: 792ms, application-code: 3.4s)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 901ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 142ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 21ms (next.js: 4ms, proxy.ts: 7ms, application-code: 10ms)
+ GET /blog 200 in 478ms (next.js: 4ms, proxy.ts: 8ms, application-code: 465ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 302ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 93ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 21ms (next.js: 5ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /blog 200 in 428ms (next.js: 4ms, proxy.ts: 7ms, application-code: 417ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 125ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 208ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /register 200 in 123ms (next.js: 29ms, proxy.ts: 5ms, application-code: 89ms)
+ GET /blog 200 in 33ms (next.js: 10ms, proxy.ts: 10ms, application-code: 13ms)
+ GET /blog 200 in 348ms (next.js: 7ms, proxy.ts: 11ms, application-code: 330ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 102ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 131ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 40ms (next.js: 5ms, proxy.ts: 8ms, application-code: 27ms)
+ GET /blog 200 in 406ms (next.js: 7ms, proxy.ts: 7ms, application-code: 391ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 189ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 107ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 16ms (next.js: 4ms, proxy.ts: 5ms, application-code: 8ms)
+ GET /blog 200 in 253ms (next.js: 4ms, proxy.ts: 5ms, application-code: 245ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 87ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 86ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 14ms (next.js: 4ms, proxy.ts: 4ms, application-code: 6ms)
+ GET /blog 200 in 244ms (next.js: 3ms, proxy.ts: 4ms, application-code: 237ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 94ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 85ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 13ms (next.js: 3ms, proxy.ts: 5ms, application-code: 5ms)
+ GET /blog 200 in 275ms (next.js: 3ms, proxy.ts: 5ms, application-code: 267ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 106ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 92ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 18ms (next.js: 5ms, proxy.ts: 6ms, application-code: 6ms)
+ GET /blog 200 in 296ms (next.js: 5ms, proxy.ts: 6ms, application-code: 286ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 98ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 108ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 18ms (next.js: 5ms, proxy.ts: 5ms, application-code: 8ms)
+ GET /blog 200 in 450ms (next.js: 3ms, proxy.ts: 7ms, application-code: 440ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 165ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 180ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 16ms (next.js: 5ms, proxy.ts: 4ms, application-code: 7ms)
+ GET /blog 200 in 260ms (next.js: 3ms, proxy.ts: 4ms, application-code: 253ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 85ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 99ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 16ms (next.js: 4ms, proxy.ts: 5ms, application-code: 8ms)
+ GET /blog 200 in 250ms (next.js: 3ms, proxy.ts: 4ms, application-code: 243ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 89ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 94ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 13ms (next.js: 3ms, proxy.ts: 5ms, application-code: 5ms)
+ GET /blog 200 in 249ms (next.js: 3ms, proxy.ts: 5ms, application-code: 240ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 95ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 84ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ GET /blog 200 in 13ms (next.js: 4ms, proxy.ts: 3ms, application-code: 7ms)
+ GET /blog 200 in 269ms (next.js: 3ms, proxy.ts: 4ms, application-code: 263ms)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=*%2Cauth.. 200 in 84ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+ │ GET https://dqszxefplefuuovd../rest/v1/blogs?select=category 200 in 123ms (cache skip)
+ │ │ Cache skipped reason: (revalidate: 0)
+[?25h

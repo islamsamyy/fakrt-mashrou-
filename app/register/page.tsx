@@ -2,28 +2,39 @@
 
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
-import { register } from '@/app/auth/actions';
+import { registerWithRoleHidden } from '@/app/auth/actions';
 
 export default function RegisterPage() {
   const [role, setRole] = useState<'founder' | 'investor'>('founder');
+
+  return (
+    <RegisterForm role={role} setRole={setRole} />
+  );
+}
+
+function RegisterForm({ role, setRole }: { role: 'founder' | 'investor'; setRole: (role: 'founder' | 'investor') => void }) {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
+
     const formData = new FormData(e.currentTarget);
     formData.set('role', role);
-    setSuccessMessage(null);
-    setError(null);
 
     startTransition(async () => {
-      const result = await register(formData);
+      const result = await registerWithRoleHidden(formData, role);
+
+      // Only update state if result is returned (no redirect occurred)
       if (result?.error) {
         setError(result.error);
       } else if (result?.message) {
         setSuccessMessage(result.message);
       }
+      // If no result, redirect() was called and is handling navigation
     });
   }
 
@@ -104,7 +115,7 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
+          <form className="space-y-6" onSubmit={handleSubmit} noValidate>
             {/* Full Name */}
             <div className="relative group">
               <label className="block text-xs font-headline text-primary-container uppercase tracking-widest mb-1">الاسم الكامل</label>

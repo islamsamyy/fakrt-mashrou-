@@ -353,6 +353,11 @@ export async function verifySession(): Promise<SessionVerifyResponse> {
   }
 }
 
+export async function registerWithRoleHidden(formData: FormData, role: 'founder' | 'investor') {
+  formData.set('role', role)
+  return register(formData)
+}
+
 export async function logout() {
   const supabase = await createClient()
   await supabase.auth.signOut()
