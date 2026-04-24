@@ -1,10 +1,10 @@
 # Backend API Test Report
 
-**Date**: 2026-04-24T01:43:01.137Z
+**Date**: 2026-04-24T01:47:15.796Z
 **Total Tests**: 12
-**Passed**: 9 ✅
-**Failed**: 3 ❌
-**Success Rate**: 75.00%
+**Passed**: 10 ✅
+**Failed**: 2 ❌
+**Success Rate**: 83.33%
 
 ## Test Results
 
@@ -13,9 +13,9 @@
 - **Name**: Register new user with valid data
 - **Status**: FAIL
 - **Expected**: 201
-- **Actual**: 500
-- **Duration**: 423ms
-- **Error**: Expected 201, got 500
+- **Actual**: 400
+- **Duration**: 125ms
+- **Error**: Expected 201, got 400
 
 
 ### auth_register_missing_email
@@ -32,7 +32,7 @@
 - **Status**: PASS
 - **Expected**: 400
 - **Actual**: 400
-- **Duration**: 14ms
+- **Duration**: 13ms
 
 
 
@@ -41,26 +41,26 @@
 - **Status**: PASS
 - **Expected**: 400
 - **Actual**: 400
-- **Duration**: 11ms
+- **Duration**: 12ms
 
 
 
 ### auth_register_weak_password
 - **Name**: Register with weak password (< 8 chars)
-- **Status**: FAIL
+- **Status**: PASS
 - **Expected**: 400
-- **Actual**: 500
-- **Duration**: 198ms
-- **Error**: Expected 400, got 500
+- **Actual**: 400
+- **Duration**: 18ms
+
 
 
 ### auth_register_invalid_email
 - **Name**: Register with invalid email format
 - **Status**: FAIL
 - **Expected**: 400
-- **Actual**: 500
-- **Duration**: 285ms
-- **Error**: Expected 400, got 500
+- **Actual**: 429
+- **Duration**: 586ms
+- **Error**: Expected 400, got 429
 
 
 ### auth_register_invalid_role
@@ -68,7 +68,7 @@
 - **Status**: PASS
 - **Expected**: 400
 - **Actual**: 400
-- **Duration**: 27ms
+- **Duration**: 12ms
 
 
 
@@ -77,7 +77,7 @@
 - **Status**: PASS
 - **Expected**: 400
 - **Actual**: 400
-- **Duration**: 14ms
+- **Duration**: 57ms
 
 
 
@@ -86,7 +86,7 @@
 - **Status**: PASS
 - **Expected**: 400
 - **Actual**: 400
-- **Duration**: 14ms
+- **Duration**: 19ms
 
 
 
@@ -95,7 +95,7 @@
 - **Status**: PASS
 - **Expected**: 401
 - **Actual**: 401
-- **Duration**: 110ms
+- **Duration**: 122ms
 
 
 
@@ -104,7 +104,7 @@
 - **Status**: PASS
 - **Expected**: 401
 - **Actual**: 401
-- **Duration**: 23ms
+- **Duration**: 58ms
 
 
 
@@ -113,10 +113,10 @@
 - **Status**: PASS
 - **Expected**: 401
 - **Actual**: 401
-- **Duration**: 32ms
+- **Duration**: 45ms
 
 
 
 ## Summary
 
-⚠️ 3 test(s) failed. Review errors above and fix issues.
+⚠️ 2 test(s) failed. Review errors above and fix issues.

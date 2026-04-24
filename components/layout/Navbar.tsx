@@ -17,6 +17,7 @@ const NAV_LINKS = [
   { href: '/trending', label: 'شائع' },
   { href: '/leaderboard', label: 'الأفضل' },
   { href: '/investors', label: 'المستثمرون' },
+  { href: '/blog', label: 'المدونة' },
 ];
 
 const NavLinks = ({ onClick, pathname }: { onClick?: () => void, pathname: string }) => (

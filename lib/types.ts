@@ -71,3 +71,17 @@ export interface Notification {
   created_at: string;
   relatedUser?: Profile;
 }
+
+export interface Blog {
+  id: string;
+  title: string;
+  content: string;
+  excerpt: string | null;
+  author_id: string | null;
+  category: string | null;
+  image_url: string | null;
+  slug: string;
+  published_at: string;
+  created_at: string;
+  author?: Profile;
+}
