@@ -8,7 +8,7 @@
     "projectName": "IDEA BUSINESS",
     "projectPath": "D:\\IDEA BUSINESS",
     "testIds": [],
-    "additionalInstruction": "Execute all backend API tests including authentication, investments, matching, webhooks, and business logic validation",
+    "additionalInstruction": "Execute comprehensive frontend tests covering: signup/login flow, dashboard navigation, project listings, investment flow, user profiles, notifications, settings, and KYC verification screens",
     "serverMode": "production",
     "envs": {
       "API_KEY": "sk-user-_EnCj1jfY1oiMOcP_Z4StihSZ4DJiXWORZE4jfetz7cT1jIapXzQ3SVhIL2hr-d4FKd27UDRY-FqgDIYkns7QppFpKe-5SzMk5vr63XPQYnf9o1cMySN1B47llXDiq933U4"

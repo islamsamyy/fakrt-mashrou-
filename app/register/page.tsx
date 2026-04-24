@@ -15,13 +15,16 @@ export default function RegisterPage() {
     const formData = new FormData(e.currentTarget);
     formData.set('role', role);
     setSuccessMessage(null);
+    setError(null);
     startTransition(async () => {
       const result = await register(formData);
       if (result?.error) {
         setError(result.error);
       } else if (result?.message) {
         setSuccessMessage(result.message);
+        // After successful registration, user will be redirected to onboarding
       }
+      // On successful registration with session, server action redirects to onboarding
     });
   }
 

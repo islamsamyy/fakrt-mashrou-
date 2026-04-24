@@ -1,0 +1,23 @@
+
+> arabic-platform@0.1.0 dev
+> next dev
+
+⚠ Port 3000 is in use by process 18580, using available port 3002 instead.
+▲ Next.js 16.2.3 (Turbopack)
+- Local:         http://localhost:3002
+- Network:       http://192.168.1.6:3002
+- Environments: .env.local
+✓ Ready in 1217ms
+Warning: Custom Cache-Control headers detected for the following routes:
+  - /_next/static/:path*
+
+Setting a custom Cache-Control header can break Next.js development behavior.
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          18580
+- Dir:          D:\IDEA BUSINESS
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 18580 /F to stop it.
+[?25h

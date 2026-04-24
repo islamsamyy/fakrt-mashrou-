@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import { HowItWorks, TrendingIdeas, FAQSection, LiveTicker } from "@/components/home/InteractiveSections";
+import { ParallaxCard } from "@/components/ui/ParallaxCard";
 
 interface Stat {
   value: string;
@@ -82,7 +83,7 @@ export default async function HomePage() {
       icon: "emoji_objects",
       title: "صاحب فكرة",
       description:
-        "لديك فكرة متميزة وتبحث عن تمويل أو شريك استراتيجي لت حويل المخطط إلى واقع ملموس.",
+        "لديك فكرة متميزة وتبحث عن تمويل أو شريك استراتيجي لتحويل المخطط إلى واقع ملموس.",
       color: "tertiary-fixed-dim",
       bg: "bg-tertiary-fixed-dim/5",
     },
@@ -142,8 +143,11 @@ export default async function HomePage() {
       <main className="relative z-10">
         {/* Hero Section */}
         <section className="min-h-[calc(100vh-80px)] flex flex-col justify-center items-center px-6 text-center relative overflow-hidden pt-32 pb-20">
+          {/* Cyber Grid Perspective Background */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-full cyber-grid-perspective -z-10"></div>
+          
           {/* Futuristic Status Badge */}
-          <div className="mb-12 inline-flex items-center gap-3 px-6 py-2 border border-primary-container/40 bg-primary-container/10 dark:bg-black/40 backdrop-blur-md rounded-full text-[11px] font-data tracking-[0.3em] uppercase text-primary-container animate-fade-in">
+          <div className="mb-12 inline-flex items-center gap-3 px-6 py-2 border border-primary-container/40 bg-primary-container/10 dark:bg-black/40 backdrop-blur-md rounded-full text-[11px] font-data tracking-[0.3em] uppercase text-primary-container animate-fade-in shadow-[0_0_15px_rgba(0,255,209,0.2)]">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-container"></span>
@@ -151,20 +155,22 @@ export default async function HomePage() {
             Platform Status: Operational // AI Powered
           </div>
 
-          <h1 className="font-headline text-6xl md:text-9xl font-semibold leading-[1.1] mb-10 max-w-7xl tracking-[-0.04em] text-foreground">
-            اصنع <span className="text-primary-container font-light italic">مستقبلك</span> الاستثماري
-            <br />
-            <span className="bg-gradient-to-r from-foreground via-foreground/80 to-foreground/60 dark:from-white dark:via-white/80 dark:to-white/60 bg-clip-text text-transparent">في قلب رؤية 2030</span>
-          </h1>
+          <div className="scanning-line py-4">
+            <h1 className="font-headline text-6xl md:text-9xl font-semibold leading-[1.1] mb-10 max-w-7xl tracking-[-0.04em] text-foreground relative">
+              اصنع <span className="text-primary-container font-light italic neon-flicker">مستقبلك</span> الاستثماري
+              <br />
+              <span className="bg-gradient-to-r from-foreground via-foreground/80 to-foreground/60 dark:from-white dark:via-white/80 dark:to-white/60 bg-clip-text text-transparent">في قلب رؤية 2030</span>
+            </h1>
+          </div>
 
           <p className="text-muted-foreground text-lg md:text-2xl max-w-4xl mb-16 font-body leading-relaxed opacity-80 dark:opacity-70 font-light">
             بيئة سيادية آمنة تجمع بين طموح الرواد وذكاء المستثمرين. نوظف تقنيات الذكاء الاصطناعي لاختيار الفرص الأكثر نمواً وتأثيراً في الاقتصاد الجديد.
           </p>
 
-          <div className="flex flex-col md:flex-row gap-8 mb-24">
+          <div className="flex flex-col md:flex-row gap-8 mb-24 relative z-20">
             <Link
               href="/opportunities"
-              className="group relative px-14 py-6 bg-gradient-to-r from-primary-container to-accent text-foreground font-semibold text-xl rounded-full transition-all hover:scale-105 active:scale-95 overflow-hidden shadow-[0_8px_24px_rgba(0,255,209,0.3)] dark:shadow-[0_20px_50px_rgba(255,255,255,0.1)]"
+              className="group relative px-14 py-6 bg-gradient-to-r from-primary-container to-accent text-foreground font-semibold text-xl rounded-full transition-all hover:scale-105 active:scale-95 overflow-hidden shadow-[0_8px_24px_rgba(0,255,209,0.3)] holographic-reflection clip-button"
             >
               <span className="relative z-10 flex items-center gap-3 transition-colors">
                 اكتشف الفرص الحالية
@@ -173,7 +179,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/add-idea"
-              className="group relative px-14 py-6 border-2 border-primary-container/50 bg-primary-container/10 dark:bg-white/5 backdrop-blur-sm text-foreground dark:text-white font-semibold text-xl rounded-full transition-all hover:border-primary-container hover:bg-primary-container/20 dark:hover:border-primary-container/50 dark:hover:bg-white/10 active:scale-95"
+              className="group relative px-14 py-6 border-2 border-primary-container/50 bg-primary-container/10 dark:bg-white/5 backdrop-blur-sm text-foreground dark:text-white font-semibold text-xl rounded-full transition-all hover:border-primary-container hover:bg-primary-container/20 active:scale-95 holographic-reflection"
             >
               <span className="flex items-center gap-3">
                 اطرح مشروعك الآن
@@ -215,8 +221,8 @@ export default async function HomePage() {
           </div>
           <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
             {stats.map((stat, i) => (
-              <div key={i} className="group cursor-default">
-                <div className="p-8 rounded-2xl bg-gradient-to-br from-surface-container-high dark:from-white/[0.05] to-surface-container-highest dark:to-white/[0.02] border border-primary-container/20 dark:border-white/10 hover:border-primary-container/40 dark:hover:border-white/30 transition-all hover:bg-surface-container-highest dark:hover:bg-white/[0.08] hover:shadow-[0_0_30px_rgba(0,255,209,0.15)] dark:hover:shadow-[0_0_30px_rgba(0,255,209,0.1)]">
+              <ParallaxCard key={i} className="h-full">
+                <div className="p-8 rounded-2xl bg-gradient-to-br from-surface-container-high dark:from-white/[0.05] to-surface-container-highest dark:to-white/[0.02] border border-primary-container/20 dark:border-white/10 hover:border-primary-container/40 dark:hover:border-white/30 transition-all hover:bg-surface-container-highest dark:hover:bg-white/[0.08] group h-full">
                   <div className="flex flex-col items-start gap-4">
                     <div className="relative">
                       <span className={`font-data text-5xl md:text-6xl ${stat.color} font-black tracking-tighter group-hover:scale-115 transition-transform duration-500 origin-left`}>
@@ -234,7 +240,7 @@ export default async function HomePage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </ParallaxCard>
             ))}
           </div>
         </section>
@@ -251,7 +257,7 @@ export default async function HomePage() {
                 Choose Role // Identity Path
               </div>
               <h2 className="font-headline text-5xl md:text-7xl font-semibold text-foreground dark:text-white tracking-tight mb-6">
-                بوابتك نحو <span className="text-primary-container">التأثير.</span>
+                بوابتك نحو <span className="text-primary-container neon-flicker">التأثير.</span>
               </h2>
               <p className="text-xl text-muted-foreground font-light">اختر هويتك الاستثمارية لنرشدك إلى المسار الأكثر كفاءة وموثوقية.</p>
             </div>
@@ -260,50 +266,51 @@ export default async function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
             {paths.map((path, i) => (
-              <Link
-                key={i}
-                href={path.featured ? "/add-idea" : i === 0 ? "/opportunities" : "/"}
-                className={`group relative overflow-hidden rounded-3xl transition-all duration-700 h-full transform hover:-translate-y-3 ${path.featured ? "md:scale-105" : ""}`}
-              >
-                <div className={`h-full p-12 border backdrop-blur-sm rounded-3xl flex flex-col transition-all duration-700 ${
-                  path.featured
-                    ? "border-primary-container/50 bg-gradient-to-br from-primary-container/20 to-primary-container/5 dark:shadow-[0_0_40px_rgba(0,255,209,0.2)] dark:hover:shadow-[0_0_60px_rgba(0,255,209,0.3)] shadow-[0_0_30px_rgba(0,255,209,0.15)] hover:shadow-[0_0_40px_rgba(0,255,209,0.25)]"
-                    : "border-primary-container/20 dark:border-white/5 bg-gradient-to-br from-surface-container dark:from-white/[0.05] to-surface-container-high dark:to-white/[0.02] hover:border-primary-container/30 dark:hover:border-white/20 hover:shadow-[0_0_20px_rgba(0,255,209,0.1)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]"
-                }`}>
-                  <div className="relative z-10 flex flex-col h-full text-right">
-                    {/* Icon Container */}
-                    <div className={`w-24 h-24 rounded-2xl ${path.bg} flex items-center justify-center mb-8 border border-primary-container/30 dark:border-white/10 group-hover:scale-125 group-hover:shadow-[0_0_25px_rgba(0,255,209,0.3)] transition-all duration-500 relative`}>
-                      <span className={`material-symbols-outlined text-6xl text-${path.color} group-hover:animate-pulse`}>
-                        {path.icon}
-                      </span>
-                      <div className={`absolute inset-0 ${path.bg} opacity-15 dark:opacity-20 blur-lg -z-10 rounded-2xl group-hover:opacity-30 dark:group-hover:opacity-40 transition-opacity`}></div>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-3xl font-semibold mb-6 text-foreground dark:text-white font-headline group-hover:translate-x-2 transition-transform duration-500">
-                      {path.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-muted-foreground leading-relaxed font-body text-lg opacity-85 dark:opacity-80 mb-10 group-hover:text-foreground dark:group-hover:text-slate-300 transition-colors">
-                      {path.description}
-                    </p>
-
-                    {/* CTA */}
-                    <div className="mt-auto pt-8 border-t border-primary-container/20 dark:border-white/10 group-hover:border-primary-container/40 dark:group-hover:border-primary-container/30 transition-colors">
-                      <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <span className="text-[10px] font-data text-primary-container tracking-widest uppercase animate-fade-in">ابدأ الرحلة</span>
-                        <span className="material-symbols-outlined text-primary-container -rotate-180 group-hover:translate-x-2 transition-transform">arrow_forward</span>
+              <ParallaxCard key={i} className="h-full">
+                <Link
+                  href={path.featured ? "/add-idea" : i === 0 ? "/opportunities" : "/"}
+                  className={`group relative overflow-hidden rounded-3xl transition-all duration-700 h-full flex flex-col ${path.featured ? "md:scale-105" : ""}`}
+                >
+                  <div className={`h-full p-12 border backdrop-blur-sm rounded-3xl flex flex-col transition-all duration-700 h-full ${
+                    path.featured
+                      ? "border-primary-container/50 bg-gradient-to-br from-primary-container/20 to-primary-container/5 dark:shadow-[0_0_40px_rgba(0,255,209,0.2)] dark:hover:shadow-[0_0_60px_rgba(0,255,209,0.3)] shadow-[0_0_30px_rgba(0,255,209,0.15)] hover:shadow-[0_0_40px_rgba(0,255,209,0.25)]"
+                      : "border-primary-container/20 dark:border-white/5 bg-gradient-to-br from-surface-container dark:from-white/[0.05] to-surface-container-high dark:to-white/[0.02] hover:border-primary-container/30 dark:hover:border-white/20 hover:shadow-[0_0_20px_rgba(0,255,209,0.1)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+                  }`}>
+                    <div className="relative z-10 flex flex-col h-full text-right">
+                      {/* Icon Container */}
+                      <div className={`w-24 h-24 rounded-2xl ${path.bg} flex items-center justify-center mb-8 border border-primary-container/30 dark:border-white/10 group-hover:scale-125 group-hover:shadow-[0_0_25px_rgba(0,255,209,0.3)] transition-all duration-500 relative hologram-effect`}>
+                        <span className={`material-symbols-outlined text-6xl text-${path.color} group-hover:animate-pulse`}>
+                          {path.icon}
+                        </span>
+                        <div className={`absolute inset-0 ${path.bg} opacity-15 dark:opacity-20 blur-lg -z-10 rounded-2xl group-hover:opacity-30 dark:group-hover:opacity-40 transition-opacity`}></div>
                       </div>
-                      {path.featured && (
-                        <div className="absolute top-6 right-6 px-3 py-1 bg-primary-container/20 border border-primary-container/30 rounded-full">
-                          <span className="text-xs font-black text-primary-container uppercase tracking-widest">مميز</span>
+
+                      {/* Title */}
+                      <h3 className="text-3xl font-semibold mb-6 text-foreground dark:text-white font-headline group-hover:translate-x-2 transition-transform duration-500">
+                        {path.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-muted-foreground leading-relaxed font-body text-lg opacity-85 dark:opacity-80 mb-10 group-hover:text-foreground dark:group-hover:text-slate-300 transition-colors">
+                        {path.description}
+                      </p>
+
+                      {/* CTA */}
+                      <div className="mt-auto pt-8 border-t border-primary-container/20 dark:border-white/10 group-hover:border-primary-container/40 dark:group-hover:border-primary-container/30 transition-colors">
+                        <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                          <span className="text-[10px] font-data text-primary-container tracking-widest uppercase animate-fade-in">ابدأ الرحلة</span>
+                          <span className="material-symbols-outlined text-primary-container -rotate-180 group-hover:translate-x-2 transition-transform">arrow_forward</span>
                         </div>
-                      )}
+                        {path.featured && (
+                          <div className="absolute top-6 right-6 px-3 py-1 bg-primary-container/20 border border-primary-container/30 rounded-full shadow-[0_0_10px_rgba(0,255,209,0.3)]">
+                            <span className="text-xs font-black text-primary-container uppercase tracking-widest">مميز</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </ParallaxCard>
             ))}
           </div>
         </section>
@@ -322,7 +329,7 @@ export default async function HomePage() {
                   Capabilities // System Core
                 </div>
                 <h2 className="font-headline text-5xl md:text-7xl font-semibold text-foreground dark:text-white tracking-tight mb-6">
-                  التميز <span className="opacity-60 dark:opacity-40 italic">التقني.</span>
+                  التميز <span className="opacity-60 dark:opacity-40 italic neon-flicker">التقني.</span>
                 </h2>
                 <p className="text-xl text-muted-foreground font-light">بنية تحتية متطورة تضمن كفاءة الربط بين الموارد والطموح والفرص الحقيقية.</p>
               </div>
@@ -331,12 +338,8 @@ export default async function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((feat, i) => (
-                <div
-                  key={i}
-                  className="group relative overflow-hidden transition-all duration-500 cursor-pointer h-full"
-                >
-                  {/* Card */}
-                  <div className="p-12 rounded-2xl bg-gradient-to-br from-surface-container dark:from-white/[0.05] to-surface-container-high dark:to-white/[0.02] border border-primary-container/20 dark:border-white/10 h-full flex flex-col text-right group-hover:border-primary-container/40 dark:group-hover:border-primary-container/30 group-hover:bg-surface-container-highest dark:group-hover:bg-white/[0.08] transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,209,0.1)]">
+                <ParallaxCard key={i} className="h-full">
+                  <div className="p-12 rounded-2xl bg-gradient-to-br from-surface-container dark:from-white/[0.05] to-surface-container-high dark:to-white/[0.02] border border-primary-container/20 dark:border-white/10 h-full flex flex-col text-right group group-hover:border-primary-container/40 dark:group-hover:border-primary-container/30 group-hover:bg-surface-container-highest dark:group-hover:bg-white/[0.08] transition-all duration-500 hover:shadow-[0_0_30px_rgba(0,255,209,0.1)] relative overflow-hidden">
                     {/* Corner Accent */}
                     <div className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-primary-container opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-br-3xl"></div>
 
@@ -365,12 +368,12 @@ export default async function HomePage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </ParallaxCard>
               ))}
             </div>
 
             {/* Extra Feature Highlight */}
-            <div className="mt-20 p-12 bg-gradient-to-r from-primary-container/10 dark:from-primary-container/10 via-transparent to-secondary-container/10 dark:to-secondary-container/10 border border-primary-container/30 dark:border-primary-container/20 rounded-3xl relative overflow-hidden group cursor-pointer transition-all hover:border-primary-container/50 dark:hover:border-primary-container/40 hover:shadow-[0_0_40px_rgba(0,255,209,0.2)] dark:hover:shadow-[0_0_40px_rgba(0,255,209,0.15)]">
+            <div className="mt-20 p-12 bg-gradient-to-r from-primary-container/10 dark:from-primary-container/10 via-transparent to-secondary-container/10 dark:to-secondary-container/10 border border-primary-container/30 dark:border-primary-container/20 rounded-3xl relative overflow-hidden group cursor-pointer transition-all hover:border-primary-container/50 dark:hover:border-primary-container/40 hover:shadow-[0_0_40px_rgba(0,255,209,0.2)] dark:hover:shadow-[0_0_40px_rgba(0,255,209,0.15)] scanning-line">
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-primary-container/20 dark:bg-primary-container/20 blur-[80px] rounded-full"></div>
               </div>
@@ -411,7 +414,7 @@ export default async function HomePage() {
                 <h2 className="text-5xl md:text-7xl font-headline font-semibold leading-tight text-foreground">
                   نحن لا نبني منصة،
                   <br />
-                  <span className="text-primary-container animate-pulse">بل نصمم اقتصاد الغد.</span>
+                  <span className="text-primary-container animate-pulse neon-flicker">بل نصمم اقتصاد الغد.</span>
                 </h2>
                 <p className="text-xl text-muted-foreground font-light leading-relaxed max-w-xl ml-auto hover:text-foreground transition-colors">
                   تلتزم IDEA BUSINESS بتمكين العقول السعودية وربطها بالموارد التي تحتاجها للنمو. من قلب الرياض، نفتح آفاقاً جديدة للاستثمار الجريء والنمو المستدام وفق معايير عالمية مرموقة.
@@ -443,7 +446,7 @@ export default async function HomePage() {
 
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-br from-primary-container/10 to-transparent blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-[3rem]"></div>
-                <div className="relative p-12 border border-primary-container/20 dark:border-white/10 group-hover:border-primary-container/40 dark:group-hover:border-primary-container/30 rounded-[3rem] bg-gradient-to-br from-surface-container-high dark:from-black/60 to-surface-container dark:to-black/40 backdrop-blur-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,255,209,0.1)]">
+                <div className="relative p-12 border border-primary-container/20 dark:border-white/10 group-hover:border-primary-container/40 dark:group-hover:border-primary-container/30 rounded-[3rem] bg-gradient-to-br from-surface-container-high dark:from-black/60 to-surface-container dark:to-black/40 backdrop-blur-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,255,209,0.1)] hologram-effect">
                   {/* Animated Corner */}
                   <div className="absolute top-0 right-0 p-8">
                     <div className="relative">
@@ -455,7 +458,7 @@ export default async function HomePage() {
                     {/* Live Badge */}
                     <div className="flex items-center justify-end gap-3">
                       <span className="font-data text-[10px] text-primary-container tracking-widest uppercase font-black">System Message</span>
-                      <div className="h-2 w-2 rounded-full bg-primary-container animate-pulse"></div>
+                      <div className="h-2 w-2 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_var(--color-primary-container)]"></div>
                     </div>
 
                     {/* Quote */}
@@ -490,7 +493,7 @@ export default async function HomePage() {
 
           <div className="container mx-auto px-6 relative z-10 text-center">
             <div className="max-w-5xl mx-auto space-y-16">
-              <div className="inline-block px-6 py-2 border border-primary-container/30 bg-primary-container/10 rounded-full font-data text-[11px] text-primary-container tracking-[0.5em] uppercase font-black animate-fade-in">
+              <div className="inline-block px-6 py-2 border border-primary-container/30 bg-primary-container/10 rounded-full font-data text-[11px] text-primary-container tracking-[0.5em] uppercase font-black animate-fade-in shadow-[0_0_20px_rgba(0,255,209,0.2)]">
                 Global Network // Saudi Innovation Hub
               </div>
 
@@ -498,7 +501,7 @@ export default async function HomePage() {
                 <h2 className="text-6xl md:text-8xl font-headline font-black text-foreground leading-tight tracking-tight">
                   العالم ينتظر
                   <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-container via-primary-container to-secondary animate-pulse">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-container via-primary-container to-secondary animate-pulse neon-flicker">
                     فكرتك القادمة.
                   </span>
                 </h2>
@@ -511,7 +514,7 @@ export default async function HomePage() {
               <div className="pt-8 flex flex-col sm:flex-row gap-6 justify-center items-center">
                 <Link
                   href="/opportunities"
-                  className="group relative inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-primary-container to-accent text-foreground font-black text-xl rounded-full hover:scale-105 active:scale-95 transition-all shadow-[0_8px_30px_rgba(0,255,209,0.3)] overflow-hidden"
+                  className="group relative inline-flex items-center gap-4 px-12 py-6 bg-gradient-to-r from-primary-container to-accent text-foreground font-black text-xl rounded-full hover:scale-105 active:scale-95 transition-all shadow-[0_8px_30px_rgba(0,255,209,0.3)] overflow-hidden holographic-reflection clip-button"
                 >
                   <span className="relative flex items-center gap-3">
                     <span className="material-symbols-outlined font-black text-2xl group-hover:scale-125 transition-transform">search</span>
@@ -521,7 +524,7 @@ export default async function HomePage() {
 
                 <Link
                   href="/add-idea"
-                  className="group relative inline-flex items-center gap-4 px-12 py-6 border-2 border-primary-container/50 bg-primary-container/10 dark:bg-transparent text-foreground dark:text-white font-black text-xl rounded-full hover:bg-primary-container/20 dark:hover:bg-white/10 hover:border-primary-container active:scale-95 transition-all"
+                  className="group relative inline-flex items-center gap-4 px-12 py-6 border-2 border-primary-container/50 bg-primary-container/10 dark:bg-transparent text-foreground dark:text-white font-black text-xl rounded-full hover:bg-primary-container/20 dark:hover:bg-white/10 hover:border-primary-container active:scale-95 transition-all holographic-reflection"
                 >
                   <span className="relative flex items-center gap-3">
                     <span className="material-symbols-outlined font-black text-2xl text-primary-container group-hover:rotate-180 transition-transform">add_circle</span>
@@ -532,17 +535,17 @@ export default async function HomePage() {
 
               {/* Trust Indicators */}
               <div className="pt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-                <div className="p-6 border border-primary-container/20 dark:border-white/10 rounded-xl bg-surface-container dark:bg-white/[0.02] hover:bg-primary-container/10 dark:hover:bg-white/[0.05] hover:border-primary-container/40 dark:hover:border-primary-container/30 transition-all group cursor-default">
+                <div className="p-6 border border-primary-container/20 dark:border-white/10 rounded-xl bg-surface-container dark:bg-white/[0.02] hover:bg-primary-container/10 dark:hover:bg-white/[0.05] hover:border-primary-container/40 dark:hover:border-primary-container/30 transition-all group cursor-default hologram-effect">
                   <span className="material-symbols-outlined text-3xl text-primary-container mb-3 block group-hover:scale-110 transition-transform">shield_verified</span>
                   <h4 className="text-foreground font-black mb-2 text-lg">موثوق ومأمون</h4>
                   <p className="text-muted-foreground text-sm">معايير أمان عالمية</p>
                 </div>
-                <div className="p-6 border border-secondary/20 dark:border-white/10 rounded-xl bg-surface-container dark:bg-white/[0.02] hover:bg-secondary/10 dark:hover:bg-white/[0.05] hover:border-secondary/40 transition-all group cursor-default">
+                <div className="p-6 border border-secondary/20 dark:border-white/10 rounded-xl bg-surface-container dark:bg-white/[0.02] hover:bg-secondary/10 dark:hover:bg-white/[0.05] hover:border-secondary/40 transition-all group cursor-default hologram-effect">
                   <span className="material-symbols-outlined text-3xl text-secondary mb-3 block group-hover:scale-110 transition-transform">speed</span>
                   <h4 className="text-foreground font-black mb-2 text-lg">سريع وفعال</h4>
                   <p className="text-muted-foreground text-sm">من الفكرة للصفقة في أسابيع</p>
                 </div>
-                <div className="p-6 border border-primary-container/20 dark:border-white/10 rounded-xl bg-surface-container dark:bg-white/[0.02] hover:bg-primary-container/10 dark:hover:bg-white/[0.05] hover:border-primary-container/40 transition-all group cursor-default">
+                <div className="p-6 border border-primary-container/20 dark:border-white/10 rounded-xl bg-surface-container dark:bg-white/[0.02] hover:bg-primary-container/10 dark:hover:bg-white/[0.05] hover:border-primary-container/40 transition-all group cursor-default hologram-effect">
                   <span className="material-symbols-outlined text-3xl text-primary-container mb-3 block group-hover:scale-110 transition-transform">support_agent</span>
                   <h4 className="text-foreground font-black mb-2 text-lg">دعم متكامل</h4>
                   <p className="text-muted-foreground text-sm">فريق متخصص يساعدك دائماً</p>
@@ -563,7 +566,7 @@ export default async function HomePage() {
 
       <footer className="w-full py-20 px-12 grid grid-cols-1 md:grid-cols-3 gap-12 bg-[#050b14] border-t border-primary-container/10 relative z-10">
         <div className="flex flex-col gap-6">
-          <div className="font-data text-primary-container font-black text-3xl tracking-tighter">
+          <div className="font-data text-primary-container font-black text-3xl tracking-tighter neon-flicker">
             IDEA BUSINESS
           </div>
           <p className="font-body text-sm text-slate-500 max-w-xs leading-relaxed">

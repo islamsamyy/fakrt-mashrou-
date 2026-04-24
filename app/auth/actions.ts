@@ -92,7 +92,10 @@ export async function login(formData: FormData): Promise<LoginResponse> {
     }
 
     revalidatePath('/', 'layout')
-    return response
+
+    // Route to dashboard based on role
+    const role = profile?.role || 'investor'
+    redirect(`/dashboard/${role}`)
   } catch (err) {
     console.error('Login error:', err)
     return {
@@ -251,6 +254,9 @@ export async function register(formData: FormData): Promise<RegisterResponse> {
       created_at: new Date().toISOString(),
     })
 
+    // Initialize fresh user data based on role
+    await initializeUserData(supabase, data.user.id, role, fullName.trim())
+
     // If session is null, it means email confirmation is required
     if (!data.session) {
       return {
@@ -268,16 +274,9 @@ export async function register(formData: FormData): Promise<RegisterResponse> {
     }
 
     revalidatePath('/', 'layout')
-    return {
-      success: true,
-      data: {
-        user: {
-          id: data.user.id,
-          email: data.user.email || '',
-        },
-      },
-      statusCode: 201,
-    }
+
+    // Route to onboarding to complete profile setup
+    redirect(`/onboarding?role=${role}`)
   } catch (err) {
     console.error('Register error:', err)
     return {
@@ -399,4 +398,60 @@ export async function updateProfile(role: string, interests: string[]) {
   
   // Perform redirect
   redirect(destination)
+}
+
+/**
+ * Initialize fresh user data when account is created
+ * Creates role-specific data structures for each new user
+ */
+async function initializeUserData(
+  supabase: any,
+  userId: string,
+  role: string,
+  fullName: string
+) {
+  try {
+    if (role === 'founder') {
+      // Create sample founder project with default values
+      try {
+        await supabase.from('projects').insert({
+          founder_id: userId,
+          title: `مشروع ${fullName}`,
+          description: `مشروع تجريبي لـ ${fullName}. يمكنك تعديله وإضافة تفاصيل المشروع الحقيقي.`,
+          category: 'التكنولوجيا',
+          funding_goal: 500000,
+          amount_raised: 0,
+          min_invest: 10000,
+          roi: '25%',
+          status: 'draft',
+          verified: false,
+          created_at: new Date().toISOString(),
+        })
+        console.log('✅ Sample project created for founder:', userId)
+      } catch (err) {
+        console.error('Note: Could not create sample project:', err)
+      }
+    } else if (role === 'investor') {
+      // For investors, we store their preferences in the profile interests field
+      // which is set during onboarding
+      console.log('✅ Investor account initialized:', userId)
+    }
+
+    // Update profile with initialization flag
+    try {
+      await supabase
+        .from('profiles')
+        .update({
+          initialized: true,
+          initialized_at: new Date().toISOString(),
+        })
+        .eq('id', userId)
+      console.log('✅ Profile marked as initialized:', userId)
+    } catch (err) {
+      console.error('Note: Could not update initialization flag:', err)
+    }
+  } catch (error) {
+    console.error('Error initializing user data:', error)
+    // Don't throw - initialization error shouldn't prevent account creation
+  }
 }

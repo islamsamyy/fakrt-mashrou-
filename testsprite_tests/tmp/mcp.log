@@ -2858,3 +2858,9 @@
 {"timestamp":"2026-04-24T01:40:48.642Z","level":"info","message":"Tool invocation started","correlationId":"bb7d16d0-8832-4a9a-9a4d-df6054886d48","tool":"testsprite_generate_code_and_execute"}
 {"timestamp":"2026-04-24T01:40:48.645Z","level":"info","message":"Tool invocation completed","correlationId":"bb7d16d0-8832-4a9a-9a4d-df6054886d48","tool":"testsprite_generate_code_and_execute"}
 {"timestamp":"2026-04-24T01:40:48.645Z","level":"info","message":"Deleted existing file: D:\\IDEA BUSINESS\\testsprite_tests\\tmp\\raw_report.md","correlationId":"bb7d16d0-8832-4a9a-9a4d-df6054886d48","tool":"testsprite_generate_code_and_execute"}
+{"timestamp":"2026-04-24T02:39:05.257Z","level":"info","message":"Tool invocation started","correlationId":"f0a8cb69-ea11-4405-9703-46f7f6f73e17","tool":"testsprite_generate_frontend_test_plan"}
+{"timestamp":"2026-04-24T02:39:05.260Z","level":"debug","message":"Generate frontend test plan params","correlationId":"f0a8cb69-ea11-4405-9703-46f7f6f73e17","tool":"testsprite_generate_frontend_test_plan","context":{"projectPath":"D:\\IDEA BUSINESS","needLogin":true}}
+{"timestamp":"2026-04-24T02:39:05.261Z","level":"warn","message":"Login credentials missing, disabling login in test plan","correlationId":"f0a8cb69-ea11-4405-9703-46f7f6f73e17","tool":"testsprite_generate_frontend_test_plan"}
+{"timestamp":"2026-04-24T02:39:40.929Z","level":"info","message":"Tool invocation completed","correlationId":"f0a8cb69-ea11-4405-9703-46f7f6f73e17","tool":"testsprite_generate_frontend_test_plan"}
+{"timestamp":"2026-04-24T02:39:45.366Z","level":"info","message":"Tool invocation started","correlationId":"62e8640a-f4eb-4db7-8626-750665756a86","tool":"testsprite_generate_code_and_execute"}
+{"timestamp":"2026-04-24T02:39:45.369Z","level":"info","message":"Tool invocation completed","correlationId":"62e8640a-f4eb-4db7-8626-750665756a86","tool":"testsprite_generate_code_and_execute"}

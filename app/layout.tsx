@@ -4,6 +4,8 @@ import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import CyberCursor from "@/components/ui/CyberCursor";
+import PageLoader from "@/components/blog/PageLoader";
 import "./globals.css";
 
 const inter = Inter({
@@ -48,6 +50,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
+          <PageLoader />
+          <div className="page-scanline" />
+          <CyberCursor />
           {children}
           <Toaster position="bottom-right" theme="dark" />
           <Analytics />

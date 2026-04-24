@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
 import { login } from '@/app/auth/actions';
+import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -17,6 +19,8 @@ export default function LoginPage() {
       if (result?.error) {
         setError(result.error);
       }
+      // On successful login, the server action redirects via redirect()
+      // This client-side handler is just for error display
     });
   }
 

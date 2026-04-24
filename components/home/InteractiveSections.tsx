@@ -127,17 +127,29 @@ export function LiveTicker() {
   const doubled = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
 
   return (
-    <div className="w-full overflow-hidden border-y border-primary-container/15 dark:border-white/5 py-5 relative bg-surface-container/30 dark:bg-white/[0.01]">
-      <div className="absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+    <div className="w-full overflow-hidden border-y border-primary-container/15 dark:border-white/5 py-6 relative bg-surface-container/30 dark:bg-white/[0.01] backdrop-blur-sm">
+      <div className="absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+      
+      {/* HUD line */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary-container/30 to-transparent" />
+      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary-container/30 to-transparent" />
 
-      <div className="animate-ticker flex gap-12 whitespace-nowrap">
+      <div className="animate-ticker flex gap-16 whitespace-nowrap py-1">
         {doubled.map((item, i) => (
-          <div key={i} className="flex items-center gap-3 flex-shrink-0 px-4 py-1.5 glass rounded-full">
-            <span className={`material-symbols-outlined text-lg ${item.color}`}>{item.icon}</span>
-            <span className="text-sm font-body text-foreground opacity-80">{item.label}</span>
-            <span className="font-data font-black text-sm text-foreground">{item.amount}</span>
-            <span className={`font-data text-xs font-black ${item.color}`}>{item.change}</span>
+          <div key={i} className="flex items-center gap-4 flex-shrink-0 px-6 py-2 glass rounded-lg border-primary-container/10 hover:border-primary-container/30 transition-all group cursor-pointer holographic-glow">
+            <span className={`material-symbols-outlined text-xl ${item.color} group-hover:scale-125 transition-transform data-flicker`}>{item.icon}</span>
+            <div className="flex flex-col text-right">
+              <span className="text-[10px] font-data text-muted-foreground uppercase tracking-widest leading-none mb-1">Market Entry</span>
+              <span className="text-sm font-headline font-bold text-foreground opacity-90 group-hover:opacity-100 transition-opacity">{item.label}</span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="font-data font-black text-sm text-foreground">{item.amount}</span>
+              <span className={`font-data text-[10px] font-black ${item.color} flex items-center gap-1`}>
+                <span className="w-1 h-1 rounded-full bg-current animate-pulse" />
+                {item.change}
+              </span>
+            </div>
           </div>
         ))}
       </div>
@@ -161,50 +173,66 @@ export function HowItWorks() {
   const step = STEPS[activeStep];
 
   return (
-    <section className="py-32 px-6 container mx-auto relative">
+    <section className="py-40 px-6 container mx-auto relative overflow-hidden">
+      {/* HUD Brackets */}
+      <div className="absolute top-10 right-10 w-32 h-32 border-t-2 border-r-2 border-primary-container/20 rounded-tr-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-32 h-32 border-b-2 border-l-2 border-primary-container/20 rounded-bl-3xl pointer-events-none" />
+
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-10 right-20 w-72 h-72 bg-secondary/8 blur-[120px] rounded-full" />
-        <div className="absolute bottom-10 left-10 w-60 h-60 bg-primary-container/6 blur-[100px] rounded-full" />
+        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-secondary/5 blur-[120px] rounded-full animate-float-orb" />
+        <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-primary-container/5 blur-[100px] rounded-full animate-float-orb" style={{ animationDelay: '-5s' }} />
       </div>
 
-      <div className="relative z-10 text-right mb-16">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 glass-cyan rounded-full font-data text-[10px] text-primary-container tracking-[0.3em] uppercase mb-6">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse" />
-          Journey // Step by Step
+      <div className="relative z-10 text-right mb-24">
+        <div className="inline-flex items-center gap-3 px-5 py-2 glass-cyan rounded-full font-data text-[11px] text-primary-container tracking-[0.4em] uppercase mb-8 border border-primary-container/30 shadow-neon-sm">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-container opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-container"></span>
+          </span>
+          Protocol Architecture // v4.0
         </div>
-        <h2 className="font-headline text-5xl md:text-7xl font-black text-foreground uppercase tracking-tight">
-          كيف يعمل <span className="text-primary-container">IDEA BUSINESS</span>؟
+        <h2 className="font-headline text-6xl md:text-8xl font-black text-foreground tracking-tighter leading-none mb-6">
+          مسارك نحو <span className="text-primary-container italic">الريادة</span>
         </h2>
-        <p className="text-muted-foreground text-lg mt-4 max-w-xl ml-auto">رحلة مضمونة من الفكرة إلى الواقع الاستثماري</p>
+        <p className="text-muted-foreground text-xl mt-4 max-w-2xl ml-auto font-light leading-relaxed">هيكل تنظيمي متطور يضمن تدفق الأفكار والسيولة بكفاءة عالية وفق أعلى معايير الحوكمة الرقمية.</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
         {/* Steps list */}
-        <div className="space-y-4" onMouseLeave={() => setAutoPlay(true)}>
+        <div className="space-y-6" onMouseLeave={() => setAutoPlay(true)}>
           {STEPS.map((s, i) => (
             <div
               key={i}
               onMouseEnter={() => { setActiveStep(i); setAutoPlay(false); }}
-              className={`p-7 border-r-4 rounded-2xl transition-all duration-400 cursor-pointer group ${
+              className={`group relative p-8 border-r-4 transition-all duration-500 cursor-pointer overflow-hidden ${
                 activeStep === i
-                  ? `${s.glass} border-primary-container -translate-x-2 ${s.glow}`
-                  : 'glass border-transparent hover:border-primary-container/30 hover:-translate-x-1'
-              }`}
+                  ? `${s.glass} border-primary-container -translate-x-4 shadow-neon`
+                  : 'glass border-transparent hover:border-primary-container/40 hover:-translate-x-2'
+              } rounded-2xl`}
             >
-              <div className="flex items-start gap-5">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${activeStep === i ? s.glass : 'glass'}`}>
-                  <span className={`material-symbols-outlined text-3xl ${activeStep === i ? s.accent : 'text-muted-foreground'} group-hover:scale-110 transition-transform`}>
+              {/* Scanline effect for active step */}
+              {activeStep === i && (
+                <div className="absolute inset-0 scanline-overlay opacity-30 animate-scanline pointer-events-none" />
+              )}
+              
+              <div className="flex items-start gap-8 relative z-10">
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-500 border border-primary-container/20 ${activeStep === i ? 'bg-primary-container/20 scale-110 shadow-neon-sm' : 'glass group-hover:bg-primary-container/10'}`}>
+                  <span className={`material-symbols-outlined text-4xl ${activeStep === i ? s.accent : 'text-muted-foreground'} transition-all duration-500`}>
                     {s.icon}
                   </span>
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-1.5">
-                    <span className={`text-xs font-data font-black ${activeStep === i ? s.accent : 'text-muted-foreground'}`}>0{i + 1}</span>
-                    <h3 className={`text-xl font-black font-headline ${activeStep === i ? 'text-foreground' : 'text-muted-foreground'}`}>{s.title}</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className={`text-2xl font-black font-headline transition-colors duration-500 ${activeStep === i ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground/70'}`}>{s.title}</h3>
+                    <span className={`text-xs font-data font-black tracking-[0.2em] ${activeStep === i ? s.accent : 'text-muted-foreground opacity-50'}`}>STEP_0{i + 1}</span>
                   </div>
-                  <p className={`font-body text-sm leading-relaxed ${activeStep === i ? 'text-foreground/80' : 'text-muted-foreground'}`}>{s.description}</p>
+                  <p className={`font-body text-lg leading-relaxed transition-colors duration-500 ${activeStep === i ? 'text-foreground/90' : 'text-muted-foreground group-hover:text-foreground/60'}`}>{s.description}</p>
+                  
                   {activeStep === i && (
-                    <p className={`text-xs font-semibold mt-1.5 animate-fade-in ${s.accent}`}>✓ {s.details}</p>
+                    <div className="mt-4 pt-4 border-t border-primary-container/20 flex items-center gap-3 animate-fade-in">
+                      <span className="material-symbols-outlined text-primary-container text-sm">verified</span>
+                      <span className="text-[11px] font-data font-black text-primary-container uppercase tracking-widest">{s.details}</span>
+                    </div>
                   )}
                 </div>
               </div>
@@ -212,36 +240,46 @@ export function HowItWorks() {
           ))}
         </div>
 
-        {/* Visual panel */}
-        <div className={`relative aspect-square glass rounded-3xl overflow-hidden flex items-center justify-center group ${step.glow} transition-all duration-700`}>
-          <div className="absolute inset-0 neon-grid opacity-5" />
-          <div className={`absolute top-1/4 right-1/4 w-48 h-48 bg-secondary/15 blur-[60px] rounded-full`} />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/10" />
-
-          <div className="relative z-10 text-center p-12 w-full h-full flex flex-col items-center justify-center">
-            <div className={`w-48 h-48 ${step.glass} rounded-full blur-[60px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-30`} />
-            <span
-              key={activeStep}
-              className={`material-symbols-outlined text-[130px] mb-6 ${step.accent} drop-shadow-[0_0_30px_rgba(0,255,209,0.3)] animate-fade-in`}
-            >
-              {step.icon}
-            </span>
-            <h3 className="text-3xl font-black text-foreground font-headline mb-3 animate-fade-in">{step.title}</h3>
-            <p className="text-muted-foreground font-body max-w-xs animate-fade-in">{step.description}</p>
-            <div className={`font-data text-9xl font-black opacity-5 absolute bottom-4 left-4 select-none ${step.accent}`}>0{activeStep + 1}</div>
+        {/* Visual panel - HUD Style */}
+        <div className={`relative aspect-square rounded-[3rem] overflow-hidden group transition-all duration-1000 ${step.glow} border border-primary-container/20`}>
+          <div className="absolute inset-0 bg-[#050b14]" />
+          <div className="absolute inset-0 neon-grid opacity-10" />
+          <div className="absolute inset-0 scanline opacity-5" />
+          
+          {/* Animated rings */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-primary-container/5 rounded-full animate-[spin_20s_linear_infinite]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] h-[90%] border border-secondary/10 rounded-full animate-[spin_15s_linear_infinite_reverse]" />
+          
+          <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-16 text-center">
+            <div className={`absolute inset-0 bg-gradient-to-br ${step.accent.replace('text-', 'from-')}/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000`} />
+            
+            <div className="relative mb-12">
+              <div className={`absolute -inset-10 ${step.glass} rounded-full blur-[60px] opacity-40 animate-pulse`} />
+              <span
+                key={activeStep}
+                className={`material-symbols-outlined text-[160px] ${step.accent} drop-shadow-[0_0_40px_rgba(0,255,209,0.4)] animate-count-up relative z-10`}
+              >
+                {step.icon}
+              </span>
+            </div>
+            
+            <div className="space-y-4 relative z-10">
+              <h3 className="text-4xl font-black text-white font-headline animate-count-up" style={{ animationDelay: '0.1s' }}>{step.title}</h3>
+              <p className="text-slate-400 font-body text-xl max-w-sm mx-auto leading-relaxed animate-count-up" style={{ animationDelay: '0.2s' }}>{step.description}</p>
+            </div>
+            
+            {/* HUD Data Tags */}
+            <div className="absolute top-8 left-8 flex flex-col items-start gap-2">
+              <div className="px-3 py-1 glass-cyan rounded font-data text-[9px] text-primary-container uppercase tracking-widest border border-primary-container/30">System: Ready</div>
+              <div className="px-3 py-1 glass rounded font-data text-[9px] text-slate-500 uppercase tracking-widest border border-white/10">Lat: 24.7136</div>
+            </div>
+            
+            <div className="absolute bottom-8 right-8 flex flex-col items-end gap-2">
+              <div className="px-3 py-1 glass rounded font-data text-[9px] text-slate-500 uppercase tracking-widest border border-white/10">Lng: 46.6753</div>
+              <div className={`px-3 py-1 ${step.glass} rounded font-data text-[9px] ${step.accent} uppercase tracking-widest border border-primary-container/30`}>Process_Id: 0x{activeStep + 1}F9A</div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Progress dots */}
-      <div className="flex justify-center gap-3 mt-12 relative z-10">
-        {STEPS.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => { setActiveStep(i); setAutoPlay(false); }}
-            className={`h-2 rounded-full transition-all duration-300 ${activeStep === i ? `bg-primary-container w-8` : 'bg-foreground/20 w-2 hover:bg-foreground/40'}`}
-          />
-        ))}
       </div>
     </section>
   );
@@ -254,96 +292,98 @@ export function TrendingIdeas() {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   return (
-    <section className="py-32 px-6 relative overflow-hidden">
+    <section className="py-40 px-6 relative overflow-hidden bg-surface-container/20 dark:bg-black/20">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-primary-container/5 blur-[150px] rounded-full" />
-        <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/5 blur-[100px] rounded-full" />
+        <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-primary-container/5 blur-[150px] rounded-full animate-float-orb" />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary/5 blur-[120px] rounded-full animate-float-orb" style={{ animationDelay: '-3s' }} />
       </div>
 
       <div className="container mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-8">
-          <div className="text-right">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 glass-cyan rounded-full font-data text-[10px] text-primary-container tracking-[0.3em] uppercase mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse" />
-              Trending // Hot Opportunities
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-10">
+          <div className="text-right space-y-6">
+            <div className="inline-flex items-center gap-3 px-5 py-2 glass-cyan rounded-full font-data text-[11px] text-primary-container tracking-[0.4em] uppercase border border-primary-container/30 shadow-neon-sm">
+              <span className="w-2 h-2 rounded-full bg-primary-container animate-pulse" />
+              Live Feed // Priority Targets
             </div>
-            <h2 className="font-headline text-5xl md:text-7xl font-black text-foreground">أفكار مرشحة</h2>
-            <p className="text-muted-foreground mt-4 text-lg">أهم الأفكار التي تحظى باهتمام المستثمرين حالياً</p>
+            <h2 className="font-headline text-6xl md:text-8xl font-black text-foreground tracking-tighter">أهداف <span className="text-primary-container">استراتيجية.</span></h2>
+            <p className="text-muted-foreground text-xl max-w-2xl font-light">أكثر المشاريع تفاعلاً وجذباً للسيولة في المنظومة الرقمية خلال الـ 24 ساعة الماضية.</p>
           </div>
-          <Link href="/opportunities" className="text-primary-container font-black flex items-center gap-2 hover:gap-4 transition-all hover:opacity-80">
-            استعرض الكل
-            <span className="material-symbols-outlined text-2xl">west</span>
+          <Link href="/opportunities" className="group flex items-center gap-4 bg-primary-container/10 hover:bg-primary-container px-8 py-4 rounded-2xl border border-primary-container/30 hover:border-primary-container text-primary-container hover:text-background transition-all duration-500 font-black tracking-widest text-sm uppercase">
+            استعراض المنظومة
+            <span className="material-symbols-outlined text-2xl group-hover:translate-x-[-10px] transition-transform">west</span>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {TRENDING_IDEAS.map((idea, i) => (
             <div
               key={i}
               onMouseEnter={() => setHoveredId(i)}
               onMouseLeave={() => setHoveredId(null)}
-              className={`group relative glass rounded-3xl p-8 overflow-hidden transition-all duration-500 cursor-pointer flex flex-col ${
-                hoveredId === i ? `-translate-y-3 ${idea.glass} shadow-[0_20px_60px_rgba(0,255,209,0.15)]` : 'hover:-translate-y-1'
+              className={`group relative glass rounded-[2.5rem] p-10 overflow-hidden transition-all duration-700 cursor-pointer flex flex-col h-full holographic-glow border-2 ${
+                hoveredId === i ? `-translate-y-4 border-primary-container/50 shadow-neon scale-[1.02]` : 'border-white/5 hover:border-white/20'
               }`}
             >
-              {/* shimmer */}
-              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary-container/60 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700" />
-
-              <div className="relative z-10 flex justify-between items-start mb-6">
-                <div>
-                  <span className={`text-xs font-data uppercase tracking-widest block mb-2 ${idea.accent}`}>{idea.category}</span>
-                  <div className="flex gap-2">
+              {/* Card Corner HUD */}
+              <div className={`absolute top-0 left-0 w-24 h-24 border-t-2 border-l-2 ${hoveredId === i ? 'border-primary-container opacity-100' : 'border-transparent opacity-0'} transition-all duration-700 rounded-tl-[2.5rem]`} />
+              
+              <div className="relative z-10 flex justify-between items-start mb-10">
+                <div className="space-y-3">
+                  <span className={`text-[10px] font-data font-black uppercase tracking-[0.3em] block ${idea.accent} opacity-80`}>{idea.category} // CAT_ID_{i}</span>
+                  <div className="flex flex-wrap gap-2">
                     {idea.tags.map(tag => (
-                      <span key={tag} className={`text-[10px] px-3 py-1 rounded-full font-black transition-all ${hoveredId === i ? `${idea.glass} ${idea.accent}` : 'glass text-muted-foreground'}`}>
+                      <span key={tag} className={`text-[9px] px-4 py-1.5 rounded-lg font-black transition-all border ${hoveredId === i ? `${idea.accent} border-primary-container/30 bg-primary-container/10` : 'glass text-muted-foreground border-white/5'}`}>
                         {tag}
                       </span>
                     ))}
                   </div>
                 </div>
-                <span className={`material-symbols-outlined text-3xl cursor-pointer transition-all ${hoveredId === i ? `${idea.accent} scale-125` : 'text-muted-foreground'}`}>
-                  favorite
-                </span>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-500 ${hoveredId === i ? 'bg-primary-container/20 scale-125' : 'glass'}`}>
+                  <span className={`material-symbols-outlined text-2xl transition-all ${hoveredId === i ? idea.accent : 'text-muted-foreground'}`}>
+                    verified
+                  </span>
+                </div>
               </div>
 
-              <h3 className={`text-2xl font-black mb-6 font-headline relative z-10 transition-colors ${hoveredId === i ? idea.accent : 'text-foreground'}`}>{idea.title}</h3>
+              <h3 className={`text-3xl font-black mb-8 font-headline relative z-10 leading-tight transition-colors duration-500 ${hoveredId === i ? idea.accent : 'text-foreground'}`}>{idea.title}</h3>
 
-              {/* Progress */}
-              <div className="mb-5 relative z-10">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-xs text-muted-foreground font-data uppercase tracking-widest">التقدم</span>
-                  <span className={`text-sm font-black transition-colors ${hoveredId === i ? idea.accent : 'text-foreground'}`}>{idea.progress}%</span>
+              {/* Progress HUD */}
+              <div className="mb-8 relative z-10 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
+                <div className="flex justify-between items-end mb-4">
+                  <div className="flex flex-col">
+                    <span className="text-[9px] text-muted-foreground font-data uppercase tracking-[0.2em] mb-1">Funding Progress</span>
+                    <span className={`text-2xl font-black font-data transition-colors ${hoveredId === i ? idea.accent : 'text-foreground'}`}>{idea.progress}%</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[9px] text-muted-foreground font-data uppercase tracking-[0.2em] mb-1">Backers</span>
+                    <span className="text-xl font-black font-data text-foreground block">{idea.investors}</span>
+                  </div>
                 </div>
-                <div className="w-full bg-foreground/10 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-white/5 rounded-full h-3 overflow-hidden border border-white/10 p-[2px]">
                   <div
-                    className={`bg-gradient-to-r ${idea.bar} h-full transition-all duration-700 rounded-full`}
+                    className={`bg-gradient-to-r ${idea.bar} h-full transition-all duration-1000 rounded-full shadow-[0_0_15px_rgba(0,255,209,0.5)]`}
                     style={{ width: `${idea.progress}%` }}
-                  />
+                  >
+                    <div className="w-full h-full animate-shimmer" />
+                  </div>
                 </div>
               </div>
 
-              {/* Investors */}
-              <div className="mb-6 relative z-10 flex items-center gap-3 p-3 glass rounded-xl">
-                <span className={`material-symbols-outlined text-2xl ${idea.accent}`}>groups</span>
-                <div>
-                  <span className="text-sm font-black text-foreground">{idea.investors}</span>
-                  <span className="text-xs text-muted-foreground block">مستثمرون مهتمون</span>
-                </div>
-              </div>
-
-              <div className="mt-auto pt-6 border-t border-foreground/10 relative z-10 flex justify-between items-center">
-                <div>
-                  <span className="text-xs text-muted-foreground mb-1 font-data uppercase tracking-widest block">التمويل المطلوب</span>
-                  <span className={`font-data text-2xl font-black ${hoveredId === i ? idea.accent : 'text-foreground'}`}>{idea.amount}</span>
+              <div className="mt-auto pt-8 border-t border-white/10 relative z-10 flex justify-between items-end">
+                <div className="space-y-1">
+                  <span className="text-[10px] text-muted-foreground font-data uppercase tracking-[0.3em] block">Required Liquidity</span>
+                  <span className={`font-data text-4xl font-black ${hoveredId === i ? 'text-white' : 'text-foreground'} tracking-tighter`}>{idea.amount}</span>
                 </div>
                 <Link
                   href={`/opportunities?featured=${i}`}
-                  className={`px-6 py-2.5 text-sm font-black rounded-xl transition-all uppercase tracking-widest ${
+                  className={`relative overflow-hidden px-8 py-4 rounded-2xl font-black transition-all uppercase tracking-widest text-xs ${
                     hoveredId === i
-                      ? 'bg-primary-container text-background hover:brightness-110'
-                      : 'glass text-primary-container hover:border-primary-container/40'
+                      ? 'bg-primary-container text-background scale-110 shadow-neon'
+                      : 'glass text-primary-container border border-primary-container/20 hover:border-primary-container/50'
                   }`}
                 >
-                  التفاصيل
+                  <span className="relative z-10">Access Data</span>
+                  {hoveredId === i && <div className="absolute inset-0 bg-white/20 animate-shimmer" />}
                 </Link>
               </div>
             </div>
