@@ -8,8 +8,8 @@
     "projectName": "IDEA BUSINESS",
     "projectPath": "D:\\IDEA BUSINESS",
     "testIds": [],
-    "additionalInstruction": "Fixed: register route now accepts both fullName and name fields. All auth endpoints working: POST /api/auth/login, POST /api/auth/register. Investment endpoint: POST /api/invest. Test with: email+timestamp to avoid duplicates, 1K-10M SAR investment range validation, empty field validation returning 400, wrong credentials returning 401, public pages 200, protected pages redirect.",
-    "serverMode": "development",
+    "additionalInstruction": "Execute all backend API tests including authentication, investments, matching, webhooks, and business logic validation",
+    "serverMode": "production",
     "envs": {
       "API_KEY": "sk-user-_EnCj1jfY1oiMOcP_Z4StihSZ4DJiXWORZE4jfetz7cT1jIapXzQ3SVhIL2hr-d4FKd27UDRY-FqgDIYkns7QppFpKe-5SzMk5vr63XPQYnf9o1cMySN1B47llXDiq933U4"
     }

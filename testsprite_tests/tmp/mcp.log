@@ -2851,3 +2851,10 @@
 {"timestamp":"2026-04-23T21:54:59.500Z","level":"error","message":"checkPortListening failed (tcp + http): 3000 localhost","correlationId":"06099f39-867b-40c6-8ba8-32fde473b907","tool":"testsprite_bootstrap"}
 {"timestamp":"2026-04-23T21:54:59.499Z","level":"error","message":"checkPortListening http check failed: http://localhost:3000/ TypeError: fetch failed","correlationId":"06099f39-867b-40c6-8ba8-32fde473b907","tool":"testsprite_bootstrap"}
 {"timestamp":"2026-04-23T22:14:40.006Z","level":"info","message":"Auto-cleaning stale test summary cache for: D:\\IDEA BUSINESS"}
+{"timestamp":"2026-04-24T01:40:42.804Z","level":"debug","message":"Generate backend test plan params","correlationId":"ca7171f1-71c2-43b2-b2ff-3afb5a8c6aa1","tool":"testsprite_generate_backend_test_plan","context":{"projectPath":"D:\\IDEA BUSINESS"}}
+{"timestamp":"2026-04-24T01:40:42.804Z","level":"info","message":"Tool invocation started","correlationId":"ca7171f1-71c2-43b2-b2ff-3afb5a8c6aa1","tool":"testsprite_generate_backend_test_plan"}
+{"timestamp":"2026-04-24T01:40:45.390Z","level":"info","message":"Backend test plan generated successfully","correlationId":"ca7171f1-71c2-43b2-b2ff-3afb5a8c6aa1","tool":"testsprite_generate_backend_test_plan"}
+{"timestamp":"2026-04-24T01:40:45.391Z","level":"info","message":"Tool invocation completed","correlationId":"ca7171f1-71c2-43b2-b2ff-3afb5a8c6aa1","tool":"testsprite_generate_backend_test_plan"}
+{"timestamp":"2026-04-24T01:40:48.642Z","level":"info","message":"Tool invocation started","correlationId":"bb7d16d0-8832-4a9a-9a4d-df6054886d48","tool":"testsprite_generate_code_and_execute"}
+{"timestamp":"2026-04-24T01:40:48.645Z","level":"info","message":"Tool invocation completed","correlationId":"bb7d16d0-8832-4a9a-9a4d-df6054886d48","tool":"testsprite_generate_code_and_execute"}
+{"timestamp":"2026-04-24T01:40:48.645Z","level":"info","message":"Deleted existing file: D:\\IDEA BUSINESS\\testsprite_tests\\tmp\\raw_report.md","correlationId":"bb7d16d0-8832-4a9a-9a4d-df6054886d48","tool":"testsprite_generate_code_and_execute"}

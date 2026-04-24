@@ -1,0 +1,128 @@
+{
+  "projectName": "IDEA BUSINESS",
+  "testType": "backend",
+  "baseUrl": "http://localhost:3000",
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/auth/register",
+      "name": "User Registration",
+      "tests": [
+        {
+          "id": "auth_register_success",
+          "description": "Register new user with valid data",
+          "payload": {
+            "fullName": "Ahmed Test User",
+            "email": "ahmed.test@example.com",
+            "password": "TestPassword123",
+            "role": "investor"
+          },
+          "expectedStatus": 201
+        },
+        {
+          "id": "auth_register_missing_email",
+          "description": "Register without email",
+          "payload": {
+            "fullName": "Test User",
+            "email": "",
+            "password": "TestPassword123",
+            "role": "investor"
+          },
+          "expectedStatus": 400
+        },
+        {
+          "id": "auth_register_missing_password",
+          "description": "Register without password",
+          "payload": {
+            "fullName": "Test User",
+            "email": "test@example.com",
+            "password": "",
+            "role": "investor"
+          },
+          "expectedStatus": 400
+        },
+        {
+          "id": "auth_register_weak_password",
+          "description": "Register with weak password",
+          "payload": {
+            "fullName": "Test User",
+            "email": "test@example.com",
+            "password": "weak",
+            "role": "investor"
+          },
+          "expectedStatus": 400
+        },
+        {
+          "id": "auth_register_invalid_email",
+          "description": "Register with invalid email format",
+          "payload": {
+            "fullName": "Test User",
+            "email": "invalid-email",
+            "password": "TestPassword123",
+            "role": "investor"
+          },
+          "expectedStatus": 400
+        },
+        {
+          "id": "auth_register_invalid_role",
+          "description": "Register with invalid role",
+          "payload": {
+            "fullName": "Test User",
+            "email": "test@example.com",
+            "password": "TestPassword123",
+            "role": "admin"
+          },
+          "expectedStatus": 400
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/auth/login",
+      "name": "User Login",
+      "tests": [
+        {
+          "id": "auth_login_missing_email",
+          "description": "Login without email",
+          "payload": {
+            "email": "",
+            "password": "TestPassword123"
+          },
+          "expectedStatus": 400
+        },
+        {
+          "id": "auth_login_missing_password",
+          "description": "Login without password",
+          "payload": {
+            "email": "test@example.com",
+            "password": ""
+          },
+          "expectedStatus": 400
+        },
+        {
+          "id": "auth_login_invalid_credentials",
+          "description": "Login with wrong credentials",
+          "payload": {
+            "email": "nonexistent@example.com",
+            "password": "WrongPassword123"
+          },
+          "expectedStatus": 401
+        }
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/invest",
+      "name": "Investment API",
+      "tests": [
+        {
+          "id": "invest_no_auth",
+          "description": "Invest without authentication",
+          "payload": {},
+          "expectedStatus": 401,
+          "headers": {}
+        }
+      ]
+    }
+  ]
+}
