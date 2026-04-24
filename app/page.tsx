@@ -245,23 +245,27 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Professional Path Gate - Enhanced */}
+        {/* Professional Path Gate - Enhanced Role Selection Terminal */}
         <section className="py-40 px-6 container mx-auto relative">
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
             <div className="absolute top-1/3 -left-20 w-80 h-80 bg-primary-container/5 dark:bg-primary-container/5 blur-[150px] rounded-full"></div>
+            <div className="absolute inset-0 noise-bg opacity-[0.03] pointer-events-none"></div>
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8 relative z-10">
             <div className="max-w-2xl text-right">
               <div className="inline-block px-4 py-1 border border-primary-container/40 bg-primary-container/15 dark:bg-primary-container/5 rounded-lg font-data text-[10px] text-primary-container tracking-[0.3em] uppercase mb-6">
-                Choose Role // Identity Path
+                IDENTITY_UPLINK // SELECT_ROLE
               </div>
               <h2 className="font-headline text-5xl md:text-7xl font-semibold text-foreground dark:text-white tracking-tight mb-6">
-                بوابتك نحو <span className="text-primary-container neon-flicker">التأثير.</span>
+                بوابتك نحو <span className="text-primary-container text-glitch after:content-['التأثير'] after:absolute after:inset-0 after:text-secondary/30 after:-translate-x-[2px] after:animate-glitch-1 before:content-['التأثير'] before:absolute before:inset-0 before:text-primary-container/30 before:translate-x-[2px] before:animate-glitch-2 relative">التأثير.</span>
               </h2>
-              <p className="text-xl text-muted-foreground font-light">اختر هويتك الاستثمارية لنرشدك إلى المسار الأكثر كفاءة وموثوقية.</p>
+              <p className="text-xl text-muted-foreground font-light border-r-2 border-primary-container/20 pr-6">اختر هويتك الاستثمارية في الشبكة لنرشدك إلى المسار الأكثر كفاءة وموثوقية.</p>
             </div>
-            <div className="font-data text-primary-container text-xs tracking-[0.4em] uppercase opacity-50">Identity Selection // ID_REQ</div>
+            <div className="flex flex-col items-end gap-2 font-data text-primary-container text-[10px] tracking-[0.4em] uppercase opacity-50">
+              <span>System_Core: V3.4.2</span>
+              <span>Identity_Sync: STABLE</span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
@@ -269,41 +273,65 @@ export default async function HomePage() {
               <ParallaxCard key={i} className="h-full">
                 <Link
                   href={path.featured ? "/add-idea" : i === 0 ? "/opportunities" : "/"}
-                  className={`group relative overflow-hidden rounded-3xl transition-all duration-700 h-full flex flex-col ${path.featured ? "md:scale-105" : ""}`}
+                  className={`group relative overflow-hidden rounded-[2.5rem] transition-all duration-700 h-full flex flex-col border ${
+                    path.featured 
+                      ? "border-primary-container/40 shadow-[0_0_50px_rgba(0,255,209,0.15)]" 
+                      : "border-primary-container/10"
+                  }`}
                 >
-                  <div className={`h-full p-12 border backdrop-blur-sm rounded-3xl flex flex-col transition-all duration-700 h-full ${
+                  <div className={`h-full p-12 backdrop-blur-3xl flex flex-col transition-all duration-700 h-full relative ${
                     path.featured
-                      ? "border-primary-container/50 bg-gradient-to-br from-primary-container/20 to-primary-container/5 dark:shadow-[0_0_40px_rgba(0,255,209,0.2)] dark:hover:shadow-[0_0_60px_rgba(0,255,209,0.3)] shadow-[0_0_30px_rgba(0,255,209,0.15)] hover:shadow-[0_0_40px_rgba(0,255,209,0.25)]"
-                      : "border-primary-container/20 dark:border-white/5 bg-gradient-to-br from-surface-container dark:from-white/[0.05] to-surface-container-high dark:to-white/[0.02] hover:border-primary-container/30 dark:hover:border-white/20 hover:shadow-[0_0_20px_rgba(0,255,209,0.1)] dark:hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]"
+                      ? "bg-gradient-to-br from-primary-container/15 to-transparent"
+                      : "bg-surface-container-low/20"
                   }`}>
+                    {/* Terminal Overlay */}
+                    <div className="absolute inset-0 scanline opacity-10 pointer-events-none"></div>
+                    
                     <div className="relative z-10 flex flex-col h-full text-right">
-                      {/* Icon Container */}
-                      <div className={`w-24 h-24 rounded-2xl ${path.bg} flex items-center justify-center mb-8 border border-primary-container/30 dark:border-white/10 group-hover:scale-125 group-hover:shadow-[0_0_25px_rgba(0,255,209,0.3)] transition-all duration-500 relative hologram-effect`}>
-                        <span className={`material-symbols-outlined text-6xl text-${path.color} group-hover:animate-pulse`}>
-                          {path.icon}
-                        </span>
-                        <div className={`absolute inset-0 ${path.bg} opacity-15 dark:opacity-20 blur-lg -z-10 rounded-2xl group-hover:opacity-30 dark:group-hover:opacity-40 transition-opacity`}></div>
+                      {/* Role Header */}
+                      <div className="flex justify-between items-start mb-10">
+                        <div className="flex flex-col items-end gap-1">
+                          <span className="text-[9px] font-black text-primary-container/40 uppercase tracking-widest">Active_Nodes</span>
+                          <span className="text-lg font-black tabular-nums">{i === 0 ? '1,204' : i === 1 ? '4,832' : '12,401'}</span>
+                        </div>
+                        <div className={`w-20 h-20 rounded-2xl ${path.bg} flex items-center justify-center border border-primary-container/20 group-hover:scale-110 group-hover:shadow-neon-sm transition-all duration-500 relative`}>
+                          <span className={`material-symbols-outlined text-4xl text-${path.color} group-hover:animate-pulse`}>
+                            {path.icon}
+                          </span>
+                        </div>
                       </div>
 
                       {/* Title */}
-                      <h3 className="text-3xl font-semibold mb-6 text-foreground dark:text-white font-headline group-hover:translate-x-2 transition-transform duration-500">
+                      <h3 className="text-3xl font-black mb-6 text-foreground font-headline group-hover:text-primary-container transition-colors duration-500">
                         {path.title}
                       </h3>
 
                       {/* Description */}
-                      <p className="text-muted-foreground leading-relaxed font-body text-lg opacity-85 dark:opacity-80 mb-10 group-hover:text-foreground dark:group-hover:text-slate-300 transition-colors">
+                      <p className="text-muted-foreground leading-relaxed font-body text-lg opacity-85 mb-12 group-hover:text-foreground transition-colors flex-grow">
                         {path.description}
                       </p>
 
+                      {/* Status Bar */}
+                      <div className="space-y-3 mb-10">
+                        <div className="flex justify-between text-[8px] font-black tracking-widest uppercase">
+                          <span className="text-primary-container">Sync_Status</span>
+                          <span className="opacity-40">Operational</span>
+                        </div>
+                        <div className="h-1 bg-background/50 rounded-full overflow-hidden border border-white/5">
+                          <div className={`h-full transition-all duration-1000 group-hover:w-full bg-${path.color}/40`} style={{ width: i === 0 ? '94%' : i === 1 ? '98%' : '92%' }}></div>
+                        </div>
+                      </div>
+
                       {/* CTA */}
-                      <div className="mt-auto pt-8 border-t border-primary-container/20 dark:border-white/10 group-hover:border-primary-container/40 dark:group-hover:border-primary-container/30 transition-colors">
-                        <div className="flex justify-between items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <span className="text-[10px] font-data text-primary-container tracking-widest uppercase animate-fade-in">ابدأ الرحلة</span>
-                          <span className="material-symbols-outlined text-primary-container -rotate-180 group-hover:translate-x-2 transition-transform">arrow_forward</span>
+                      <div className="pt-8 border-t border-primary-container/10 group-hover:border-primary-container/30 transition-colors">
+                        <div className="flex justify-between items-center group-hover:translate-x-[-10px] transition-transform duration-500">
+                          <span className="material-symbols-outlined text-primary-container -rotate-180 font-black">arrow_forward</span>
+                          <span className="text-[10px] font-black text-primary-container tracking-[0.3em] uppercase">INITIATE_PATH</span>
                         </div>
                         {path.featured && (
-                          <div className="absolute top-6 right-6 px-3 py-1 bg-primary-container/20 border border-primary-container/30 rounded-full shadow-[0_0_10px_rgba(0,255,209,0.3)]">
-                            <span className="text-xs font-black text-primary-container uppercase tracking-widest">مميز</span>
+                          <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 glass-strong rounded-full border border-primary-container/30">
+                            <span className="w-1.5 h-1.5 bg-primary-container rounded-full animate-ping"></span>
+                            <span className="text-[8px] font-black text-primary-container uppercase tracking-widest">Priority_Node</span>
                           </div>
                         )}
                       </div>

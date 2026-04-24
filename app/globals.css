@@ -503,7 +503,8 @@
   }
 
   .premium-gradient-text {
-    @apply bg-gradient-to-r from-primary-container via-white to-secondary bg-clip-text text-transparent animate-gradient-shift;
+    @apply bg-gradient-to-r from-primary-container via-white to-secondary bg-clip-text text-transparent;
+    animation: gradient-shift 6s ease infinite;
     background-size: 200% auto;
   }
 

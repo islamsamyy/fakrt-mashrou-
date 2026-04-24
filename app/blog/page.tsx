@@ -232,33 +232,48 @@ export default async function BlogPage({ searchParams }: { searchParams: { q?: s
             {/* Other Posts Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
               {displayBlogs.map((blog, idx) => (
-                    <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary-container/40 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
-                  </div>
-                  
-                  <div className="p-12 flex flex-col flex-grow space-y-8 relative">
-                    <div className="text-[10px] font-black text-primary-container uppercase tracking-[0.3em] flex items-center gap-3">
-                      <span className="w-2 h-2 bg-primary-container/30 rounded-full animate-pulse"></span>
-                      {new Date(blog.published_at).toLocaleDateString('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' })}
+                <ParallaxCard key={blog.id} className="group relative flex flex-col h-full rounded-[2.5rem] overflow-hidden border border-primary-container/10 bg-surface-container-low/20 backdrop-blur-xl transition-all duration-700 hover:border-primary-container/40 hover:shadow-[0_0_80px_rgba(0,255,209,0.15)] animate-slide-up" style={{ animationDelay: `${0.4 + (idx * 0.1)}s` }}>
+                  <Link href={`/blog/${blog.slug}`} className="flex flex-col h-full">
+                    <div className="relative aspect-video overflow-hidden border-b border-primary-container/10">
+                      <img 
+                        src={blog.image_url || 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800'} 
+                        alt={blog.title}
+                        className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-60"></div>
+                      
+                      <div className="absolute top-6 right-6">
+                        <span className="px-4 py-1.5 glass-cyan rounded-lg text-primary-container text-[8px] font-black tracking-widest uppercase border border-primary-container/20">
+                          {blog.category}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary-container/40 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700"></div>
                     </div>
                     
-                    <h3 className="text-3xl font-black leading-tight group-hover:text-primary-container transition-colors duration-500 line-clamp-2 tracking-tight">
-                      {blog.title}
-                    </h3>
-                    
-                    <p className="text-foreground/60 text-xl font-light leading-relaxed line-clamp-3 flex-grow">
-                      {blog.excerpt}
-                    </p>
-                    
-                    <div className="pt-10 border-t border-primary-container/10 flex items-center justify-between group-hover:border-primary-container/40 transition-all duration-500">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-black text-primary-container uppercase tracking-[0.3em]">Protocol_Initiate</span>
-                        <div className="w-1 h-1 bg-primary-container rounded-full animate-pulse"></div>
+                    <div className="p-12 flex flex-col flex-grow space-y-8 relative">
+                      <div className="text-[10px] font-black text-primary-container uppercase tracking-[0.3em] flex items-center gap-3">
+                        <span className="w-2 h-2 bg-primary-container/30 rounded-full animate-pulse"></span>
+                        {new Date(blog.published_at).toLocaleDateString('ar-EG', { month: 'long', day: 'numeric', year: 'numeric' })}
                       </div>
-                      <div className="w-12 h-12 rounded-2xl glass-cyan flex items-center justify-center text-primary-container group-hover:scale-110 transition-all duration-500">
-                        <span className="material-symbols-outlined text-lg group-hover:translate-x-[-4px] transition-transform font-black">arrow_back</span>
+                      
+                      <h3 className="text-3xl font-black leading-tight group-hover:text-primary-container transition-colors duration-500 line-clamp-2 tracking-tight">
+                        {blog.title}
+                      </h3>
+                      
+                      <p className="text-foreground/60 text-xl font-light leading-relaxed line-clamp-3 flex-grow">
+                        {blog.excerpt}
+                      </p>
+                      
+                      <div className="pt-10 border-t border-primary-container/10 flex items-center justify-between group-hover:border-primary-container/40 transition-all duration-500">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-black text-primary-container uppercase tracking-[0.3em]">Protocol_Initiate</span>
+                          <div className="w-1 h-1 bg-primary-container rounded-full animate-pulse"></div>
+                        </div>
+                        <div className="w-12 h-12 rounded-2xl glass-cyan flex items-center justify-center text-primary-container group-hover:scale-110 transition-all duration-500">
+                          <span className="material-symbols-outlined text-lg group-hover:translate-x-[-4px] transition-transform font-black">arrow_back</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   </Link>
                 </ParallaxCard>
               ))}
