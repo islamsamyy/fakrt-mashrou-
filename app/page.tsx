@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Navbar } from "@/components/layout/Navbar";
 import { createClient } from "@/lib/supabase/server";
 import { HowItWorks, TrendingIdeas, FAQSection, LiveTicker } from "@/components/home/InteractiveSections";
@@ -132,9 +133,8 @@ export default async function HomePage() {
     <div
       className="bg-background text-foreground font-body min-h-screen relative overflow-x-hidden text-right"
       dir="rtl"
+      suppressHydrationWarning
     >
-      <div className="fixed inset-0 neon-grid pointer-events-none z-0 opacity-10 dark:opacity-20"></div>
-      <div className="fixed inset-0 scanline pointer-events-none z-0 opacity-3 dark:opacity-5"></div>
       <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-secondary-container/5 dark:bg-secondary-container/10 blur-[150px] -z-10 rounded-full"></div>
       <div className="fixed bottom-0 left-0 w-[500px] h-[500px] bg-primary-container/5 dark:bg-primary-container/10 blur-[150px] -z-10 rounded-full"></div>
 
@@ -155,7 +155,8 @@ export default async function HomePage() {
             Platform Status: Operational // AI Powered
           </div>
 
-          <div className="scanning-line py-4">
+
+          <div className="py-4">
             <h1 className="font-headline text-6xl md:text-9xl font-semibold leading-[1.1] mb-10 max-w-7xl tracking-[-0.04em] text-foreground relative">
               اصنع <span className="text-primary-container font-light italic neon-flicker">مستقبلك</span> الاستثماري
               <br />
@@ -202,10 +203,48 @@ export default async function HomePage() {
                   <span className="material-symbols-outlined text-3xl text-primary-container opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all">
                     {item.icon}
                   </span>
-                  <span className="text-[11px] font-data tracking-widest uppercase text-primary-container opacity-80 group-hover:opacity-100 transition-opacity font-bold">{item.label}</span>
-                  <span className="text-sm font-black text-foreground dark:text-white group-hover:text-primary-container transition-colors tracking-wide">{item.val}</span>
+                  <span className="text-sm font-data tracking-widest uppercase text-primary-container font-bold">{item.label}</span>
+                  <span className="text-base font-black text-foreground group-hover:text-primary-container transition-colors tracking-wide">{item.val}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Brand Section */}
+        <section className="py-24 border-t border-primary-container/10 relative overflow-hidden">
+          <div className="container mx-auto px-6 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
+              <div className="flex items-center justify-center">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-primary-container/10 blur-3xl rounded-full scale-150" />
+                  <img src="/LOGO.svg" alt="فكرة مشروع" className="relative w-48 h-48 object-contain drop-shadow-[0_0_40px_rgba(0,255,209,0.4)] group-hover:drop-shadow-[0_0_60px_rgba(0,255,209,0.6)] transition-all duration-700 group-hover:scale-105" />
+                </div>
+              </div>
+              <div className="flex flex-col gap-6 text-right">
+                <div className="inline-flex items-center gap-3 px-4 py-2 border border-primary-container/30 bg-primary-container/10 rounded-full font-data text-[11px] text-primary-container tracking-[0.3em] uppercase w-fit self-end">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse" />
+                  هويتنا البصرية
+                </div>
+                <h2 className="font-headline text-5xl md:text-6xl font-black text-foreground tracking-tight leading-tight">
+                  فكرة <span className="text-primary-container italic neon-flicker">مشروع</span>
+                </h2>
+                <p className="text-muted-foreground text-lg leading-relaxed font-light">
+                  شعار يجمع بين الأصالة العربية والتصميم العصري — معبّراً عن رؤيتنا في ربط الأفكار بالاستثمار وبناء مستقبل اقتصادي مستدام.
+                </p>
+                <ul className="space-y-3 text-sm text-muted-foreground font-body">
+                  {['منصة سيادية عربية 100%','تقنيات الذكاء الاصطناعي لاختيار الفرص','بيئة آمنة للمستثمرين والرواد','متوافقة مع رؤية 2030'].map((item) => (
+                    <li key={item} className="flex items-center gap-3 justify-end">
+                      <span>{item}</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary-container flex-shrink-0" />
+                    </li>
+                  ))}
+                </ul>
+                <div className="flex gap-4 justify-end pt-2">
+                  <Link href="/register" className="px-8 py-4 bg-primary-container text-background font-black rounded-full hover:brightness-110 active:scale-95 transition-all shadow-[0_4px_20px_rgba(0,255,209,0.3)]">ابدأ الآن</Link>
+                  <Link href="/opportunities" className="px-8 py-4 border border-primary-container/40 text-foreground font-black rounded-full hover:bg-primary-container/10 transition-all">استعرض الفرص</Link>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -285,7 +324,6 @@ export default async function HomePage() {
                       : "bg-surface-container-low/20"
                   }`}>
                     {/* Terminal Overlay */}
-                    <div className="absolute inset-0 scanline opacity-10 pointer-events-none"></div>
                     
                     <div className="relative z-10 flex flex-col h-full text-right">
                       {/* Role Header */}
@@ -401,7 +439,7 @@ export default async function HomePage() {
             </div>
 
             {/* Extra Feature Highlight */}
-            <div className="mt-20 p-12 bg-gradient-to-r from-primary-container/10 dark:from-primary-container/10 via-transparent to-secondary-container/10 dark:to-secondary-container/10 border border-primary-container/30 dark:border-primary-container/20 rounded-3xl relative overflow-hidden group cursor-pointer transition-all hover:border-primary-container/50 dark:hover:border-primary-container/40 hover:shadow-[0_0_40px_rgba(0,255,209,0.2)] dark:hover:shadow-[0_0_40px_rgba(0,255,209,0.15)] scanning-line">
+            <div className="mt-20 p-12 bg-gradient-to-r from-primary-container/10 dark:from-primary-container/10 via-transparent to-secondary-container/10 dark:to-secondary-container/10 border border-primary-container/30 dark:border-primary-container/20 rounded-3xl relative overflow-hidden group cursor-pointer transition-all hover:border-primary-container/50 dark:hover:border-primary-container/40 hover:shadow-[0_0_40px_rgba(0,255,209,0.2)] dark:hover:shadow-[0_0_40px_rgba(0,255,209,0.15)]">
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-primary-container/20 dark:bg-primary-container/20 blur-[80px] rounded-full"></div>
               </div>
@@ -590,35 +628,41 @@ export default async function HomePage() {
         <section className="py-20 border-t border-white/5">
           <FAQSection />
         </section>
+
       </main>
 
       <footer className="w-full py-20 px-12 grid grid-cols-1 md:grid-cols-3 gap-12 bg-[#050b14] border-t border-primary-container/10 relative z-10">
         <div className="flex flex-col gap-6">
-          <div className="font-data text-primary-container font-black text-3xl tracking-tighter neon-flicker">
-            IDEA BUSINESS
-          </div>
-          <p className="font-body text-sm text-slate-500 max-w-xs leading-relaxed">
+          <Link href="/" className="flex items-center gap-3 group w-fit">
+            <div className="w-10 h-10 border border-primary-container/30 rounded-xl overflow-hidden bg-primary-container/5 group-hover:border-primary-container transition-colors">
+              <Image src="/LOGO.svg" alt="فكرة مشروع" width={40} height={40} className="object-contain p-1" />
+            </div>
+            <span className="font-headline text-primary-container font-black text-2xl tracking-tight neon-flicker">
+              فكرة مشروع
+            </span>
+          </Link>
+          <p className="font-body text-base text-muted-foreground max-w-xs leading-relaxed">
             المنصة الرائدة في الشرق الأوسط لربط الأفكار الريادية برؤوس الأموال الذكية باستخدام تقنيات الذكاء الاصطناعي.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-8">
           <div className="flex flex-col gap-4 text-right">
-            <h5 className="text-primary-container font-black mb-2 uppercase tracking-widest text-xs">الروابط</h5>
+            <h5 className="text-primary-container font-black mb-2 uppercase tracking-widest text-sm">الروابط</h5>
             {[
               { text: "الشروط والأحكام", href: "/terms" },
               { text: "سياسة الخصوصية", href: "/privacy" },
               { text: "اتصل بنا", href: "/contact" },
               { text: "خارطة الطريق", href: "/roadmap" },
             ].map((link, i) => (
-              <Link key={i} href={link.href} className="text-slate-500 hover:text-white transition-colors font-body text-sm">
+              <Link key={i} href={link.href} className="text-muted-foreground hover:text-primary-container transition-colors font-body text-base">
                 {link.text}
               </Link>
             ))}
           </div>
           <div className="flex flex-col gap-4 text-right">
-            <h5 className="text-primary-container font-black mb-2 uppercase tracking-widest text-xs">مجالاتنا</h5>
+            <h5 className="text-primary-container font-black mb-2 uppercase tracking-widest text-sm">مجالاتنا</h5>
             {["التكنولوجيا المالية", "الطاقة المتجددة", "الذكاء الاصطناعي", "الصحة الرقمية"].map((link, i) => (
-              <Link key={i} href="#" className="text-slate-500 hover:text-white transition-colors font-body text-sm">
+              <Link key={i} href="#" className="text-muted-foreground hover:text-primary-container transition-colors font-body text-base">
                 {link}
               </Link>
             ))}
@@ -627,13 +671,13 @@ export default async function HomePage() {
         <div className="flex flex-col gap-8 items-end">
           <div className="flex gap-4">
             {["public", "alternate_email", "share"].map((icon, i) => (
-              <a key={i} href="#" className="w-14 h-14 border border-white/10 flex items-center justify-center hover:bg-primary-container/20 hover:text-primary-container transition-all">
+              <a key={i} href="#" className="w-14 h-14 border border-foreground/10 flex items-center justify-center hover:bg-primary-container/20 hover:text-primary-container transition-all text-foreground/60">
                 <span className="material-symbols-outlined text-2xl">{icon}</span>
               </a>
             ))}
           </div>
-          <p className="font-data text-[10px] text-slate-600 uppercase tracking-[0.2em]">
-            © 2024 IDEA BUSINESS. السيادة المالية الرقمية.
+          <p className="font-data text-sm text-muted-foreground uppercase tracking-[0.2em]">
+            © 2024 فكرة مشروع. السيادة المالية الرقمية.
           </p>
         </div>
       </footer>

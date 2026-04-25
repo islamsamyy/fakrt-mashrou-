@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
-import { registerWithRoleHidden } from '@/app/auth/actions';
+import Image from 'next/image';
+import { register } from '@/app/auth/actions';
 
 export default function RegisterPage() {
   const [role, setRole] = useState<'founder' | 'investor'>('founder');
@@ -26,7 +27,7 @@ function RegisterForm({ role, setRole }: { role: 'founder' | 'investor'; setRole
     formData.set('role', role);
 
     startTransition(async () => {
-      const result = await registerWithRoleHidden(formData, role);
+      const result = await register(formData);
 
       // Only update state if result is returned (no redirect occurred)
       if (result?.error) {
@@ -56,9 +57,7 @@ function RegisterForm({ role, setRole }: { role: 'founder' | 'investor'; setRole
       <main className="relative z-10 w-full max-w-[560px]">
         {/* Top Bar */}
         <div className="flex justify-between items-center mb-12">
-          <div className="flex items-center gap-2 font-data font-bold text-primary-container text-2xl tracking-tighter">
-            IDEA BUSINESS
-          </div>
+          <Image src="/LOGO.svg" alt="IDEA BUSINESS" width={130} height={40} className="h-9 w-auto" />
           <Link href="/login" className="text-xs font-data text-outline tracking-widest uppercase opacity-50 hover:opacity-100 hover:text-primary-container transition-all">
             تسجيل الدخول ←
           </Link>

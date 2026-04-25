@@ -3,244 +3,93 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import type { SupabaseClient } from '@supabase/supabase-js'
 
-interface LoginResponse {
-  success: boolean
-  data?: {
-    user: { id: string; email: string; full_name: string }
-    token: string
+const VALID_ROLES = ['investor', 'founder'] as const
+type Role = typeof VALID_ROLES[number]
+
+export async function login(formData: FormData) {
+  const email = (formData.get('email') as string)?.trim()
+  const password = (formData.get('password') as string)?.trim()
+
+  if (!email) return { success: false, error: 'البريد الإلكتروني مطلوب' }
+  if (!password) return { success: false, error: 'كلمة المرور مطلوبة' }
+
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+  if (error) {
+    if (error.message.includes('Invalid login credentials')) {
+      return { success: false, error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة' }
+    }
+    return { success: false, error: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى' }
   }
-  error?: string
-  statusCode?: number
+
+  if (!data.session || !data.user) {
+    return { success: false, error: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى' }
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('full_name, role')
+    .eq('id', data.user.id)
+    .single()
+
+  revalidatePath('/', 'layout')
+  redirect(`/dashboard/${profile?.role ?? 'investor'}`)
 }
 
-export async function login(formData: FormData): Promise<LoginResponse> {
-  try {
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
+export async function register(formData: FormData) {
+  const email = (formData.get('email') as string)?.trim()
+  const fullName = (formData.get('fullName') as string)?.trim()
+  const password = (formData.get('password') as string)?.trim()
+  const role = ((formData.get('role') as string) ?? 'founder') as Role
 
-    // BUG #3 FIX: Validate empty credentials → return 400
-    if (!email?.trim()) {
-      return {
-        success: false,
-        error: 'البريد الإلكتروني مطلوب',
-        statusCode: 400,
-      }
-    }
+  if (!email) return { success: false, error: 'البريد الإلكتروني مطلوب' }
+  if (!fullName) return { success: false, error: 'الاسم الكامل مطلوب' }
+  if (!password) return { success: false, error: 'كلمة المرور مطلوبة' }
 
-    if (!password?.trim()) {
-      return {
-        success: false,
-        error: 'كلمة المرور مطلوبة',
-        statusCode: 400,
-      }
-    }
-
-    const supabase = await createClient()
-
-    // BUG #1 & #2 FIX: Proper password validation and error handling
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password: password.trim(),
-    })
-
-    // Handle authentication errors → return 401
-    if (error) {
-      // BUG #1: Wrong password
-      // BUG #2: Non-existent email (both return "Invalid login credentials")
-      if (error.message.includes('Invalid login credentials')) {
-        return {
-          success: false,
-          error: 'البريد الإلكتروني أو كلمة المرور غير صحيحة',
-          statusCode: 401,
-        }
-      }
-
-      return {
-        success: false,
-        error: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى',
-        statusCode: 401,
-      }
-    }
-
-    if (!data.session || !data.user) {
-      return {
-        success: false,
-        error: 'فشل تسجيل الدخول. يرجى المحاولة مرة أخرى',
-        statusCode: 401,
-      }
-    }
-
-    // BUG #4 FIX: Return proper JSON with token on success
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('full_name, role')
-      .eq('id', data.user.id)
-      .single()
-
-    const response: LoginResponse = {
-      success: true,
-      data: {
-        user: {
-          id: data.user.id,
-          email: data.user.email || '',
-          full_name: profile?.full_name || 'مستخدم',
-        },
-        token: data.session.access_token,
-      },
-      statusCode: 200,
-    }
-
-    revalidatePath('/', 'layout')
-
-    // Route to dashboard based on role
-    const role = profile?.role || 'investor'
-    redirect(`/dashboard/${role}`)
-  } catch (err) {
-    console.error('Login error:', err)
-    return {
-      success: false,
-      error: 'حدث خطأ في الخادم. يرجى المحاولة لاحقاً',
-      statusCode: 500,
-    }
+  if (!VALID_ROLES.includes(role)) {
+    return { success: false, error: 'نوع الحساب غير صحيح' }
   }
-}
 
-interface RegisterResponse {
-  success: boolean
-  data?: {
-    user: { id: string; email: string }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { success: false, error: 'البريد الإلكتروني غير صحيح' }
   }
-  error?: string
-  statusCode?: number
-  message?: string
-}
 
-export async function register(formData: FormData): Promise<RegisterResponse> {
-  try {
-    const fullName = formData.get('fullName') as string
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const role = (formData.get('role') as string) || 'founder'
+  if (password.length < 8) {
+    return { success: false, error: 'يجب أن تكون كلمة المرور 8 أحرف على الأقل' }
+  }
 
-    // BUG #7 FIX: Validate missing registration fields → return 400
-    if (!email?.trim()) {
-      return {
-        success: false,
-        error: 'البريد الإلكتروني مطلوب',
-        statusCode: 400,
-      }
+  const supabase = await createClient()
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { full_name: fullName, role } },
+  })
+
+  if (error) {
+    if (error.message.includes('already registered')) {
+      return { success: false, error: 'هذا البريد الإلكتروني مسجل بالفعل' }
     }
+    return { success: false, error: 'فشل التسجيل. يرجى المحاولة مرة أخرى' }
+  }
 
-    if (!fullName?.trim()) {
-      return {
-        success: false,
-        error: 'الاسم الكامل مطلوب',
-        statusCode: 400,
-      }
-    }
+  if (!data.user) {
+    return { success: false, error: 'فشل التسجيل. يرجى المحاولة مرة أخرى' }
+  }
 
-    if (!password?.trim()) {
-      return {
-        success: false,
-        error: 'كلمة المرور مطلوبة',
-        statusCode: 400,
-      }
-    }
-
-    if (!['investor', 'founder'].includes(role)) {
-      return {
-        success: false,
-        error: 'نوع الحساب غير صحيح',
-        statusCode: 400,
-      }
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email.trim())) {
-      return {
-        success: false,
-        error: 'البريد الإلكتروني غير صحيح',
-        statusCode: 400,
-      }
-    }
-
-    // Validate password strength
-    if (password.length < 8) {
-      return {
-        success: false,
-        error: 'يجب أن تكون كلمة المرور 8 أحرف على الأقل',
-        statusCode: 400,
-      }
-    }
-
-    const supabase = await createClient()
-
-    // BUG #6 FIX: Check for duplicate email first → return 409 Conflict
-    const { data: existingUser } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('email', email.trim())
-      .maybeSingle()
-
-    if (existingUser) {
-      return {
-        success: false,
-        error: 'هذا البريد الإلكتروني مسجل بالفعل',
-        statusCode: 409,
-      }
-    }
-
-    const { data, error } = await supabase.auth.signUp({
-      email: email.trim(),
-      password: password.trim(),
-      options: {
-        data: {
-          full_name: fullName.trim(),
-          role,
-        },
-      },
-    })
-
-    if (error) {
-      // Handle duplicate email error from auth service
-      if (error.message.includes('already registered')) {
-        return {
-          success: false,
-          error: 'هذا البريد الإلكتروني مسجل بالفعل',
-          statusCode: 409,
-        }
-      }
-
-      return {
-        success: false,
-        error: 'فشل التسجيل. يرجى المحاولة مرة أخرى',
-        statusCode: 400,
-      }
-    }
-
-    if (!data.user) {
-      return {
-        success: false,
-        error: 'فشل التسجيل. يرجى المحاولة مرة أخرى',
-        statusCode: 400,
-      }
-    }
-
-    // Create profile record
-    await supabase.from('profiles').insert({
+  await Promise.allSettled([
+    supabase.from('profiles').insert({
       id: data.user.id,
-      email: email.trim(),
-      full_name: fullName.trim(),
+      email,
+      full_name: fullName,
       role,
       avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.user.id}`,
-      created_at: new Date().toISOString(),
       kyc_status: 'pending',
-    })
-
-    // Auto-create notification preferences
-    await supabase.from('notification_preferences').insert({
+    }),
+    supabase.from('notification_preferences').insert({
       user_id: data.user.id,
       email_on_investment: true,
       email_on_message: true,
@@ -251,108 +100,21 @@ export async function register(formData: FormData): Promise<RegisterResponse> {
       push_on_message: true,
       push_on_kyc_update: true,
       in_app_notifications: true,
-      created_at: new Date().toISOString(),
-    })
+    }),
+  ])
 
-    // Initialize fresh user data based on role
-    await initializeUserData(supabase, data.user.id, role, fullName.trim())
-
-    // If no session (email confirmation required), sign in immediately to bypass it
-    if (!data.session) {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: email.trim(),
-        password: password.trim(),
-      })
-
-      if (signInError) {
-        // Sign in failed - account created but can't auto-login
-        return {
-          success: true,
-          data: { user: { id: data.user.id, email: data.user.email || '' } },
-          message: 'تم إنشاء الحساب! يرجى تسجيل الدخول.',
-          statusCode: 201,
-        }
+  if (!data.session) {
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+    if (signInError) {
+      return {
+        success: true,
+        message: 'تم إنشاء الحساب! يرجى تسجيل الدخول.',
       }
-    }
-
-    revalidatePath('/', 'layout')
-    redirect(`/dashboard/${role}`)
-  } catch (err) {
-    console.error('Register error:', err)
-    return {
-      success: false,
-      error: 'حدث خطأ في الخادم. يرجى المحاولة لاحقاً',
-      statusCode: 500,
     }
   }
-}
 
-/**
- * BUG #5 FIX: Verify session token is not expired
- * Returns 401 if expired or invalid
- */
-interface SessionVerifyResponse {
-  valid: boolean
-  session?: { access_token: string; expires_at?: number }
-  error?: string
-  statusCode?: number
-}
-
-export async function verifySession(): Promise<SessionVerifyResponse> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase.auth.getSession()
-
-    if (error || !data.session) {
-      return {
-        valid: false,
-        error: 'جلستك انتهت. يرجى تسجيل الدخول مرة أخرى',
-        statusCode: 401,
-      }
-    }
-
-    // Check if token is about to expire (expires in less than 5 minutes)
-    const expiresAt = data.session.expires_at
-    const now = Math.floor(Date.now() / 1000)
-    const timeUntilExpiry = (expiresAt || 0) - now
-
-    if (timeUntilExpiry < 300) {
-      // Try to refresh token
-      const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession()
-
-      if (refreshError || !refreshed.session) {
-        return {
-          valid: false,
-          error: 'فشل تحديث الجلسة. يرجى تسجيل الدخول مرة أخرى',
-          statusCode: 401,
-        }
-      }
-
-      return {
-        valid: true,
-        session: refreshed.session,
-        statusCode: 200,
-      }
-    }
-
-    return {
-      valid: true,
-      session: data.session,
-      statusCode: 200,
-    }
-  } catch (err) {
-    console.error('Session verification error:', err)
-    return {
-      valid: false,
-      error: 'خطأ في التحقق من الجلسة',
-      statusCode: 401,
-    }
-  }
-}
-
-export async function registerWithRoleHidden(formData: FormData, role: 'founder' | 'investor') {
-  formData.set('role', role)
-  return register(formData)
+  revalidatePath('/', 'layout')
+  redirect(`/dashboard/${role}`)
 }
 
 export async function logout() {
@@ -363,100 +125,33 @@ export async function logout() {
 }
 
 export async function updateProfile(role: string, interests: string[]) {
-  console.log('--- updateProfile called ---');
-  console.log('Role:', role);
-  console.log('Interests:', interests);
+  if (!VALID_ROLES.includes(role as Role)) {
+    return { error: 'نوع الحساب غير صحيح' }
+  }
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  
-  if (!user) {
-    console.error('updateProfile error: No user session found');
-    return { error: 'جلسة العمل انتهت، يرجى تسجيل الدخول مرة أخرى' };
-  }
 
-  console.log('Updating profile for user:', user.id);
+  if (!user) return { error: 'جلسة العمل انتهت، يرجى تسجيل الدخول مرة أخرى' }
 
   const { error } = await supabase
     .from('profiles')
-    .update({ 
-      role, 
-      interests,
-      // Ensure we mark them as having completed onboarding if we have a flag, 
-      // but here we just update role and interests.
-    })
+    .update({ role, interests })
     .eq('id', user.id)
 
-  if (error) {
-    console.error('Supabase update error:', error);
-    return { error: `خطأ في تحديث البيانات: ${error.message}` };
-  }
-  
-  console.log('Update profile success. Revalidating and redirecting...');
-  
-  // Revalidate the entire site to update dashboards and navbars
+  if (error) return { error: 'خطأ في تحديث البيانات' }
+
   revalidatePath('/', 'layout')
-  
-  // Construct destination
-  const destination = `/dashboard/${role}`;
-  console.log('Redirecting to:', destination);
-  
-  // Perform redirect
-  redirect(destination)
+  redirect(`/dashboard/${role}`)
 }
 
-/**
- * Initialize fresh user data when account is created
- * Creates role-specific data structures for each new user
- */
-async function initializeUserData(
-  supabase: any,
-  userId: string,
-  role: string,
-  fullName: string
-) {
-  try {
-    if (role === 'founder') {
-      // Create sample founder project with default values
-      try {
-        await supabase.from('projects').insert({
-          founder_id: userId,
-          title: `مشروع ${fullName}`,
-          description: `مشروع تجريبي لـ ${fullName}. يمكنك تعديله وإضافة تفاصيل المشروع الحقيقي.`,
-          category: 'التكنولوجيا',
-          funding_goal: 500000,
-          amount_raised: 0,
-          min_invest: 10000,
-          roi: '25%',
-          status: 'draft',
-          verified: false,
-          created_at: new Date().toISOString(),
-        })
-        console.log('✅ Sample project created for founder:', userId)
-      } catch (err) {
-        console.error('Note: Could not create sample project:', err)
-      }
-    } else if (role === 'investor') {
-      // For investors, we store their preferences in the profile interests field
-      // which is set during onboarding
-      console.log('✅ Investor account initialized:', userId)
-    }
+export async function verifySession() {
+  const supabase = await createClient()
+  const { data: { user }, error } = await supabase.auth.getUser()
 
-    // Update profile with initialization flag
-    try {
-      await supabase
-        .from('profiles')
-        .update({
-          initialized: true,
-          initialized_at: new Date().toISOString(),
-        })
-        .eq('id', userId)
-      console.log('✅ Profile marked as initialized:', userId)
-    } catch (err) {
-      console.error('Note: Could not update initialization flag:', err)
-    }
-  } catch (error) {
-    console.error('Error initializing user data:', error)
-    // Don't throw - initialization error shouldn't prevent account creation
+  if (error || !user) {
+    return { valid: false, error: 'جلستك انتهت. يرجى تسجيل الدخول مرة أخرى' }
   }
+
+  return { valid: true }
 }

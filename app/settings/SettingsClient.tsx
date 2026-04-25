@@ -43,21 +43,50 @@ export default function SettingsClient({ profile, userEmail }: SettingsClientPro
 
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
     if (!fullName.trim()) {
       toast.error('يجب إدخال الاسم الكامل')
       return
     }
+
+    // Show uploading toast
+    if (avatarFile) {
+      toast.loading('جاري تحميل الصورة...')
+    } else {
+      toast.loading('جاري حفظ البيانات...')
+    }
+
     const formData = new FormData()
     formData.append('full_name', fullName)
-    formData.append('bio', bio)
-    if (avatarFile) formData.append('avatar', avatarFile)
+    formData.append('bio', bio || '')
+    if (avatarFile) {
+      console.log('Adding avatar file:', avatarFile.name, 'Size:', avatarFile.size)
+      formData.append('avatar', avatarFile)
+    }
 
     startTransition(async () => {
-      const result = await updateProfileInfo(formData)
-      if (result?.error) {
-        toast.error(result.error)
-      } else {
-        toast.success('تم تحديث الملف الشخصي بنجاح')
+      try {
+        console.log('Submitting profile update...')
+        const result = await updateProfileInfo(formData)
+
+        if (result?.error) {
+          console.error('Update error:', result.error)
+          toast.error(result.error || 'فشل تحديث الملف الشخصي')
+        } else {
+          console.log('Update successful:', result)
+          // Force a small delay before showing success to let DB commit
+          await new Promise(resolve => setTimeout(resolve, 500))
+          toast.success('تم تحديث الملف الشخصي بنجاح! ✨')
+          // Reset avatar file after success
+          setAvatarFile(null)
+          // Refresh page to show updated data
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
+        }
+      } catch (error) {
+        console.error('Submit error:', error)
+        toast.error('حدث خطأ أثناء التحديث')
       }
     })
   }

@@ -66,37 +66,36 @@ export function DashboardSidebar() {
   const roleLabel = isFounder ? 'مؤسس' : 'مستثمر';
 
   return (
-    <aside className="hidden xl:flex fixed right-0 top-20 h-[calc(100vh-80px)] w-72 bg-[#020406]/95 backdrop-blur-2xl border-l border-white/5 flex-col z-30 overflow-hidden shadow-[-20px_0_40px_rgba(0,0,0,0.4)]">
+    <aside className="hidden xl:flex fixed right-0 top-20 h-[calc(100vh-80px)] w-72 bg-background/95 backdrop-blur-2xl border-l border-foreground/10 flex-col z-30 overflow-hidden shadow-[-8px_0_32px_rgba(0,0,0,0.15)]">
       {/* Visual Overlays */}
       <div className="absolute inset-0 neon-grid opacity-[0.03] pointer-events-none" />
-      <div className="absolute inset-0 scanline opacity-[0.05] pointer-events-none" />
       <div className="absolute top-0 right-0 w-[1px] h-full bg-gradient-to-b from-transparent via-primary-container/30 to-transparent" />
 
       {/* User Info Section */}
-      <div className="p-8 border-b border-white/5 relative group">
+      <div className="p-8 border-b border-foreground/10 relative group">
         <div className="absolute top-0 left-0 w-8 h-[1px] bg-primary-container/50" />
         <div className="absolute top-0 left-0 w-[1px] h-8 bg-primary-container/50" />
-        
+
         <div className="flex items-center gap-4 mb-6 relative">
           <div className="relative">
             <div className="w-14 h-14 rounded-xl overflow-hidden border border-primary-container/30 bg-primary-container/10 flex items-center justify-center holographic-reflection group-hover:border-primary-container transition-colors duration-500">
               <span className="material-symbols-outlined text-3xl text-primary-container animate-pulse-gentle">person</span>
             </div>
-            <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-[#020406] border border-primary-container/20 flex items-center justify-center rounded-sm">
-              <div className="w-2 h-2 bg-primary-container rounded-full animate-pulse shadow-[0_0_5px_#00ffd1]" />
+            <div className="absolute -bottom-1 -left-1 w-4 h-4 bg-background border border-primary-container/20 flex items-center justify-center rounded-sm">
+              <div className="w-2 h-2 bg-primary-container rounded-full animate-pulse" />
             </div>
           </div>
-          
+
           <div className="flex-1 min-w-0">
-            <h4 className="font-headline text-base text-white font-black truncate uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
+            <h4 className="font-headline text-base text-foreground font-black truncate uppercase tracking-tight group-hover:text-primary-container transition-colors duration-300">
               {profile?.full_name ?? user?.email?.split('@')[0] ?? 'UNKNOWN_ENTITY'}
             </h4>
             <div className="flex items-center gap-2 mt-1">
-              <span className="px-1.5 py-0.5 bg-primary-container/10 border border-primary-container/20 rounded text-[9px] font-black text-primary-container uppercase tracking-widest leading-none">
+              <span className="px-2 py-1 bg-primary-container/10 border border-primary-container/30 rounded text-xs font-black text-primary-container uppercase tracking-wider leading-none">
                 {roleLabel}
               </span>
-              <span className="text-[9px] text-slate-500 font-data font-bold uppercase tracking-widest">
-                Tier: {tierLabel}
+              <span className="text-xs text-foreground/60 font-data font-bold uppercase tracking-widest">
+                {tierLabel}
               </span>
             </div>
           </div>
@@ -105,10 +104,10 @@ export function DashboardSidebar() {
         {profile?.kyc_status !== 'verified' && (
           <Link
             href="/kyc"
-            className="w-full py-2.5 px-4 bg-yellow-500/5 text-yellow-500 text-[10px] font-black border border-yellow-500/20 hover:bg-yellow-500/10 transition-all flex items-center gap-2 justify-center clip-button uppercase tracking-widest animate-glow-soft"
+            className="w-full py-2.5 px-4 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 text-sm font-black border border-yellow-500/30 hover:bg-yellow-500/20 transition-all flex items-center gap-2 justify-center clip-button uppercase tracking-widest"
           >
-            <span className="material-symbols-outlined text-xs animate-pulse">security</span>
-            Verification Required
+            <span className="material-symbols-outlined text-sm animate-pulse">security</span>
+            VERIFICATION REQUIRED
           </Link>
         )}
       </div>
@@ -116,9 +115,9 @@ export function DashboardSidebar() {
       {/* Navigation Section */}
       <nav className="flex-1 py-6 overflow-y-auto no-scrollbar relative">
         <div className="px-6 mb-4">
-          <p className="text-[10px] text-slate-600 font-black uppercase tracking-[0.3em]">Core_systems</p>
+          <p className="text-xs text-foreground/50 font-black uppercase tracking-[0.3em]">CORE_SYSTEMS</p>
         </div>
-        
+
         <div className="space-y-1">
           {menuItems.map((item, index) => {
             const isActive = pathname === item.href;
@@ -128,32 +127,28 @@ export function DashboardSidebar() {
                 href={item.href}
                 className={`relative px-8 py-3.5 flex items-center gap-4 group transition-all duration-500 ${
                   isActive
-                    ? 'text-primary-container'
-                    : 'text-slate-500 hover:text-white'
+                    ? 'text-primary-container bg-primary-container/8'
+                    : 'text-foreground/70 hover:text-primary-container hover:bg-primary-container/5'
                 }`}
               >
-                {/* Active Indicator */}
                 {isActive && (
                   <>
-                    <div className="absolute inset-y-0 right-0 w-1 bg-primary-container shadow-[0_0_15px_#00ffd1]" />
-                    <div className="absolute inset-0 bg-gradient-to-l from-primary-container/5 to-transparent" />
+                    <div className="absolute inset-y-0 right-0 w-1 bg-primary-container" />
+                    <div className="absolute inset-0 bg-gradient-to-l from-primary-container/8 to-transparent" />
                   </>
                 )}
-                
+
                 <span className={`material-symbols-outlined text-xl transition-all duration-500 ${
-                  isActive ? 'text-primary-container drop-shadow-[0_0_8px_#00ffd1]' : 'group-hover:text-primary-container group-hover:translate-x-1'
+                  isActive ? 'text-primary-container' : 'group-hover:text-primary-container group-hover:translate-x-1'
                 }`}>
                   {item.icon}
                 </span>
-                
+
                 <span className={`font-body text-sm font-bold uppercase tracking-widest transition-all duration-300 ${
-                  isActive ? 'translate-x-1' : 'group-hover:translate-x-2'
+                  isActive ? 'translate-x-1 font-black' : 'group-hover:translate-x-2'
                 }`}>
                   {item.label}
                 </span>
-                
-                {/* Holographic Flash on Hover */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000 pointer-events-none" />
               </Link>
             );
           })}
@@ -161,39 +156,29 @@ export function DashboardSidebar() {
       </nav>
 
       {/* System Status Section */}
-      <div className="p-6 border-t border-white/5 space-y-4 relative bg-[#050b14]/50">
-        <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary-container/20 to-transparent" />
-        
-        <div className="bg-white/[0.02] p-4 border border-white/5 relative overflow-hidden group">
-          <div className="absolute inset-0 scanline-overlay opacity-5 animate-scanline-slow" />
-          
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-[9px] text-slate-500 font-black tracking-[0.2em] uppercase">Network_Link</span>
+      <div className="p-6 border-t border-foreground/10 space-y-4 relative bg-muted/30">
+        <div className="bg-foreground/[0.03] p-4 border border-foreground/10 relative overflow-hidden rounded-lg">
+          <div className="flex justify-between items-center mb-3">
+            <span className="text-xs text-foreground/60 font-black tracking-widest uppercase">NETWORK</span>
             <div className="flex items-center gap-1.5">
-              <span className="text-[9px] text-primary-container font-black uppercase tabular-nums">124.0.0.1</span>
-              <div className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse shadow-[0_0_8px_#00ffd1]" />
+              <span className="text-xs text-primary-container font-black uppercase">ACTIVE</span>
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             </div>
           </div>
-          
-          <div className="space-y-1.5">
+
+          <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-[10px] text-white font-bold uppercase tracking-tighter">Secure node</span>
-              <span className="text-[10px] text-primary-container font-data font-black">ACTIVE</span>
+              <span className="text-sm text-foreground/80 font-bold uppercase tracking-tight">Secure Node</span>
+              <span className="text-xs text-primary-container font-data font-black">TERMINAL_V2</span>
             </div>
-            <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
-              <div className="h-full w-full bg-primary-container/40 animate-shimmer" />
+            <div className="w-full h-1 bg-foreground/10 rounded-full overflow-hidden">
+              <div className="h-full w-full bg-primary-container/60 animate-shimmer" />
             </div>
           </div>
         </div>
 
         <div className="px-2">
           <LogoutButton />
-        </div>
-        
-        <div className="text-center">
-          <p className="text-[8px] text-slate-700 font-data font-bold uppercase tracking-[0.4em] animate-pulse">
-            Terminal_v2.4.0_SA
-          </p>
         </div>
       </div>
     </aside>

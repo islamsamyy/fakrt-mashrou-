@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useTransition, useEffect } from 'react';
+import Image from 'next/image';
 import { login } from '@/app/auth/actions';
 import { useRouter } from 'next/navigation';
 
@@ -124,14 +125,8 @@ export default function LoginPage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(0,255,209,0.05),transparent_70%)]"></div>
           
           {/* Top Header */}
-          <div className="relative z-10 flex items-start gap-4">
-            <div className="p-3 border-r-2 border-t-2 border-primary-container">
-              <span className="material-symbols-outlined text-primary-container text-4xl">insights</span>
-            </div>
-            <div>
-              <h2 className="font-data font-black text-2xl text-primary-container tracking-tighter neon-glow">IDEA BUSINESS</h2>
-              <p className="font-body text-primary-container text-sm font-medium">فكرة مشروع</p>
-            </div>
+          <div className="relative z-10">
+            <Image src="/LOGO.svg" alt="IDEA BUSINESS" width={160} height={48} className="h-12 w-auto" />
           </div>
 
           {/* Central Visual */}

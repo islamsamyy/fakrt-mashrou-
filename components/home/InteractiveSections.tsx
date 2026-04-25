@@ -210,10 +210,6 @@ export function HowItWorks() {
                   : 'glass border-transparent hover:border-primary-container/40 hover:-translate-x-2'
               } rounded-2xl`}
             >
-              {/* Scanline effect for active step */}
-              {activeStep === i && (
-                <div className="absolute inset-0 scanline-overlay opacity-30 animate-scanline pointer-events-none" />
-              )}
               
               <div className="flex items-start gap-8 relative z-10">
                 <div className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-500 border border-primary-container/20 ${activeStep === i ? 'bg-primary-container/20 scale-110 shadow-neon-sm' : 'glass group-hover:bg-primary-container/10'}`}>
@@ -243,8 +239,8 @@ export function HowItWorks() {
         {/* Visual panel - HUD Style */}
         <div className={`relative aspect-square rounded-[3rem] overflow-hidden group transition-all duration-1000 ${step.glow} border border-primary-container/20`}>
           <div className="absolute inset-0 bg-[#050b14]" />
-          <div className="absolute inset-0 neon-grid opacity-10" />
-          <div className="absolute inset-0 scanline opacity-5" />
+          
+          
           
           {/* Animated rings */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-primary-container/5 rounded-full animate-[spin_20s_linear_infinite]" />

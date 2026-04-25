@@ -8,13 +8,13 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  --color-primary: #ffffff;
-  --color-primary-foreground: #000000;
-  --color-primary-container: #00ffd1;
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-container: var(--primary-container);
 
-  --color-secondary: #6800ec;
-  --color-secondary-foreground: #ffffff;
-  --color-secondary-container: #1a1a1a;
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-container: var(--secondary-container);
 
   --color-tertiary: #fffeff;
   --color-tertiary-container: #ffddab;
@@ -41,8 +41,8 @@
   --color-ring: var(--ring);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: #00ffd1;
-  --color-accent-foreground: #000000;
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
 
   --shadow-neon: 0 0 30px rgba(0, 255, 209, 0.2);
 
@@ -62,24 +62,29 @@
 
 /* ======= LIGHT THEME (default :root) ======= */
 :root {
-  --background: #ffffff;
-  --foreground: #02040a;
+  --background: #f8fafc;
+  --foreground: #030712;
 
   --primary: #0a0e27;
   --primary-foreground: #ffffff;
 
-  --secondary: #7c3aed;
-  --secondary-foreground: #ffffff;
+  /* primary-container in light mode = deep teal, readable on white */
+  --primary-container: #007a63;
+  --primary-container-foreground: #ffffff;
 
-  --muted: #f0f4f8;
-  --muted-foreground: #475569;
+  --secondary: #6d28d9;
+  --secondary-foreground: #ffffff;
+  --secondary-container: #4c1d95;
+
+  --muted: #e2e8f0;
+  --muted-foreground: #334155;
 
   --accent: #00ffd1;
   --accent-foreground: #0a0e27;
 
-  --border: rgba(10, 14, 39, 0.25);
-  --input: rgba(10, 14, 39, 0.2);
-  --ring: #00d9b5;
+  --border: rgba(10, 14, 39, 0.2);
+  --input: rgba(10, 14, 39, 0.15);
+  --ring: #007a63;
 
   --surface-container-lowest: #ffffff;
   --surface-container-low: #f1f5f9;
@@ -93,13 +98,18 @@
 /* ======= DARK THEME ======= */
 .dark {
   --background: #020406;
-  --foreground: #ffffff;
+  --foreground: #f0f6fc;
 
   --primary: #ffffff;
   --primary-foreground: #000000;
 
+  /* primary-container in dark mode = bright cyan, glows on dark */
+  --primary-container: #00ffd1;
+  --primary-container-foreground: #000000;
+
   --secondary: #6800ec;
   --secondary-foreground: #ffffff;
+  --secondary-container: #1a1a1a;
 
   --muted: #0f172a;
   --muted-foreground: #94a3b8;
@@ -107,8 +117,8 @@
   --accent: #00ffd1;
   --accent-foreground: #000000;
 
-  --border: rgba(255, 255, 255, 0.15);
-  --input: rgba(255, 255, 255, 0.15);
+  --border: rgba(255, 255, 255, 0.12);
+  --input: rgba(255, 255, 255, 0.12);
   --ring: #00ffd1;
 
   --surface-container-lowest: #020406;
@@ -128,8 +138,23 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+  html {
+    font-size: 17px;
+  }
   body {
     @apply bg-background text-foreground font-body antialiased;
+    font-size: 1rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.3;
+    font-weight: 900;
+  }
+  p {
+    font-size: 1rem;
   }
 }
 
@@ -158,26 +183,26 @@
 
 @layer utilities {
   .neon-grid {
-    background-image:
-      linear-gradient(to right, rgba(0, 255, 209, 0.08) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 255, 209, 0.08) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: none;
   }
 
   .dark .neon-grid {
-    background-image:
-      linear-gradient(to right, rgba(0, 255, 209, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 255, 209, 0.05) 1px, transparent 1px);
+    background-image: none;
   }
 
-  .scanline {
-    background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 209, 0.03) 50%);
-    background-size: 100% 4px;
-    pointer-events: none;
-  }
-
-  .dark .scanline {
-    background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 209, 0.02) 50%);
+  .scanline,
+  .dark .scanline,
+  .scanline-overlay,
+  .neon-grid,
+  .dark .neon-grid,
+  .hex-grid,
+  .cyber-grid-perspective,
+  .animate-scanline,
+  .animate-scanline-slow,
+  .page-scanline {
+    display: none !important;
+    background: none !important;
+    animation: none !important;
   }
 
   .clip-button {
@@ -370,14 +395,7 @@
   }
 
   .scanline-overlay {
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      rgba(0, 255, 209, 0.05) 50%,
-      transparent
-    );
-    background-size: 100% 4px;
-    z-index: 50;
+    background: none;
     pointer-events: none;
   }
 
@@ -549,24 +567,9 @@
     transition: transform 0.1s ease-out;
   }
 
-  /* Scanline Page Loader */
+  /* Scanline Page Loader — disabled */
   .page-scanline {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, var(--color-primary-container), transparent);
-    background-size: 100% 10%;
-    opacity: 0.1;
-    z-index: 9999;
-    pointer-events: none;
-    animation: page-scan 2s linear infinite;
-  }
-
-  @keyframes page-scan {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
+    display: none;
   }
 
   /* Neon Flicker */
@@ -587,15 +590,7 @@
 
   /* Cyber Grid Background with Perspective */
   .cyber-grid-perspective {
-    background-image: 
-      linear-gradient(rgba(0, 255, 209, 0.2) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 255, 209, 0.2) 1px, transparent 1px);
-    background-size: 50px 50px;
-    background-position: center center;
-    perspective: 1000px;
-    transform: rotateX(60deg) translateY(-100px);
-    mask-image: linear-gradient(to top, rgba(0,0,0,1), transparent);
-    opacity: 0.2;
+    background-image: none;
     pointer-events: none;
   }
 
@@ -608,36 +603,16 @@
   }
 
   .hologram-effect::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 255, 209, 0.03) 3px,
-      transparent 3px
-    );
-    pointer-events: none;
+    display: none;
   }
 
   /* Scanning Line Animation for elements */
   .scanning-line {
     position: relative;
-    overflow: hidden;
   }
 
   .scanning-line::after {
-    content: '';
-    position: absolute;
-    top: -100%;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    background: linear-gradient(to bottom, transparent, rgba(0, 255, 209, 0.5), transparent);
-    animation: scan-move 3s linear infinite;
-    opacity: 0.3;
-    pointer-events: none;
+    display: none;
   }
 
   @keyframes scan-move {
@@ -757,22 +732,12 @@
   100% { transform: translate(0); }
 }
 
-@keyframes scanline {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
-}
-
 .animate-scanline {
-  animation: scanline 4s linear infinite;
-}
-
-@keyframes scanline-slow {
-  0% { transform: translateY(-100%); }
-  100% { transform: translateY(100%); }
+  display: none;
 }
 
 .animate-scanline-slow {
-  animation: scanline-slow 8s linear infinite;
+  display: none;
 }
 
 @keyframes scroll-rtl {
@@ -1032,4 +997,59 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-accent);
+}
+/* ===== GLOBAL LIGHT MODE CONTRAST FIXES ===== */
+
+/* Prevent tiny text - enforce minimum readable sizes */
+:root {
+  --min-text: 0.875rem; /* 14px minimum */
+}
+
+/* All text-[10px] and text-[11px] get bumped up in light mode */
+:not(.dark) .text-\[10px\],
+:not(.dark) .text-\[11px\] {
+  font-size: 0.8125rem !important; /* 13px */
+}
+
+/* All text-xs gets bumped slightly */
+:not(.dark) .text-xs {
+  font-size: 0.875rem !important; /* 14px */
+}
+
+/* Light mode: primary-container text must be readable */
+:not(.dark) .text-primary-container {
+  color: var(--primary-container) !important;
+  font-weight: 600;
+}
+
+/* Light mode: secondary-container text readable */
+:not(.dark) .text-secondary-container {
+  color: #4c1d95 !important;
+  font-weight: 600;
+}
+
+/* Light mode: muted foreground readable */
+:not(.dark) .text-muted-foreground {
+  color: #334155 !important;
+}
+
+/* Sidebar / dashboard card backgrounds: keep contrast in light */
+:not(.dark) .bg-surface-container-low\/60,
+:not(.dark) .bg-surface-container-low\/30,
+:not(.dark) .bg-surface-container-high\/60,
+:not(.dark) .bg-surface-container-high\/30 {
+  background-color: rgba(241, 245, 249, 0.8) !important;
+}
+
+/* Nav links readable in light */
+:not(.dark) .text-foreground\/70 {
+  color: #334155 !important;
+}
+
+:not(.dark) .text-foreground\/60 {
+  color: #475569 !important;
+}
+
+:not(.dark) .text-foreground\/50 {
+  color: #64748b !important;
 }

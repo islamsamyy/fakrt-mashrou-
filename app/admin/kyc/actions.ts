@@ -4,107 +4,77 @@ import { createClient } from '@/lib/supabase/server'
 import { createNotification } from '@/lib/notifications'
 import { revalidatePath } from 'next/cache'
 
+async function verifyAdmin(userId: string): Promise<boolean> {
+  const supabase = await createClient()
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', userId)
+    .single()
+  return profile?.role === 'admin'
+}
+
 export async function approveKyc(userId: string) {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) {
-      return { error: 'غير مصرح' }
-    }
-
-    // Verify user is admin
-    const { data: adminProfile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (adminProfile?.role !== 'admin') {
-      return { error: 'غير مصرح' }
-    }
-
-    // Update user's KYC status to verified
-    const { error } = await supabase
-      .from('profiles')
-      .update({ kyc_status: 'verified' })
-      .eq('id', userId)
-
-    if (error) {
-      return { error: 'فشل تحديث الحالة' }
-    }
-
-    // Notify user
-    await createNotification(
-      userId,
-      'kyc_update',
-      'تم التحقق من هويتك',
-      'تهانينا! تم الموافقة على طلب التحقق من هويتك ويمكنك الآن الاستثمار.',
-      '/dashboard/investor'
-    )
-
-    revalidatePath('/admin/kyc')
-    return { success: true }
-  } catch (error) {
-    console.error('Approve KYC error:', error)
-    return { error: 'حدث خطأ غير متوقع' }
+  if (!user || !(await verifyAdmin(user.id))) {
+    return { error: 'غير مصرح' }
   }
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({ kyc_status: 'verified', verified_at: new Date().toISOString() })
+    .eq('id', userId)
+
+  if (error) {
+    console.error('[approveKyc]', error)
+    return { error: 'فشل تحديث الحالة' }
+  }
+
+  await createNotification(
+    userId,
+    'kyc_update',
+    'تم التحقق من هويتك',
+    'تهانينا! تم الموافقة على طلب التحقق من هويتك.',
+    '/dashboard'
+  ).catch((err) => console.error('[approveKyc notification]', err))
+
+  revalidatePath('/admin/kyc')
+  return { success: true }
 }
 
 export async function rejectKyc(userId: string, reason: string) {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-    if (!user) {
-      return { error: 'غير مصرح' }
-    }
-
-    // Verify user is admin
-    const { data: adminProfile } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-
-    if (adminProfile?.role !== 'admin') {
-      return { error: 'غير مصرح' }
-    }
-
-    // Get current KYC data
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('kyc_data')
-      .eq('id', userId)
-      .single()
-
-    // Update status back to unverified with rejection reason
-    const { error } = await supabase.from('profiles').update({
-      kyc_status: 'unverified',
-      kyc_data: {
-        ...profile?.kyc_data,
-        rejectionReason: reason,
-        rejectedAt: new Date().toISOString(),
-      },
-    }).eq('id', userId)
-
-    if (error) {
-      return { error: 'فشل تحديث الحالة' }
-    }
-
-    // Notify user
-    await createNotification(
-      userId,
-      'kyc_update',
-      'لم يتم قبول طلب التحقق',
-      `للأسف، لم يتم الموافقة على طلب التحقق من الهوية. السبب: ${reason}. يرجى المحاولة مجدداً.`,
-      '/kyc'
-    )
-
-    revalidatePath('/admin/kyc')
-    return { success: true }
-  } catch (error) {
-    console.error('Reject KYC error:', error)
-    return { error: 'حدث خطأ غير متوقع' }
+  if (!user || !(await verifyAdmin(user.id))) {
+    return { error: 'غير مصرح' }
   }
+
+  if (!reason || reason.trim().length === 0) {
+    return { error: 'يجب تحديد سبب الرفض' }
+  }
+
+  const { error } = await supabase.from('profiles').update({
+    kyc_status: 'rejected',
+    kyc_rejection_reason: reason.trim(),
+    rejected_at: new Date().toISOString(),
+  }).eq('id', userId)
+
+  if (error) {
+    console.error('[rejectKyc]', error)
+    return { error: 'فشل تحديث الحالة' }
+  }
+
+  await createNotification(
+    userId,
+    'kyc_update',
+    'لم يتم قبول طلب التحقق',
+    `السبب: ${reason}. يرجى المحاولة مجدداً.`,
+    '/kyc'
+  ).catch((err) => console.error('[rejectKyc notification]', err))
+
+  revalidatePath('/admin/kyc')
+  return { success: true }
 }

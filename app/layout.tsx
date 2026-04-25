@@ -20,7 +20,7 @@ const readexPro = Readex_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "IDEA BUSINESS | المنصة السيادية للاستثمار",
+  title: "فكرة مشروع | المنصة السيادية للاستثمار",
   description: "المنصة الرائدة في الشرق الأوسط لربط الأفكار الريادية برؤوس الأموال الذكية باستخدام تقنيات الذكاء الاصطناعي.",
 };
 
@@ -39,15 +39,10 @@ export default function RootLayout({
       <head>
         {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}}catch(e){}})()`,
-          }}
-        />
       </head>
-      <body 
+      <body
         className="min-h-full flex flex-col bg-background text-foreground font-body selection:bg-primary-container/30 selection:text-primary-container"
-        suppressHydrationWarning
+        suppressHydrationWarning={true}
       >
         <ThemeProvider>
           <PageLoader />

@@ -1,88 +1,67 @@
+import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { sortProjectsByMatch } from '@/lib/matching-enhanced'
 import type { Project, Profile, Investment } from '@/lib/types'
-import { NextResponse } from 'next/server'
 
-export async function GET(request: Request) {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+const TOP_MATCHES_LIMIT = 5
+const PROJECTS_POOL_LIMIT = 100
 
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+export async function GET() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-    // Fetch investor profile
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single()
-
-    if (!profile) {
-      return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
-    }
-
-    // Fetch investor's investment history
-    const { data: investments } = await supabase
-      .from('investments')
-      .select(`
-        id,
-        amount,
-        status,
-        created_at,
-        project:projects (*)
-      `)
-      .eq('investor_id', user.id)
-      .order('created_at', { ascending: false })
-
-    // Fetch all active projects
-    const { data: projects } = await supabase
-      .from('projects')
-      .select('*')
-      .eq('status', 'active')
-      .limit(100)
-
-    if (!projects) {
-      return NextResponse.json({
-        matches: [],
-        total: 0,
-      })
-    }
-
-    // Calculate matches
-    const matches = sortProjectsByMatch(
-      projects as Project[],
-      profile as Profile,
-      investments as any[]
-    )
-
-    // Return top 5 matches
-    const topMatches = matches.slice(0, 5)
-
-    return NextResponse.json({
-      matches: topMatches.map(match => ({
-        id: match.project.id,
-        title: match.project.title,
-        description: match.project.description,
-        category: match.project.category,
-        funding_goal: match.project.funding_goal,
-        amount_raised: match.project.amount_raised,
-        verified: match.project.verified,
-        img: match.project.img,
-        video_url: match.project.video_url,
-        founder_id: match.project.founder_id,
-        matchScore: match.matchScore,
-        scoreBreakdown: match.scoreBreakdown,
-      })),
-      total: topMatches.length,
-      investmentHistoryCount: investments?.length || 0,
-    })
-  } catch (error) {
-    console.error('Match API error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  const [profileResult, investmentsResult, projectsResult] = await Promise.all([
+    supabase.from('profiles').select('*').eq('id', user.id).single(),
+    supabase
+      .from('investments')
+      .select('id, amount, status, created_at, project:projects(*)')
+      .eq('investor_id', user.id)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('projects')
+      .select('id, title, description, category, funding_goal, amount_raised, verified, img, video_url, founder_id, status, ai_score')
+      .eq('status', 'active')
+      .limit(PROJECTS_POOL_LIMIT),
+  ])
+
+  if (!profileResult.data) {
+    return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
+  }
+
+  const projects = projectsResult.data ?? []
+
+  if (projects.length === 0) {
+    return NextResponse.json({ matches: [], total: 0, investmentHistoryCount: 0 })
+  }
+
+  const matches = sortProjectsByMatch(
+    projects as Project[],
+    profileResult.data as Profile,
+    (investmentsResult.data ?? []) as Investment[]
+  )
+
+  const topMatches = matches.slice(0, TOP_MATCHES_LIMIT).map(({ project, matchScore, scoreBreakdown }) => ({
+    id: project.id,
+    title: project.title,
+    description: project.description,
+    category: project.category,
+    funding_goal: project.funding_goal,
+    amount_raised: project.amount_raised,
+    verified: project.verified,
+    img: project.img,
+    video_url: project.video_url,
+    founder_id: project.founder_id,
+    matchScore,
+    scoreBreakdown,
+  }))
+
+  return NextResponse.json({
+    matches: topMatches,
+    total: topMatches.length,
+    investmentHistoryCount: investmentsResult.data?.length ?? 0,
+  })
 }

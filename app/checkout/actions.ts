@@ -1,38 +1,36 @@
-'use server';
+'use server'
 
-import { createClient } from '@/lib/supabase/server';
-import { stripe } from '@/lib/stripe';
-import { redirect } from 'next/navigation';
+import { createClient } from '@/lib/supabase/server'
+import { stripe } from '@/lib/stripe'
+import { redirect } from 'next/navigation'
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000';
-const PLATFORM_FEE_RATE = 0.015; // 1.5%
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+const PLATFORM_FEE_RATE = 0.015
 
 export async function createStripeSession(projectId: string, amount: number) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) redirect('/login');
+  if (!user) redirect('/login')
 
   if (!projectId || amount <= 0) {
-    throw new Error('بيانات الاستثمار غير صحيحة');
+    throw new Error('بيانات الاستثمار غير صحيحة')
   }
 
-  // Fetch project for display name
   const { data: project, error: projectError } = await supabase
     .from('projects')
     .select('title, status')
     .eq('id', projectId)
-    .single();
+    .single()
 
   if (projectError || !project) {
-    throw new Error('المشروع غير موجود');
+    throw new Error('المشروع غير موجود')
   }
 
   if (project.status !== 'active') {
-    throw new Error('هذا المشروع لا يقبل استثمارات حالياً');
+    throw new Error('هذا المشروع لا يقبل استثمارات حالياً')
   }
 
-  // Create a pending investment record first so we have its ID for the webhook
   const { data: investment, error: investmentError } = await supabase
     .from('investments')
     .insert({
@@ -42,14 +40,14 @@ export async function createStripeSession(projectId: string, amount: number) {
       status: 'committed',
     })
     .select('id')
-    .single();
+    .single()
 
   if (investmentError || !investment) {
-    throw new Error('فشل إنشاء سجل الاستثمار');
+    throw new Error('فشل إنشاء سجل الاستثمار')
   }
 
-  const platformFee = Math.round(amount * PLATFORM_FEE_RATE * 100); // cents
-  const investmentCents = Math.round(amount * 100);
+  const platformFee = Math.round(amount * PLATFORM_FEE_RATE * 100)
+  const investmentCents = Math.round(amount * 100)
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -84,11 +82,11 @@ export async function createStripeSession(projectId: string, amount: number) {
     },
     success_url: `${APP_URL}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${APP_URL}/checkout?projectId=${projectId}&cancelled=true`,
-  });
+  })
 
   if (!session.url) {
-    throw new Error('فشل إنشاء جلسة الدفع');
+    throw new Error('فشل إنشاء جلسة الدفع')
   }
 
-  return { url: session.url };
+  return { url: session.url }
 }

@@ -5,14 +5,23 @@ import { ProfileClient } from './ProfileClient';
 export default async function ProfilePage({ params }: { params: { id: string } }) {
   const supabase = await createClient();
 
-  // Fetch profile
+  // Fetch profile with better error handling
   const { data: profile, error } = await supabase
     .from('profiles')
     .select('id, full_name, avatar_url, bio, role, tier, kyc_status, created_at')
     .eq('id', params.id)
     .single();
 
-  if (error || !profile) {
+  if (error) {
+    console.error('Profile fetch error:', error);
+    // If auth error, try to fetch without authentication requirement
+    if (error.code === 'PGRST116') {
+      // Row not found - return not found
+      notFound();
+    }
+  }
+
+  if (!profile) {
     notFound();
   }
 
