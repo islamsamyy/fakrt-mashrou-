@@ -14,10 +14,9 @@ interface Opportunity {
 
 interface FilteredOpportunitiesProps {
   opportunities: Opportunity[]
-  onEmpty?: () => React.ReactNode
 }
 
-export function FilteredOpportunities({ opportunities, onEmpty }: FilteredOpportunitiesProps) {
+export function FilteredOpportunities({ opportunities }: FilteredOpportunitiesProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent');
