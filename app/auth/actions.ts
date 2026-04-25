@@ -254,32 +254,29 @@ export async function register(formData: FormData): Promise<RegisterResponse> {
       created_at: new Date().toISOString(),
     })
 
-    // If session is null, it means email confirmation is required
-    if (!data.session) {
-      // Initialize user data even without session
-      await initializeUserData(supabase, data.user.id, role, fullName.trim())
-
-      return {
-        success: true,
-        data: {
-          user: {
-            id: data.user.id,
-            email: data.user.email || '',
-          },
-        },
-        message:
-          'تم إنشاء الحساب بنجاً! يرجى التحقق من بريدك الإلكتروني لتنشيط الحساب قبل تسجيل الدخول.',
-        statusCode: 201,
-      }
-    }
-
     // Initialize fresh user data based on role
     await initializeUserData(supabase, data.user.id, role, fullName.trim())
 
-    revalidatePath('/', 'layout')
+    // If no session (email confirmation required), sign in immediately to bypass it
+    if (!data.session) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password: password.trim(),
+      })
 
-    // Route to onboarding to complete profile setup
-    redirect(`/onboarding?role=${role}`)
+      if (signInError) {
+        // Sign in failed - account created but can't auto-login
+        return {
+          success: true,
+          data: { user: { id: data.user.id, email: data.user.email || '' } },
+          message: 'تم إنشاء الحساب! يرجى تسجيل الدخول.',
+          statusCode: 201,
+        }
+      }
+    }
+
+    revalidatePath('/', 'layout')
+    redirect(`/dashboard/${role}`)
   } catch (err) {
     console.error('Register error:', err)
     return {
