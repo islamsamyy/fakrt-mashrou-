@@ -13,8 +13,8 @@ interface Opportunity {
 }
 
 interface FilteredOpportunitiesProps {
-  opportunities: Opportunity[];
-  onEmpty?: () => React.ReactNode;
+  opportunities: Opportunity[]
+  onEmpty?: () => React.ReactNode
 }
 
 export function FilteredOpportunities({ opportunities, onEmpty }: FilteredOpportunitiesProps) {
@@ -148,8 +148,6 @@ export function FilteredOpportunities({ opportunities, onEmpty }: FilteredOpport
             </div>
           ))}
         </div>
-      ) : onEmpty ? (
-        onEmpty()
       ) : (
         <div className="text-center py-8 text-foreground/60 font-body">
           لا يوجد فرص محفوظة حالياً.

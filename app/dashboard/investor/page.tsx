@@ -186,10 +186,7 @@ export default async function InvestorDashboard() {
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-black font-headline border-r-4 border-primary-container pr-4 text-foreground uppercase tracking-tight">الفرص المحفوظة</h2>
           </div>
-          <FilteredOpportunities
-            opportunities={savedOpportunities}
-            onEmpty={() => <div className="text-center py-8 text-foreground/60 font-body">لا يوجد فرص محفوظة حالياً.</div>}
-          />
+          <FilteredOpportunities opportunities={savedOpportunities} />
         </section>
 
         <section className="mb-12">

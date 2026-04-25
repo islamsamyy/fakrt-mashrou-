@@ -18,12 +18,12 @@ export async function GET() {
     supabase.from('profiles').select('*').eq('id', user.id).single(),
     supabase
       .from('investments')
-      .select('id, amount, status, created_at, project:projects(*)')
+      .select('id, amount, status, created_at, project:projects(id, title, category, funding_goal, amount_raised, verified, img, video_url, founder_id, status)')
       .eq('investor_id', user.id)
       .order('created_at', { ascending: false }),
     supabase
       .from('projects')
-      .select('id, title, description, category, funding_goal, amount_raised, verified, img, video_url, founder_id, status, ai_score')
+      .select('id, title, description, category, funding_goal, amount_raised, verified, img, video_url, founder_id, status, created_at, min_invest, roi')
       .eq('status', 'active')
       .limit(PROJECTS_POOL_LIMIT),
   ])
@@ -39,9 +39,9 @@ export async function GET() {
   }
 
   const matches = sortProjectsByMatch(
-    projects as Project[],
-    profileResult.data as Profile,
-    (investmentsResult.data ?? []) as Investment[]
+    projects as unknown as Project[],
+    profileResult.data as unknown as Profile,
+    (investmentsResult.data ?? []) as unknown as Investment[]
   )
 
   const topMatches = matches.slice(0, TOP_MATCHES_LIMIT).map(({ project, matchScore, scoreBreakdown }) => ({

@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation'
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 const PLATFORM_FEE_RATE = 0.015
 
-export async function createStripeSession(projectId: string, amount: number) {
+export async function createStripeSession(projectId: string, amount: number, message?: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -19,7 +19,7 @@ export async function createStripeSession(projectId: string, amount: number) {
 
   const { data: project, error: projectError } = await supabase
     .from('projects')
-    .select('title, status')
+    .select('title, status, founder_id')
     .eq('id', projectId)
     .single()
 
@@ -44,6 +44,23 @@ export async function createStripeSession(projectId: string, amount: number) {
 
   if (investmentError || !investment) {
     throw new Error('فشل إنشاء سجل الاستثمار')
+  }
+
+  // Send message to founder if provided
+  if (message && message.trim() && project.founder_id) {
+    const { error: messageError } = await supabase
+      .from('messages')
+      .insert({
+        sender_id: user.id,
+        receiver_id: project.founder_id,
+        content: `📈 استثمار جديد: ${message}`,
+        read: false,
+      })
+
+    if (messageError) {
+      console.error('Failed to send message:', messageError)
+      // Don't throw error - continue with investment even if message fails
+    }
   }
 
   const platformFee = Math.round(amount * PLATFORM_FEE_RATE * 100)

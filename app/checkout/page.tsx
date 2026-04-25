@@ -15,6 +15,8 @@ function CheckoutContent() {
   const [txId, setTxId] = useState('');
   const [loading, setLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!projectId) {
@@ -32,29 +34,43 @@ function CheckoutContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
 
     if (!agreedToTerms) {
-      toast.error('يجب الموافقة على الشروط والأحكام');
+      const msg = 'يجب الموافقة على الشروط والأحكام';
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
     if (!projectId) {
-      toast.error('معرف المشروع مفقود');
+      const msg = 'معرف المشروع مفقود';
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
     if (amount <= 0) {
-      toast.error('يجب أن يكون المبلغ أكبر من صفر');
+      const msg = 'يجب أن يكون المبلغ أكبر من صفر';
+      setError(msg);
+      toast.error(msg);
       return;
     }
 
     setLoading(true);
+    setError(null);
 
     try {
-      const { url } = await createStripeSession(projectId, amount);
-      window.location.href = url;
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'حدث خطأ في معالجة الاستثمار');
+      const { url } = await createStripeSession(projectId, amount, message);
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error('فشل الحصول على رابط الدفع');
+      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'حدث خطأ في معالجة الاستثمار. يرجى المحاولة مرة أخرى.';
+      setError(errorMessage);
+      toast.error(errorMessage);
       setLoading(false);
     }
   };
@@ -96,8 +112,18 @@ function CheckoutContent() {
           </div>
         </div>
 
+        {error && (
+          <div className="mb-8 bg-red-500/10 border border-red-500/30 rounded-2xl p-6 flex items-start gap-4">
+            <span className="material-symbols-outlined text-red-400 text-xl flex-shrink-0 mt-1">error</span>
+            <div className="flex-1">
+              <h3 className="text-red-400 font-headline font-black mb-1 uppercase tracking-tight">خطأ</h3>
+              <p className="text-red-400/80 text-sm font-body">{error}</p>
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* Left Column (Payment & Legal) */}
+          {/* Left Column (Payment & Legal & Message) */}
           <div className="lg:col-span-7 space-y-8">
             {/* Payment Method Card */}
             <section className="bg-surface-container-low/40 backdrop-blur-md p-8 border border-primary-container/20 relative group">
@@ -154,6 +180,29 @@ function CheckoutContent() {
               </div>
             </section>
 
+            {/* Message to Founder */}
+            <section className="bg-surface-container-low/40 backdrop-blur-md p-8 border border-primary-container/20 relative">
+              <div className="l-bracket-tr"></div>
+              <div className="l-bracket-bl"></div>
+              <h2 className="text-xl font-headline font-black text-foreground mb-8 flex items-center gap-3 uppercase tracking-tight">
+                <span className="material-symbols-outlined text-primary-container">mail</span>
+                رسالة إلى صاحب المشروع (اختياري)
+              </h2>
+              <div className="space-y-4">
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  placeholder="شارك رؤيتك أو أسئلتك حول هذا المشروع..."
+                  disabled={loading}
+                  className="w-full bg-background/50 border border-primary-container/20 focus:border-primary-container text-foreground rounded-xl p-4 font-body text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary-container/20 transition-all text-right placeholder:text-muted-foreground/50"
+                  rows={4}
+                />
+                <p className="text-xs text-muted-foreground font-body text-right">
+                  ستتم مشاركة هذه الرسالة مع صاحب المشروع مباشرة بعد تأكيد الاستثمار
+                </p>
+              </div>
+            </section>
+
             {/* CTA */}
             <button
               type="submit"
@@ -161,13 +210,25 @@ function CheckoutContent() {
               className="w-full group relative disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-primary-container blur-md opacity-20 group-hover:opacity-40 transition-opacity"></div>
-              <div className="relative bg-primary-container text-[#050608] dark:text-[#050608] py-6 px-10 flex items-center justify-between clip-button hover:brightness-110 transition-all active:scale-[0.98] disabled:hover:brightness-100">
-                <span className="material-symbols-outlined text-3xl font-black">
-                  {loading ? '' : 'arrow_forward'}
-                </span>
-                <span className="text-2xl font-headline font-black uppercase tracking-widest">
-                  {loading ? 'جاري التحويل إلى بوابة الدفع...' : 'تأكيد الاستثمار'}
-                </span>
+              <div className="relative bg-primary-container text-[#050608] dark:text-[#050608] py-6 px-10 flex items-center justify-center gap-4 clip-button hover:brightness-110 transition-all active:scale-[0.98] disabled:hover:brightness-100">
+                {loading ? (
+                  <>
+                    <svg className="w-6 h-6 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span className="text-xl font-headline font-black uppercase tracking-widest">
+                      جاري المعالجة...
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-2xl font-black">arrow_forward</span>
+                    <span className="text-2xl font-headline font-black uppercase tracking-widest">
+                      تأكيد الاستثمار
+                    </span>
+                  </>
+                )}
               </div>
             </button>
           </div>

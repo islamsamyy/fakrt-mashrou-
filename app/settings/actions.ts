@@ -63,7 +63,8 @@ export async function updateProfileInfo(formData: FormData) {
   }
 
   revalidatePath('/settings')
-  revalidatePath('/dashboard')
+  revalidatePath('/dashboard/founder')
+  revalidatePath('/dashboard/investor')
 
   return { success: true }
 }

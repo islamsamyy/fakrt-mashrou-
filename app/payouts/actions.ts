@@ -87,7 +87,7 @@ export async function initiatePayout(request: PayoutRequest) {
 
     await createNotification(
       request.founderUserId,
-      'payment',
+      'investment',
       'تم بدء تحويل الأموال',
       `تم بدء تحويل ${request.amount} ريال. قد يستغرق 1-3 أيام عمل.`,
       '/payouts'
@@ -128,7 +128,7 @@ export async function handlePayoutStatusUpdate(payoutId: string, stripePayout: {
           ? 'فشل تحويل الأموال. يرجى التحقق من بيانات حسابك.'
           : 'تم تحديث حالة دفعتك.'
 
-    await createNotification(payout.founder_id, 'payment', notificationTitle, notificationMsg, '/payouts').catch(() => {})
+    await createNotification(payout.founder_id, 'investment', notificationTitle, notificationMsg, '/payouts').catch(() => {})
 
     return { success: true }
   } catch (error) {

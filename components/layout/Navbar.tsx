@@ -69,10 +69,10 @@ export function Navbar() {
       if (user) {
         const { data } = await supabase
           .from('profiles')
-          .select('full_name, role, avatar_url')
+          .select('id, full_name, role, avatar_url, bio, kyc_status, tier, created_at')
           .eq('id', user.id)
           .single()
-        setProfile(data)
+        setProfile(data as Profile | null)
       }
       setLoading(false)
     }
